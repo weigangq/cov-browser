@@ -6,76 +6,78 @@ table {
 }
 body>table {position:relative}
 
-#mainTab {
-    width:1103px;
-    padding:0;
-    font-size:17px
-}
+#mainTab { width:1133px; padding:0 }
 #mainTab>ul {padding:0}
-#mainTab>ul>li { float:right!important; width:189px }
-#mainTab>ul>li>a {color:#428bca}
-
-#main_tab1, #main_tab2 {padding:5px 5px 0 5px}
+#mainTab>ul>li { float:right!important; width:189px; font-size:16px; font-weight:bold}
+#main_tab1, #main_tab2 {padding:4px 5px 0 5px}
 #main_tab1>table {margin-top:4px}
 
 #top_area {
     position:absolute;
-    top:3px; left:2px;
-    padding-left:155px; padding-top:6px;
+    top:3px; left:3px;
+    padding-left:215px; padding-top:7px;
     z-index:2000;
-    width:556px;
-    height:34px;
-    font-size:20px;
+    width:529px;
+    height:33px;
+    font-size:21px;
+    color:white;
     font-weight:bold;
-    background: linear-gradient(to bottom right, #d2daf4, 80%, #d3d3d3);
-	text-shadow:2px 1px white
+    background: linear-gradient(to right, gray, 90%, #d3d3d3);
 }
 
 #bottom_area {
-    background-color:#d2daf4;
-/*    text-align:center;*/
+    background-color:gray;
     line-height:110%;
+    color:white;
     font-size:12px;
     position:relative
 }
 #bottom_area span {margin-left:110px}
-#bottom_area a {color:#428bca}
+#bottom_area a {color:white}
 #bottom_area div {position:absolute}
-#version, #thank {
-    top:8px;
-	color:#666;
-	text-shadow:1px 1px white
-}
+#version, #thank { top:8px; color:white }
 #version {right:15px}
 #thank {left:777px; text-decoration:underline;cursor:pointer}
+
+#ack {
+    position:absolute;
+    top:-120px; left:580px;
+	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius:4px;
+    background-color:#FFFFE0;
+    width:450px;
+    color:black
+}
+#ack ul {padding:0 2px 0 27px}
+#ack li {padding:3px 0}
+#ack a {color:#428bca}
+
+.close {
+    float:right;
+    padding:0 5px 2px 5px;
+    background:#ddd;
+	text-shadow:1px 1px white
+}
+.close:hover {
+    color:#fff;
+	cursor:pointer
+}
 
 #ids a, #citation a { color: inherit}
 #citation {margin-top:0; margin-left:2px; width:103px}
 #citation td:hover {font-weight:bold}
 
-#netGraph {margin:0 7px 0 0; border:gray thin solid; position:relative}
+#netGraph {margin:0 6px 0 0; padding:2px 0 2px 2px; border:gray thin solid; position:relative}
 
-#chartLg {
-    position:absolute;
-    left:0; bottom:0;
-    width:125px;
-    margin:0 0 2px 2px;
-    padding:0 3px;
-    background-color:rgba(255,255,255,0.5);
-    border-top: gray thin solid;
-    border-right:gray thin solid;
-    border-radius:3px;
-/*    background-color:rgba(240,240,240,0.6);
-	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);*/
-    font-size:12px;
-    font-family:sans-serif;
-    z-index:1
+#graphLg {
+    margin:0 0 0 9px;
+    font-size:11.5px;
+    font-family:sans-serif
 }
-#chartLg span {font-weight:100; color:gray}
-#chartLg ul {padding:0 0 0 14px; margin:1px 0}
-#chartLg li {padding:1.5px 0}
-
-#hapLg {padding:3px; border-top:none; font-size:11.5px; color:gray; font-weight:100}
+#graphLg a {text-decoration:underline; fill:gray}
+.lgTitle {font-weight:bold}
+.lgExp {font-size:10.5px}
+.grayFill {fill:gray}
 
 #netGraph circle, #netGraph path {stroke:white; stroke-width:1px}
 
@@ -133,7 +135,7 @@ marker path {fill:#666}
 
 .infoTitle {
     text-align:center; text-anchor:middle;
-    color:gray; fill:gray; /*text-shadow:1px 1px white; */
+    color:gray; fill:gray;
     font-size:14px
 }
 
@@ -223,11 +225,10 @@ marker path {fill:#666}
 
 #tipDate {font-size:13px; text-anchor:middle}
 
-/*#hapInf {position:relative}*/
 .node_edge {
     position:absolute;
     top:429px;
-    width:442px; height:194px;
+    width:442px; height:191px;
     overflow-y:auto;
     padding:4px 6px;
     font-size:12px
@@ -244,37 +245,12 @@ marker path {fill:#666}
 #chgInf td, #chgInf th:not(.infoTitle) {
     text-align:center;
     width:70px;
-    overflow: hidden; display: inline-block
+    overflow:hidden; display:inline-block
 }
 #chgInf td { font-family:Courier; padding:0}
 #chgInf th {color: gray}
-/*#chgInf tr:nth-of-type(2){border-bottom:lightgray thin solid}*/
-
-#ack {
-    position:absolute;
-    top:-120px; left:580px;
-	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
-    border-radius:4px;
-    background-color:#FFFFE0;
-    width:450px;
-}
-#ack ul {padding:0 2px 0 27px}
-#ack li {padding:3px 0}
-
-.close {
-    float:right;
-    padding:0 5px 2px 5px;
-    background:#ddd;
-	text-shadow:1px 1px white
-}
-.close:hover {
-    color:#fff;
-	cursor:pointer
-}
 
 #refOrf {
-/*    position:absolute;
-    bottom:0;*/
     padding-bottom:3px;
     border-bottom:#b3b3b3 thin solid
 }

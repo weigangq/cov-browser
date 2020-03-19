@@ -37,6 +37,7 @@ $(document).ready(function(){
                     drawChart();
                     drawGeoW();
                     drawDateChart();
+                    drawLg();
                     drawRef()
                 }
             })
@@ -134,14 +135,15 @@ function asignColor(){
             return d3.hsl(360/l * d, 1, 0.45)}))
 }
 
+var chartW=655;
 function drawChart(){
-    var width = 622,//document.querySelector("#graph").clientWidth
-        height=540;//596;document.querySelector("#graph").clientHeight
+    var width = chartW,//document.querySelector("#graph").clientWidth
+        height=536;//596;document.querySelector("#graph").clientHeight
     var linewidth = 1;
 
     var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
 
-    var svg = d3.select("#netGraph svg").attr("width", width).attr("height", height);
+    var svg = d3.select("#netGraph").append("svg").attr("width", width).attr("height", height);
 
 //    var scale = d3.scaleLinear().domain([1,maxChange]).range([0.75,0]);
     for (var i=0; i<listLink.length; i++){
@@ -272,7 +274,7 @@ function drawChart(){
                 n.append("circle").attr("r", d.radius)
                     .style('fill',"white").style('stroke','#999')
                     .on('mouseover',function(d){
-                        $("#tipNet").css("left", (d3.event.pageX-35)+"px").css("top", (d3.event.pageY-27)+"px")
+                        $("#tipNet").css("left", (d3.event.pageX-35)+"px").css("top", (d3.event.pageY-77)+"px")
                         .html('Hypothetical root').show()
                     })
                     .on('mouseout', function(){ $("#tipNet").hide() })
@@ -286,7 +288,7 @@ function drawChart(){
                         .style('fill', an? geoColor(geoDataW[an.geoId].ctry) : "gray");
                 } else {
                     circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
-                        .attr("dy","0.3em").attr("dx","10px").html('&#129415;')
+                        .attr("dy","0.4em").attr("dx","10px").html('&#129415;')
                 }
                 if (an){
                     circle.on('mouseover',function(){overM([ac])})
@@ -403,6 +405,49 @@ function un_hl(){
     $("#nodeInf td:nth-of-type(2)").hide()//.slideUp("slow")
 }
 
+function drawLg(){
+    var width=chartW-12, height=44,
+        margin=12,
+        radius=13, wpic=radius*2+5;
+    var svg = d3.select("#graphLg").append("svg").attr("width", width).attr("height", height),
+        chart = svg.append("g").attr("transform", "translate("+[margin, margin]+")"),
+        pic = chart.append("g").attr("class", "blackLine")
+                .attr("transform", "translate("+[radius, radius]+")"),
+        txt1 = chart.append("g").attr("class","lgTitle").attr("transform", "translate("+[0, 11]+")"),
+        txt2 = chart.append("g").attr("class","lgExp").attr("transform", "translate("+[0, 25]+")"),
+        txt3 = chart.append("g").attr("class","lgExp grayFill").attr("transform", "translate("+[0, 11]+")")
+ 
+    pic.append("circle").attr("r", radius);
+    txt1.append("text").text("Haplotype").attr("x",wpic);
+    txt2.append("text").html("a group of viral genomes").attr("x",wpic);
+    txt3.append("text").html("N=86").attr("x",wpic+60)
+
+    ww = 176
+    pic.append("circle").attr("r", radius).attr("cx", ww).style("stroke","#ccc");
+    
+    var pie = d3.pie().startAngle(0.5*Math.PI).endAngle(0.7*Math.PI),
+        arc = d3.arc().innerRadius(0).outerRadius(radius);
+    pic.append("g").attr("transform", "translate("+[ww, 0]+")")
+        .selectAll("g").data(pie([10])).enter()
+        .append("path").attr("d", arc);  
+    txt1.append("text").text("Isolate").attr("x",ww+wpic);
+    txt2.append("text").html("a patient sample (color-coded by country)").attr("x",ww+wpic);
+    txt3.append("text").html('N=431 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+43)
+    
+    ww +=252
+    svg .append('defs').append('marker').attr('id', 'arrow')
+        .attr('viewBox', [0, -5, 10, 10])
+        .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 8).attr('markerHeight', 8)
+        .attr('orient', 'auto').append('path').attr("d", "M0,-3L7,0L0,3");
+    pic.append("line").attr("class","link")
+        .attr("transform", "translate("+[ww-radius+4, 0]+")")
+        .attr("y1",radius-4).attr("x2",2*radius-8).attr("y2", 4-radius)
+        .attr('marker-end', 'url(#arrow)')
+
+    txt1.append("text").attr("x",ww+wpic-1).text("Mutation(s)");
+    txt2.append("text").attr("x",ww+wpic-1).html("genetic changes");
+    txt3.append("text").html("at 98 genome sites").attr("x",ww+wpic+66)
+}
 
 function drawRef(){
     var width = wMap-6,
@@ -435,7 +480,7 @@ function drawRef(){
             .attr("width", function(d){return scale(d[1]) - scale(d[0])})
             .attr("height", halfH*2)
             .on('mouseover',function(d){
-                $("#tipNet").css("left", (d3.event.pageX-16)+"px").css("top", (d3.event.pageY-23)+"px")
+                $("#tipNet").css("left", (d3.event.pageX-16)+"px").css("top", (d3.event.pageY-73)+"px")
                 .html(d[2]).show()
             })
             .on('mouseout', function(){ $("#tipNet").hide() })

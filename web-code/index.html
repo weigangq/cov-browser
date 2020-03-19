@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>CoV Genome Tracker</title>
+<link rel="icon" type="image/png" href="js-css/icon.png" />
 
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
@@ -19,26 +20,16 @@
 <table>
 <tr><td><div id="mainTab">
 <ul>
-    <li><a href="#main_tab2">Evolution (宏进化)</a></li>
-    <li><a href="#main_tab1">Outbreaks (微进化)</a></li>
+    <li><a href="#main_tab2">&nbsp; &nbsp; &nbsp; &nbsp; Evolution</a></li>
+    <li><a href="#main_tab1">&nbsp; &nbsp; &nbsp; Outbreaks</a></li>
 </ul>
 
 <div id="main_tab1">
 <table>
     <tr>
-        <td valign="top" rowspan="2">
-            <div id="netGraph">
-                <div id="chartLg">
-                    <ul>
-                        <li>Slice: <span>an isolate (colored by country)</span></li>
-                        <li>Node: <span>a haplotype</span></li>
-                        <li>Link: <span>mutation(s)</span></li>
-                    </ul>
-                </div>
-                <svg></svg>
-            </div>
-            <div id="hapLg">
-                Nodes (n=86) represent distinct haplotypes, identified from 431 genomes at 98 informative SNP sites. Sequences were downloaded from <a href="www.gisaid.org" target="_blank">GISAID.org</a> on 03/12/2020. Haplotype network is a minimum spanning tree, polarized by a bat isolate, and rendered with <a href="https://github.com/d3/d3/blob/master/API.md#forces-d3-force" target="_blank">d3-force</a>. 
+        <td rowspan="2" style="position:relative">
+            <div id="netGraph"></div>
+            <div id="graphLg">
             </div>
             <div id="tipNet" class="tip tooltip hidden"></div>
         </td>
@@ -136,17 +127,17 @@
 </div>
 </div></td></tr>
 
-<div id="top_area">CoV Genome Tracker &nbsp; (冠状病毒基因组进化)</div>
+<div id="top_area">COVID-19 Genome Tracker</div>
 <tr height="30">
     <td id="bottom_area">
         <span>This website is maintained by <a href="http://diverge.hunter.cuny.edu/labwiki/Hackathon_2020" target="_blank">Dr. Weigang Qiu's group</a> at <a href="http://hunter.cuny.edu" target="_blank">Hunter College of the City University of New York</a>.</span>
         <div id="thank" onClick="showAck()">Acknowledgements</div>
         <div id="ack" class="hidden">
             <span id='closeAck' class="close">x</span>
-             <ul><li>We gratefully acknowledge the authors, originating and submitting laboratories of the sequences from GISAID’s EpiFlu™ Database on which this research is based. All submitters of data may be contacted directly via <a href="www.gisaid.org">www.gisaid.org</a></li>
-            <li>Our work was made possible by supports from <a href="https://www.niaid.nih.gov">NIH/NIAID</a> & <a href="www.hunter.cuny.edu">Hunter College of City University of New York</a></li></ul>
+             <ul><li>We gratefully acknowledge the authors, originating and submitting laboratories of the sequences from GISAID’s EpiFlu™ Database on which this research is based. All submitters of data may be contacted directly via <a href="https://www.gisaid.org" target="_blank">www.gisaid.org</a></li>
+            <li>Our work was made possible by supports from <a href="https://www.niaid.nih.gov" target="_blank">NIH/NIAID</a> & <a href="https://hunter.cuny.edu" target="_blank">Hunter College of City University of New York</a></li></ul>
         </div>
-        <div id="version">Release 3.0 (Mar 17, 2020)</div>
+        <div id="version">Release 3.2 (Mar 18, 2020)</div>
     </td>
 </tr>
 </table>
