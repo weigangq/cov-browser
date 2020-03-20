@@ -138,12 +138,12 @@ function asignColor(){
 var chartW=655;
 function drawChart(){
     var width = chartW,//document.querySelector("#graph").clientWidth
-        height=536;//596;document.querySelector("#graph").clientHeight
+        height=543;//596;document.querySelector("#graph").clientHeight
     var linewidth = 1;
 
     var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
 
-    var svg = d3.select("#netGraph").append("svg").attr("width", width).attr("height", height);
+    var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
 
 //    var scale = d3.scaleLinear().domain([1,maxChange]).range([0.75,0]);
     for (var i=0; i<listLink.length; i++){
@@ -287,8 +287,11 @@ function drawChart(){
                         .attr("r", d.radius)
                         .style('fill', an? geoColor(geoDataW[an.geoId].ctry) : "gray");
                 } else {
-                    circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
-                        .attr("dy","0.4em").attr("dx","10px").html('&#129415;')
+                    $("#bat").appendTo(('#'+d.id));
+                    circle = n.attr("id", 'nn_'+ac)
+//                    circle = n.append("svg").attr("id", 'nn_'+ac).attr("d",batPath)
+/*                    circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
+                        .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
                 if (an){
                     circle.on('mouseover',function(){overM([ac])})
@@ -346,6 +349,10 @@ function overM(acs){
         $("#patient").html(patient)
         
         $("#lab").html(an.author + '<em> et al</em><br>Sumition date: ' + an.subdate + '<br>' + an.lab);
+        
+        if (ac==outGrp){
+            d3.select("#nn_"+ac).style("fill",geoColor(geoDataW[an.geoId].ctry))
+        }
     } else {
         $("#virusName").html('&nbsp; &nbsp; &nbsp; Multiple isolates');
         $("#accNo, #patient, #lab").html('');
@@ -401,16 +408,17 @@ function un_hl(){
             d3.select('#nn_'+currRad[0]).transition().duration(transTime).attr("r", stdR);
         }
     });
+    d3.select("#nn_"+outGrp).style("fill","black")
     $("#siteName, #tipDate").hide();
     $("#nodeInf td:nth-of-type(2)").hide()//.slideUp("slow")
 }
 
 function drawLg(){
-    var width=chartW-12, height=44,
-        margin=12,
+    var width=chartW-12, height=37,
+        margin=12, margin_top=6,
         radius=13, wpic=radius*2+5;
     var svg = d3.select("#graphLg").append("svg").attr("width", width).attr("height", height),
-        chart = svg.append("g").attr("transform", "translate("+[margin, margin]+")"),
+        chart = svg.append("g").attr("transform", "translate("+[margin, margin_top]+")"),
         pic = chart.append("g").attr("class", "blackLine")
                 .attr("transform", "translate("+[radius, radius]+")"),
         txt1 = chart.append("g").attr("class","lgTitle").attr("transform", "translate("+[0, 11]+")"),
@@ -446,7 +454,7 @@ function drawLg(){
 
     txt1.append("text").attr("x",ww+wpic-1).text("Mutation(s)");
     txt2.append("text").attr("x",ww+wpic-1).html("genetic changes");
-    txt3.append("text").html("at 98 genome sites").attr("x",ww+wpic+66)
+    txt3.append("text").html("at 98 genome sites").attr("x",ww+wpic+68)
 }
 
 function drawRef(){
@@ -1408,6 +1416,8 @@ function readHaps(data){
     }
     listSite = Object.keys(site).map(d=>d*1)
 }
+
+var batPath = "M598.935,485.829c-2.286,5.292-8.146,7.917-8.146,7.917c0.025-0.684-0.068-1.365-0.279-2.016	c1.077-1.284,1.363-3.057,0.745-4.614c-1.251,0.396-2.317,1.229-3.006,2.345c-0.419-0.118-0.853-0.175-1.287-0.169	c-0.426,0.016-0.848,0.09-1.253,0.22c-0.711-1.098-1.788-1.908-3.04-2.286c-0.587,1.574-0.262,3.344,0.847,4.606	c-0.229,0.639-0.346,1.312-0.347,1.99c0,0-5.928-2.54-8.299-7.799c-3.796,4.166-8.123,7.815-12.87,10.855	c0,0,5.69-0.991,7.553,3.073c0,0,6.029-3.167,7.553,2.092c0,0,5.826-5.927,10,7.781c3.963-13.76,9.873-7.942,9.873-7.942	c1.432-5.283,7.52-2.21,7.52-2.21c1.795-4.09,7.502-3.192,7.502-3.192C607.195,493.521,602.802,489.939,598.935,485.829z	 M574.016,490.63c-1.797,2.231-3.075,4.834-3.743,7.621c-0.024,0.147-0.154,0.256-0.305,0.254H569.9	c-0.173-0.008-0.307-0.154-0.3-0.327c0.002-0.033,0.009-0.065,0.021-0.097c0.683-2.876,2.009-5.56,3.878-7.85	c0.102-0.14,0.298-0.169,0.438-0.067c0.14,0.103,0.17,0.299,0.067,0.438c-0.007,0.01-0.015,0.019-0.022,0.027H574.016z	 M578.748,494.212c-0.708,1.744-1.022,3.623-0.923,5.504c0.021,0.172-0.1,0.329-0.271,0.355h-0.042	c-0.159,0.005-0.296-0.113-0.313-0.271c-0.123-1.983,0.204-3.969,0.957-5.809c0.052-0.16,0.225-0.247,0.385-0.194	c0.007,0.003,0.014,0.005,0.021,0.008c0.162,0.06,0.247,0.238,0.188,0.401C578.75,494.208,578.749,494.21,578.748,494.212	L578.748,494.212z M586.217,492.561c-0.102,0.22-0.627,0.187-1.177-0.068c-0.551-0.254-0.923-0.635-0.847-0.847	c0.076-0.211,0.618-0.186,1.177,0.068S586.31,492.349,586.217,492.561z M588.901,492.459c-0.542,0.263-1.076,0.305-1.178,0.093	s0.263-0.601,0.847-0.847c0.585-0.245,1.076-0.305,1.178-0.085C589.85,491.841,589.451,492.196,588.901,492.459z M596.793,499.673	c-0.024,0.158-0.154,0.278-0.313,0.288l0,0c-0.172-0.022-0.295-0.175-0.279-0.348c0.068-1.883-0.276-3.759-1.008-5.495	c-0.063-0.161,0.016-0.343,0.177-0.406h0.001c0.163-0.063,0.349,0.016,0.415,0.178C596.545,495.719,596.889,497.694,596.793,499.673	z M604.058,498.217h-0.06c-0.148,0-0.277-0.102-0.313-0.246c-0.718-2.761-2.039-5.329-3.869-7.519c-0.117-0.127-0.117-0.322,0-0.449	c0.136-0.11,0.336-0.092,0.448,0.043c1.926,2.248,3.318,4.902,4.073,7.765c0.029,0.175-0.089,0.341-0.265,0.37	c-0.005,0.001-0.01,0.002-0.015,0.002V498.217z";
 
 //function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
 
