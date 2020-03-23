@@ -1,0 +1,91 @@
+B################################################
+# From Edgar: FASTA file
+################################################
+cat covid-3-12.fasta | sed  -E 's/>.+(EPI_ISL_[0-9]+)/>\1/' > cov.fas 
+
+# CSV file
+# better to be TSV (comma problem when using cut)
+cut -f2,7 -d',' gisaid_covid19_3_12.csv | grep -v host | tr ',' '\t' > host-info.tsv
+grep Human host-info.tsv | cut -f1 > ids-human
+grep Environment host-info.tsv | cut -f1 > ids-environ
+grep Rhinolophus host-info.tsv | cut -f1 > ids-outgroup
+grep -v "Human\|Rhinolophus\|Environ" host-info.tsv | cut -f1 > ids-animal
+bioseq -p"file:ids-human" cov.fas > cov-human.fas
+bioseq -p"file:ids-outgroup" cov.fas > cov-outgroup.fas
+
+#######################################
+# Parse GISAID sequences fasta
+######################################
+
+1. bioseq -B cov.fas # burst into individual files
+
+2. sam align (weigang@wallace:~/cov-03-09-2030/host-human$ for f in *.fas; do ../sam-align.bash $f; done )
+    nucmer --sam-long=COH1 B111.fa COH1.fa
+    samtools view -b COH1.sam -T B111.fa > COH1.bam
+    samtools sort COH1.bam -o COH1.sorted.bam
+    samtools index COH1.sorted.bam
+
+    with script: for f in *.fas; do ../sam-align.bash $f; done
+
+3c. Less strict call: bcftools mpileup -Ou -f ../ref.fas   *.sorted.bam | bcftools call -mv --ploidy-file ploidy.txt  -Ob -o calls.bcf -P 0.05 (or -P 0.1; large P value for less strict call, default 1.1e-3)
+# 3b. bcftools mpileup -Ou -f ../ref.fas  *.sorted.bam | bcftools call -mv --ploidy-file ploidy.txt  -Ob -o calls.bcf, with default ploidy as 1:
+weigang@wallace:~/cov-03-09-2020/cov57$ cat ploidy.txt
+*       *       *       M       1
+###############################
+# 3d. outgroup mapping:
+################################
+bcftools mpileup -Ou -f ../ref.fas  otg.sorted.bam | bcftools call -mv --ploidy-file ../ploidy.txt  -Ob -o otg.bcf -P 0.05
+
+# Not used: 3a.  samtools mpileup -uf ../ref.fas *.sorted.bam > cov.mpileup &
+
+## bcftools call -c -v --ploidy 1 cov.mpileup > raw.vcf
+
+5. bcftools stats raw.vcf > vcf.stats # check TsTv ratio
+
+6a. bcftools view -m2 -M2 --types snps calls.bcf > snps.bcf ( get only biallelic SNPs)
+6b. vcftools --vcf input_file.vcf --remove-indels --recode --recode-INFO-all --out cov.vcf # filter SNPs only
+6c. fitler outgroup SNPs:
+bcftools view otg.bcf > otg.vcf
+weigang@wallace:~/cov-03-12-2020$ bgzip snps2.vcf
+weigang@wallace:~/cov-03-12-2020$ tabix snps2.vcf.gz
+weigang@wallace:~/cov-03-12-2020$ bgzip otg.vcf
+weigang@wallace:~/cov-03-12-2020$ tabix otg.vcf.gz
+
+bcftools isec -n=2 -w1 otg.vcf.gz snps2.vcf.gz > otg-isec-sites.vcf
+gzip & tabix to index
+vcf-merge -d -R 0 otg-isec-sites.vcf.gz snps2.vcf.gz > snps-ref.vcf ( no duplicated line; add ref state "0" instead of missing)
+
+7. filter sites by allele counts: only informative sites
+bcftools view snps.bcf > snps.vcf
+vcftools --vcf snps.vcf --mac 2 --recode --recode-INFO-all --out snps2.vcf
+
+7. Get sample FASTA:
+bcftools query -l snps.bcf > samples
+cat samples | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' snps.bcf; echo; done > samples.fas
+
+(8 get ref FASTA; if necessary
+echo ">ref" >> sample.fas
+grep "^CP" gbs50-snps2.vcf | cut -f4 | paste -s -d '' >> sample.fas)
+
+9. SNP counts (for verification)
+bcftools view snps.bcf > snps.vcf
+vcftools --vcf --counts snps.vcf
+
+10. Remove gapped samples
+bioseq -d'ambig:20' samples.fas > samples2.fas # remove seqs with 20 or more missing/non-ATCG bases "."
+cat samples2.fas | sed "s/.sorted.bam//" > samples3.fas # fix names
+bioaln -i'fasta' --gap-char 'n' samples3.fas  > samples4.aln # change gaps to "n" to help reducing unique haps
+
+
+9. Annotate with gff
+
+
+#####################
+# MST by Perl
+##################
+# 1. replace gap char
+bioaln -i'fasta' --gap-char 'n' cov-275-outgroup.fas  > sample4.aln
+
+# 2. run sssp_from_haps.pl
+perl hapnet.pl --vcf snps2.vcf --genome ref.gb --hap samples4.aln --output json 2> tmp.log > net.json
+

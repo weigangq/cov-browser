@@ -1,0 +1,261 @@
+body { font-family:Arial, Helvetica, sans-serif; margin:1px 0 0 1px }
+
+table {
+    border-collapse:collapse;
+    border:0
+}
+body>table {position:relative}
+
+#mainTab { width:1133px; padding:0 }
+#mainTab>ul {padding:0}
+#mainTab>ul>li { float:right!important; width:189px; font-size:16px; font-weight:bold}
+#main_tab1, #main_tab2 {padding:4px 5px 0 5px}
+#main_tab1>table {margin-top:4px}
+
+#top_area {
+    position:absolute;
+    top:3px; left:3px;
+    padding-left:215px; padding-top:7px;
+    z-index:2000;
+    width:529px;
+    height:33px;
+    font-size:21px;
+    color:white;
+    font-weight:bold;
+    background: linear-gradient(to right, gray, 90%, #d3d3d3);
+}
+
+#bottom_area {
+    background-color:gray;
+    line-height:110%;
+    color:white;
+    font-size:12px;
+    position:relative
+}
+#bottom_area span {margin-left:110px}
+#bottom_area a {color:white}
+#bottom_area div {position:absolute}
+#version, #thank { top:8px; color:white }
+#version {right:15px}
+#thank {left:777px; text-decoration:underline;cursor:pointer}
+
+#ack {
+    position:absolute;
+    top:-120px; left:580px;
+	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius:4px;
+    background-color:#FFFFE0;
+    width:450px;
+    color:black
+}
+#ack ul {padding:0 2px 0 27px}
+#ack li {padding:3px 0}
+#ack a {color:#428bca}
+
+.close {
+    float:right;
+    padding:0 5px 2px 5px;
+    background:#ddd;
+	text-shadow:1px 1px white
+}
+.close:hover {
+    color:#fff;
+	cursor:pointer
+}
+
+#ids a, #citation a { color: inherit}
+#citation {margin-top:0; margin-left:2px; width:103px}
+#citation td:hover {font-weight:bold}
+
+#netGraph {margin:0 6px 0 0; padding:2px 0 2px 2px; border:gray thin solid; position:relative}
+
+#graphLg {
+    margin:0 0 0 9px;
+    font-size:11.5px;
+    font-family:sans-serif
+}
+#graphLg a {text-decoration:underline; fill:gray}
+.lgTitle {font-weight:bold}
+.lgExp {font-size:10.5px}
+.grayFill {fill:gray}
+
+#netGraph circle, #netGraph path {stroke:white; stroke-width:1px}
+
+.link {stroke:#666; stroke-width:2px}
+.link:hover {stroke:red}
+.noHover:hover{stroke:black}
+marker path {fill:#666}
+
+#tabs {padding:0; font-size:13px; width:795px}
+#tabs>div {padding:6px 4px}
+#tabs td{padding:0}
+#tabs a { text-shadow:2px 1px white}
+
+.disabled { cursor:not-allowed }
+.disabled > a {
+    pointer-events: none;
+    color:#bbb!important;
+}
+
+.blackLine {stroke:black; fill:none}
+.link-extensions{ stroke:lightgray; stroke-dasharray:4,2 }
+
+.pheno {white-space:nowrap}
+#collect tr:nth-of-type(even), #citation tr:nth-of-type(even), #ids tr:nth-of-type(odd){
+    background:rgb(240,240,240) }
+.pheno th {font-size:13px; color:#999; vertical-align:top}
+.pheno td {font-size:11px; overflow:hidden}
+
+#collect {margin:42px 1px 0 1px}
+#treeContainer {padding:1px 0}
+#ids {margin-left:1px}
+#ids td, #collect td {padding:0 2px 0 2px}
+
+.lg {fill:#999; font-weight:bold; font-size:13px}
+#lg_org {margin-top:25px}
+
+.grayLine {stroke:#999; fill:none}
+
+#treeScale, .lgOrg, #mapC {font-size:11px}
+#treeScale text, .mark {fill:#999}
+#treeScale tspan { fill:black; font-style:italic}
+
+.map {
+	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius:4px;
+    background-color:#f5f5f5;
+}
+.mapBg {fill:#f5f5f5}
+
+#mapC { margin:0 25px; text-anchor:middle }
+#mapW {margin:0; height:297px}
+#siteName {height:20px; text-align:center}
+
+#dateChart, .node_edge {margin:10px 0 0 0}
+
+.infoTitle {
+    text-align:center; text-anchor:middle;
+    color:gray; fill:gray;
+    font-size:14px
+}
+
+.country {fill:lightgray; stroke:white; stroke-width:0.5px}
+.country_sel {fill:lightblue}
+
+.whiteFill { fill:white }
+.dotStroke {stroke-dasharray:4,1}
+.dashStroke {stroke-dasharray:4,2}
+
+.tip {
+    position:absolute;
+    padding:1px 5px 2px 5px;
+    border-radius:4px;
+    white-space:nowrap
+}
+.tooltip {
+    background-color:rgba(0, 0, 0, 0.6);
+    color:#ffffff;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px
+}
+#tipORF { margin-top:106px }
+#symbol {font-size:13px; text-anchor:middle; font-style:italic }
+
+.hidden { display:none }
+
+.finger { cursor:pointer}
+.shade { fill:none; stroke:#4CC6FF}
+
+.xaxis line, .xaxis path { stroke:#999}
+.xaxis text { font-size:11px; fill:#ababab; stroke:none }
+#col_year .xaxis line { stroke:lightgray}
+#dateChart .xaxis text {fill:black}
+
+#mapW circle, #mapC circle {opacity:0.7}
+#mapW circle {stroke:white}
+#dateChart line {stroke:gray; stroke-width:2px}
+
+#col2 {padding-top:0; margin-top:0}
+#genome, #col2 {position:relative}
+.svgContainer {
+    overflow-x:scroll; overflow-y:hidden;
+    position:relative;
+    font-size:11px
+}
+#seqContainer { font-family:Courier; cursor:none }
+.codonBg { fill:rgb(247,247,247) }
+.mark { text-anchor:end }
+
+.opc0{ opacity:0}
+
+.guide { background-color:rgba(256,180,180,0.4); position:absolute }
+#guideH {z-index:1000}
+
+.info, #tipDate { position:absolute; white-space:nowrap}
+#instruction { top:13px; right:70px; font-size:13px }
+#geneName { top:13px; left:430px; font-size:14px }
+#showWhat {
+    top:8px; right:25px;
+    width:85px;
+    background-color:#eee;
+    text-shadow:1px 1px white;
+    cursor:pointer;
+    font-size:12px
+}
+
+#dnaComp {margin-left:5px}
+.compBgLine {stroke:white}
+#dnaComp path {fill:none}
+.lowOpc { opacity:0.1}
+.path0 { stroke:#02bd02 }
+.path1 { stroke:deepPink }
+.path2 { stroke:DodgerBlue }
+#compY, #mapW, #ack {font-size:13px}
+
+.redStroke { stroke:red }
+.redFill {fill:red; color:red}
+.blueColor {color:DodgerBlue}
+.hlLine {stroke:red; stroke-width:3px}
+
+#affiliation {height:15px; color:gray; font-style:italic}
+
+#tipNet {z-index:2001}
+#tipNet td {padding-top:3px; vertical-align:top}
+#tipNet td:nth-of-type(1){padding-right:3px; color:lightgray}
+
+#tipDate {font-size:13px; text-anchor:middle}
+
+.node_edge {
+    position:absolute;
+    top:429px;
+    width:442px; height:191px;
+    overflow-y:auto;
+    padding:4px 6px;
+    font-size:12px
+}
+.node_edge table {width:100%}
+.node_edge th {padding-bottom:4px; padding-top:0; font-weight:normal}
+.node_edge td {line-height:16px}
+
+#nodeInf tr td:nth-of-type(1){width:69px; color:gray; vertical-align:top}
+#nodeInf tr td:nth-of-type(2){display:none; font-weight:100}
+
+#chgInf {text-align:center}
+#chgTbl {margin-left:auto; margin-right:auto; width:68%}
+#chgInf td, #chgInf th:not(.infoTitle) {
+    text-align:center;
+    width:70px;
+    overflow:hidden; display:inline-block
+}
+#chgInf td { font-family:Courier; padding:0}
+#chgInf th {color: gray}
+
+#refOrf {
+    padding-bottom:3px;
+    border-bottom:#b3b3b3 thin solid
+}
+#refLine {stroke:#b3b3b3; stroke-width:6px}
+#refOrf rect {fill:lightgray; stroke:gray}
+.refSym {font-size:10px; text-anchor:middle; font-style:italic }
+
+/*.bat {text-anchor:middle; font-size:30px}
