@@ -6,7 +6,8 @@
 # Done (3/15/2020):  add additional attributes including gene, codon, AA, syn/nonsyn (by parsing VCF & BED file)
 # Done (3/15/2020):  uniq_seq: consolidate sequences with internal missing bases; solved bioaln --gap-char "n" (not ideal)
 # Done (3/16/2020):  outgroup rooting: re-orient MSP path (Single-Source Shortest Paths, SSSP, won't work because it doesn't cover all nodes)
-#
+# To Do: @diff => %diff
+# To Do: sub genome_info has redundant code to extract codon => subroutine
 # Perl modules for Graphs: https://metacpan.org/release/Graph
 #
 
@@ -48,7 +49,7 @@ pod2usage(1) if $options{'help'};
 my $in = Bio::AlignIO->new(-file=>$options{'hap'}, -format=>'clustalw');
 my $aln = $in->next_aln();
 my $alnLen = $aln->length();
-my ($stAln, $refSt) = $aln->uniq_seq(); # this doesn't count gaps on edges but still treats internal gaps as distinct seqs
+my ($stAln, $refSt) = $aln->uniq_seq(); # this doesn't count gaps on edges but still treats internal gaps as distinct seqs (solved)
 my %STs;
 foreach my $st ($stAln->each_seq) {
     $STs{$st->display_id()} = $st;
@@ -110,7 +111,7 @@ push @utr_feats, Bio::SeqFeature::Generic->new(-seq_id => '3-UTR',
 
 print Dumper(\@utr_feats) if $options{'debug'};
 #############################
-# Make a graph & calculate MST & polorize with root
+# Make a graph, calculate MST & polorize with root
 #############################
 my $graph = Graph->new(undirected => 1);
 my @sts = sort keys %STs;
@@ -119,7 +120,7 @@ for (my $i=0; $i<$#sts; $i++) { # build a complete graph from edges
     for (my $j=$i+1; $j<=$#sts; $j++) {
 	my $idJ = $STs{$sts[$j]}->display_id();
 	$graph->add_edge($idI, $idJ);
-	my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]});
+	my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); # could be optimized to store in a hash, to be re-used later
 #	print Dumper(\@diffs);
 	$graph->set_edge_weight($idI, $idJ, scalar @diffs); # seq diff as weight (to be minimized in MST)
     }
@@ -173,16 +174,42 @@ $traversal = Graph::Traversal::DFS->new(
 $traversal->dfs();
 
 #############################
-# write out JSON
+# Write outputs
 ##############################
 
 print to_json([\@nodelist, \@edgelist]) if $options{'output'} eq 'json';
 $writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
+&print_edge_list($mstg) if $options{'output'} eq 'edge';
+
 exit;
 
 #####################################
 # subroutines
 ###################################
+
+sub print_edge_list {
+    my $g = shift;
+    foreach my $e ($g->edges) {
+	my ($u, $v) = ($e->[0], $e->[1]);
+	my $from = $g->get_edge_attribute($u, $v, 'source');
+	my $to = $g->get_edge_attribute($u, $v, 'target');
+	my $ref = $g->get_edge_attribute($u, $v, 'change');
+	foreach my $mut (@$ref) {
+	    my $syn_nonsyn = 'NA';
+	    if ($mut->{src_aa}) {
+		$syn_nonsyn = $mut->{src_aa} eq $mut->{tgt_aa} ? 1 : 0;
+	    }
+	    print join "\t", ($from, $to, 
+			      $mut->{site}, $mut->{label}, 
+			      $mut->{src_base}, $mut->{tgt_base}, 
+			      $mut->{src_codon} || 'NA', $mut->{tgt_codon} || 'NA',
+			      $mut->{src_aa} || 'NA', $mut->{tgt_aa} || 'NA',
+			      $syn_nonsyn
+	    );
+	    print "\n";
+	}
+    }
+}
 
 sub comp_seq { # possibly no change? due to missing base? yes; fix uniq_seq
     my ($i, $j) = @_;
@@ -202,7 +229,7 @@ sub comp_seq { # possibly no change? due to missing base? yes; fix uniq_seq
 		    'label' => $ref->[0],
 #		    'length' => $ref->[1],
 		    'pos' => $ref->[2],
-		    'codon_pos' => $ref->[3] || undef,
+		    'cd_pos' => $ref->[3] || undef,
 		    'src_codon' => lc($ref->[4]) || undef,
 		    'tgt_codon' => lc($ref->[5]) || undef,
 		    'src_aa' => $ref->[6] || undef,
