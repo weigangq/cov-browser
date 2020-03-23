@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SEIR MODEL for CoV-19</title>
+	<!-- Load d3.js -->
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="https://unpkg.com/d3-simple-slider"></script>
+</head>
+
+<body>
+
+<div id="seir_model"></div>
+<!--
+<div class="col-sm-2"><p id="value-simple"></p></div>
+<div class="col-sm"><div id="slider-simple"></div></div>
+-->
+<script>
+
+/*
+//slider value to control R0
+var sliderValue = [];
+for (i=0; i<=20; i+0.01) {
+	sliderValue.push(i);
+}
+*/
+
+//dataset
+var data = [];
+for (days=0; days<=40;days++) {
+	rNaught = 
+	nInfected = 
+	x = days;
+	y = Math.log2(days+1);
+	data.push({ser1: x, ser2:y});
+}
+
+/*
+var sliderSimple = d3
+	.sliderBottom()
+	.min(d3.min(sliderValue))
+	.max(d3.max(sliderValue))
+	.width(50)
+	.tickformat(d3.format('.2'))
+	.ticks(5)
+	.default(1)
+	.on('onchange', val => {
+		d3.select('p#value-simple').text(d3.format('.2')(val))
+	});
+
+var gSimple = d3
+	.select('div#slider-simple')
+	.append('svg')
+	.append('g')
+	.attr('transform', 'translate(30,30');
+
+gSimple.call(sliderSimple)
+
+d3.select('p#value-simple').text(d3.format('.2%')(sliderSimple.value()));
+*/
+
+// dimensions of the graph
+var margin = {top: 50, right: 20, bottom: 70, left: 100},
+	width = 690 - margin.left - margin.right,
+	height = 460 - margin.top - margin.bottom;
+
+//append svg object to the body of the page	
+var svg = d3.select("#seir_model")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+    	"translate(" + margin.left + "," + margin.top + ")");
+
+//x-axis 
+var x = d3.scaleLinear()
+	.range([0, width]);
+var xAxis = d3.axisBottom().scale(x);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .attr("class","myXaxis");
+// Add X axis label:
+svg.append("text")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", height + margin.top)
+    .text("X axis title");
+
+// Initialize an Y axis
+var y = d3.scaleLinear().range([height, 0]);
+var yAxis = d3.axisLeft().scale(y);
+svg.append("g")
+  .attr("class","myYaxis");
+// Y axis label:
+svg.append("text")
+    .attr("text-anchor", "end")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left+50)
+    .attr("x", -margin.top)
+    .text("Y axis title")
+
+
+// Create a function that takes a dataset as input and update the plot:
+function update(data) {
+
+  // Create the X axis:
+  x.domain([0, d3.max(data, function(d) { return d.ser1 }) ]);
+  svg.selectAll(".myXaxis").transition()
+    .duration(3000)
+    .call(xAxis);
+
+  // create the Y axis
+  y.domain([0, d3.max(data, function(d) { return d.ser2  }) ]);
+  svg.selectAll(".myYaxis")
+    .transition()
+    .duration(3000)
+    .call(yAxis);
+
+  // Create a update selection: bind to the new data
+  var u = svg.selectAll(".lineTest")
+    .data([data], function(d){ return d.ser1 });
+
+  // Updata the line
+  u
+    .enter()
+    .append("path")
+    .attr("class","lineTest")
+    .merge(u)
+    .transition()
+    .duration(5000)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.ser1); })
+      .y(function(d) { return y(d.ser2); }))
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+}
+
+update(data)
+
+
+/*
+//x-axis scale
+var xScale = d3.scaleLinear()
+	.domain([0, data.length]) //input
+	.range([0, width]);
+svg.append("g")
+	.attr("transform", "translate(0," + height + ")")
+	.call(d3.axisBottom(xScale))
+
+//y-axis scale
+var yScale = d3.scaleLinear()
+	.domain([0, 1])
+	.range([height, 0]);
+svg.append("g")
+	.call(d3.axisLeft(yScale));
+
+//d3 line generator
+svg.append("path")
+	.datum(data)
+	.attr("fill", "none")
+	.attr("stroke", "steelblue")
+	.attr("stroke-width", 1.5)
+	.attr("d3.axidata", d3.line()
+		.x(data[0][0])
+		.y(data[0][1])
+		)*/
+
+
+</script>
+
+</body>
