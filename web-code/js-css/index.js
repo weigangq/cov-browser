@@ -1,15 +1,16 @@
-var listNode, listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, outGrp='EPI_ISL_402131', nodePie={}//, haplos = [];
+var listNode, listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, listChange={}, outGrp='EPI_ISL_402131', nodePie={}//, haplos = [];
 var stdR=5, cR1=4, cR=4, cR2=8, distance=12//, lnkdist=1;
 var annoDataW, geoDataW, countryData, refData,
     ids=[], annoDataC, geoDataC, pubData, source, symData, orfData, compData, seqData, dndData;
 var wTotal=1100, wTree=100, tabW, unit=30, marginL=1, wYear=140,
     hUnit=19.5, yEdge=22, hTree, hSvg,
     orgColor = {1:"DodgerBlue", 2:"magenta", 3:"yellowGreen", 4:"orange"},
-    geoColor,
+    geoColor, dateScale,
     ratio = 38.5, hORF=6, transBar, orfLine, wLg, sub_site=[],
     unitW=6.6, showAA;
 var ratioC, cid_comp=[1,2,3,4,5,6,8,9,10], compLine, seqCid, tabNum, seqScroll;
 var dbLink ={"pubmed":"http://www.ncbi.nlm.nih.gov/pubmed/","ncbi":"http://www.ncbi.nlm.nih.gov/nuccore/"};
+var duration=2000;
 
 $(document).ready(function(){
     $("#mainTab, #tabs").tabs();
@@ -44,6 +45,8 @@ $(document).ready(function(){
         }
     });
 
+    $(':radio').change(function(){changeColor(Number($(':radio:checked').val()))});
+
     $.ajax({
         async:false, dataType:"text", url:"js-css/tree.dnd",
         success: function(data){
@@ -60,7 +63,6 @@ $(document).ready(function(){
     });
     $('#showWhat').click(function(){
         $(this).html(showAA? "Show Nt" : "Show AA");
-        var duration=2000;
         if (showAA){
             d3.select("#seqNt").transition().duration(duration).style("opacity", 0);
             if (!$('#seqAA').length) { aaSeqTbl() }
@@ -145,7 +147,6 @@ function drawChart(){
 
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
 
-//    var scale = d3.scaleLinear().domain([1,maxChange]).range([0.75,0]);
     for (var i=0; i<listLink.length; i++){
         var lk = listLink[i];
         svg .append('defs')
@@ -160,34 +161,27 @@ function drawChart(){
             .append('path')
             .attr("d", "M0,-3L7,0L0,3")
 //            .attr("fill", d3.hsl(0, 0, scale(lk.change.length)))
+    
+        if (!lk.change) continue;
+        var cc = lk.change;
+        for (var j=0; j<cc.length; j++){
+            var ch = cc[j];
+            if (!ch.src_aa || ch.src_aa==ch.tgt_aa) continue;
+            var ll=[];
+            if (listChange[ch.label]) ll = listChange[ch.label];
+            ll.push(i)
+            listChange[ch.label] = ll
+        }
     }
-/*
-        for (var i=0; i<rList.length; i++){
-        var tarR = rList[i]*1;
-        svg .append('defs')
-            .append('marker')
-            .attr('id', 'arrow'+ tarR.toFixed(0))
-            .attr('viewBox', [0, -5, 10, 10])
-            .attr('refX', tarR*0.6+5)
-            .attr('refY', -0.5)
-            .attr('markerWidth', 8)
-            .attr('markerHeight', 8)
-            .attr('orient', 'auto')
-            .append('path')
-            .attr("d", "M0,-3L7,0L0,3")
-    }
-*/
 
 //    var chrg=-100;
-    var chrg=-180;
+    var chrg=-90;
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink()
                .id(function(d){ return d.index })
                .distance(function(d){ return d.source.haps? d.ldist : d.ldist*2.5/**lnkdist*/})
-               .iterations(7))
-//        .force("collide",d3.forceCollide( function(d){return d.r + 8 }).iterations(16))
+               .iterations(8))
         .force("charge", d3.forceManyBody().strength(chrg))
-//        .force("linkStrength",function(d){return 1})
         .force("center", d3.forceCenter(width/2, height/2))
         .force("y", d3.forceY(0))
         .force("x", d3.forceX(0));
@@ -196,14 +190,14 @@ function drawChart(){
         .append("line").attr('class', function(d){
                 return 'link finger' + (d.target.haps && d.target.haps[0]==outGrp? ' dashStroke' : '')
             })
-//        .attr("stroke", function(d){ return d3.hsl(0, 0, scale(d.change.length))})
+        .attr("id", function(d,i){return 'll_'+i})
         .attr('marker-end', function(d,i){return 'url(#arrow' + i + ')'})
         .on('mouseover',function(d,i){
-//            var r = d.target.radius.toFixed(0);
-            if (!d.change){d3.select(this).classed("finger",false).classed("noHover",true); return}
+            un_hl();
+            if (!d.change){d3.select(this).classed("finger",false).classed("redStroke",false); return}
+            d3.select(this).classed("redStroke",true);
             d3.select('#arrow'+i+' path').classed("redFill",true);
 
-//            var chgs = d.change.sort(function(a,b){return a.site*1 - b.site*1});
             var trs = [];
             d.change.forEach(function(c){
                 var noSyn = c.src_aa && c.src_aa != c.tgt_aa;
@@ -227,11 +221,7 @@ function drawChart(){
             $("#chgInf").fadeIn("slow")
             $("#nodeInf").fadeOut("slow");
         })
-        .on('mouseout', function(){
-            d3.selectAll('marker path').classed("redFill",false)
-            $('#chgTbl td').remove();
-            d3.selectAll('.siteLine').classed("hidden",true)
-        })
+//        .on('mouseout', function(){ un_hl})
 
     var node = svg.selectAll(".node").data(listNode).enter()
         .append("g")
@@ -255,26 +245,28 @@ function drawChart(){
 
     listNode.forEach(function(d){
         var n = d3.select('#'+d.id);
+        n.append("circle").attr("r", d.radius).style('fill',"white")
         if (d.haps && d.haps.length>1){
             d.haps.forEach(function(n){ nodePie[n]=d.id});
             var sector = d3.arc().innerRadius(0).outerRadius(d.radius);
             n.selectAll('path')
                 .data(pie(d.haps)).enter()
                 .append('path')
-                .attr("id", function(n){return 'nn_'+n.data})
+                .attr("id", function(n){return 'nn_'+n.data}).attr("class","iso")
                 .attr('d', sector)
                 .style('fill', function(n){
                     var an = annoDataW[n.data];
                     return an? geoColor(geoDataW[an.geoId].ctry) : "gray"
                 })
-                .on('mouseover',function(n){overM([n.data])})
-                .on('mouseout',un_hl)
+                .on('mouseover',function(n){ un_hl(); overM([n.data])})
+//                .on('mouseout',un_hl)
         } else {
             if (!d.haps){
                 n.append("circle").attr("r", d.radius)
                     .style('fill',"white").style('stroke','#999')
                     .on('mouseover',function(d){
-                        $("#tipNet").css("left", (d3.event.pageX-35)+"px").css("top", (d3.event.pageY-77)+"px")
+                        un_hl();
+                        $("#tipNet").css("left", (d3.event.pageX-50)+"px").css("top", (d3.event.pageY-77)+"px")
                         .html('Hypothetical root').show()
                     })
                     .on('mouseout', function(){ $("#tipNet").hide() })
@@ -283,7 +275,7 @@ function drawChart(){
                     an = annoDataW[ac];
                 var circle;
                 if (ac!=outGrp){
-                    circle = n.append("circle").attr("id", 'nn_'+ac)
+                    circle = n.append("circle").attr("id", 'nn_'+ac).attr("class","iso")
                         .attr("r", d.radius)
                         .style('fill', an? geoColor(geoDataW[an.geoId].ctry) : "gray");
                 } else {
@@ -294,8 +286,8 @@ function drawChart(){
                         .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
                 if (an){
-                    circle.on('mouseover',function(){overM([ac])})
-                          .on('mouseout',un_hl)
+                    circle.on('mouseover',function(){un_hl(); overM([ac])})
+//                          .on('mouseout',un_hl)
                 }
             }
         }
@@ -351,7 +343,7 @@ function overM(acs){
         $("#lab").html(an.author + '<em> et al</em><br>Sumition date: ' + an.subdate + '<br>' + an.lab);
         
         if (ac==outGrp){
-            d3.select("#nn_"+ac).style("fill",geoColor(geoDataW[an.geoId].ctry))
+            d3.select("#nn_"+ac).style("fill", Number($(':radio:checked').val())? "gray" : geoColor(geoDataW[an.geoId].ctry))
         }
     } else {
         $("#virusName").html('&nbsp; &nbsp; &nbsp; Multiple isolates');
@@ -365,41 +357,59 @@ function overM(acs){
 var transTime=500;
 function hlNode(acs){
     hlNodes=[];
+    var val = Number($(':radio:checked').val());
     acs.forEach(function(ac){
         var currRad = [ac];
 //        d3.select("#dd_"+ac).transition().duration(transTime).attr("r", stdR+cR1);
-        d3.selectAll("#nn_"+ac).style("fill-opacity",0.6)
+        if (!val) d3.select("#nn_"+ac).style("fill-opacity",0.6)
         if (nodePie[ac]){
             currRad.push(listNode.filter(function(n){return n.id==nodePie[ac]})[0].radius);
-            var sector = d3.arc().innerRadius(0).outerRadius(currRad[1]+stdR*2);
-            d3.select("#nn_"+ac).transition().duration(transTime).attr('d', sector)
+            var sector = d3.arc().innerRadius(0).outerRadius(currRad[1]+stdR*2),
+                sector2= d3.arc().innerRadius(0).outerRadius(currRad[1]);
+            function repeat() {
+              d3.select("#nn_"+ac)
+                .attr('d', sector2)
+                .transition().duration(transTime)
+                .attr('d', sector)
+                .transition().duration(transTime)
+                .attr('d', sector2)
+                .on("end", repeat)
+            };
+//            d3.select("#nn_"+ac).transition().duration(transTime).attr('d', sector)
         } else {
-            d3.select('#nn_'+ac).transition().duration(transTime).attr("r", stdR+cR2);
+            function repeat() {
+              d3.select("#nn_"+ac)
+                .attr('r', stdR)
+                .transition().duration(transTime)
+                .attr("r", stdR+cR2)
+                .transition().duration(transTime)
+                .attr('r', stdR)
+                .on("end", repeat)
+            };
+//            d3.select('#nn_'+ac).transition().duration(transTime).attr("r", stdR+cR2);
         }
+        repeat()
         hlNodes.push(currRad)
     })
 }
 function hlGeo(geoId){
     d3.select('#mapW_'+geoId).transition().duration(transTime).attr("r", stdR*2/transK).style("fill-opacity",0.6);
     $("#siteName").html(geoDataW[geoId].name).show()
-/*    
-    var geoNode = $("#mapW_"+geoId)[0].attributes,
-        of = $("#mapW").offset();
-    $("#tipGeo").css("left", (of.left+geoNode.cx.value*1-2)+"px")
-                .css("top", (of.top*1+geoNode.cy.value*1-5)+"px")
-                .show().html(geoDataW[geoId].name)*/
 }
 function hlDate(d){
     d3.select('#date_'+d).style("stroke","red").style("stroke-width","5px");
 
     var dateNode = $("#date_"+d)[0].attributes,
         of = $("#dateChart").offset();
-    $("#tipDate").css("left", (of.left + dateNode.transform.value.split('(')[1].split(',')[0]*1-35)+"px").css("top", (of.top+50)+"px").html(d).show()
+    $("#tipDate").css("left", (dateNode.transform.value.split('(')[1].split(',')[0]*1-35)+"px").css("top", (of.top+3)+"px").html(d).show()
 }
 function un_hl(){
     d3.selectAll("#dateChart line").style("stroke","gray").style("stroke-width","2px");
     d3.selectAll('#mapW circle').transition().duration(transTime).attr("r", cR/transK);
-    d3.selectAll('#netGraph path, #netGraph circle, #mapW circle').style("fill-opacity",1);
+
+    var val = Number($(':radio:checked').val());
+    if (!val) d3.selectAll('.iso, #mapW circle').style("fill-opacity",1);
+
     hlNodes.forEach(function(currRad){
         if (currRad[1]){
             var sector = d3.arc().innerRadius(0).outerRadius(currRad[1]);
@@ -411,14 +421,19 @@ function un_hl(){
     d3.select("#nn_"+outGrp).style("fill","black")
     $("#siteName, #tipDate").hide();
     $("#nodeInf td:nth-of-type(2)").hide()//.slideUp("slow")
+
+    d3.selectAll(".link").classed("redStroke",false);
+    d3.selectAll('marker path').classed("redFill",false)
+    $('#chgTbl td').remove();
+    d3.selectAll('.siteLine').classed("hidden",true)
 }
 
 function drawLg(){
     var width=chartW-12, height=37,
-        margin=12, margin_top=6,
-        radius=13, wpic=radius*2+5;
+        margin_left=40, margin_top=6,
+        radius=12, wpic=radius*2+5;
     var svg = d3.select("#graphLg").append("svg").attr("width", width).attr("height", height),
-        chart = svg.append("g").attr("transform", "translate("+[margin, margin_top]+")"),
+        chart = svg.append("g").attr("transform", "translate("+[margin_left, margin_top]+")"),
         pic = chart.append("g").attr("class", "blackLine")
                 .attr("transform", "translate("+[radius, radius]+")"),
         txt1 = chart.append("g").attr("class","lgTitle").attr("transform", "translate("+[0, 11]+")"),
@@ -427,10 +442,10 @@ function drawLg(){
  
     pic.append("circle").attr("r", radius);
     txt1.append("text").text("Haplotype").attr("x",wpic);
-    txt2.append("text").html("a group of viral genomes").attr("x",wpic);
-    txt3.append("text").html("N=86").attr("x",wpic+60)
+    txt2.append("text").html("a group of similar genomes").attr("x",wpic);
+    txt3.append("text").html("N=151").attr("x",wpic+60)
 
-    ww = 176
+    ww = 187
     pic.append("circle").attr("r", radius).attr("cx", ww).style("stroke","#ccc");
     
     var pie = d3.pie().startAngle(0.5*Math.PI).endAngle(0.7*Math.PI),
@@ -439,10 +454,10 @@ function drawLg(){
         .selectAll("g").data(pie([10])).enter()
         .append("path").attr("d", arc);  
     txt1.append("text").text("Isolate").attr("x",ww+wpic);
-    txt2.append("text").html("a patient sample (color-coded by country)").attr("x",ww+wpic);
-    txt3.append("text").html('N=431 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+43)
+    txt2.append("text").html("a patient sample").attr("x",ww+wpic);
+    txt3.append("text").html('N=712 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+43)
     
-    ww +=252
+    ww += 190//249
     svg .append('defs').append('marker').attr('id', 'arrow')
         .attr('viewBox', [0, -5, 10, 10])
         .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 8).attr('markerHeight', 8)
@@ -454,33 +469,35 @@ function drawLg(){
 
     txt1.append("text").attr("x",ww+wpic-1).text("Mutation(s)");
     txt2.append("text").attr("x",ww+wpic-1).html("genetic changes");
-    txt3.append("text").html("at 98 genome sites").attr("x",ww+wpic+68)
+    txt3.append("text").html("at 132 genome sites").attr("x",ww+wpic+68)
 }
 
 function drawRef(){
     var width = wMap-6,
-        height=42,
-        margin=2,
+        height=56,
+        margin=2, margin_top=12,
         chartW = width-2*margin,
-        base = height-25,
+        base = 18,
         halfH = 6;
     var seqL = refData.len;
     var svg = d3.select("#refOrf svg").attr("width", width).attr("height", height),
         chart = svg.append("g")
             .attr("width", chartW).attr("height", height)
-            .attr("transform", "translate("+[margin, 0]+")");
+            .attr("transform", "translate("+[margin, margin_top]+")");
+
+    svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",14).html('Genome map');
 
     var scale = d3.scaleLinear().domain([1, seqL]).range([0, chartW]);
     
     var xAxis = d3.axisBottom().scale(scale).tickSize(-3, 0).ticks(seqL/1000)
                 .tickFormat(function(f){ return f<2000? '1k' : f/1000 });
-    chart.append("g").attr("class", "xaxis").attr("transform", "translate(0," + (height-12) + ")").call(xAxis);
+    chart.append("g").attr("class", "xaxis").attr("transform", "translate(0," + (base+10) + ")").call(xAxis);
 
     var orfChart = chart.append("g").attr("transform", "translate("+[0, base]+")");
     orfChart.append("line").attr("id","refLine").attr("x2", scale(seqL));
 
     var orfs = refData.orf;
-    orfChart.append("g")//.attr("class","orfRef")
+    orfChart.append("g").attr("class","finger")
             .selectAll("rect").data(orfs).enter()
             .append("rect")
             .attr("x", function(d){return scale(d[0])})
@@ -488,12 +505,29 @@ function drawRef(){
             .attr("width", function(d){return scale(d[1]) - scale(d[0])})
             .attr("height", halfH*2)
             .on('mouseover',function(d){
-                $("#tipNet").css("left", (d3.event.pageX-16)+"px").css("top", (d3.event.pageY-73)+"px")
-                .html(d[2]).show()
-            })
-            .on('mouseout', function(){ $("#tipNet").hide() })
+                un_hl();
+                d3.select(this).style("fill", "orange");
 
-    var toShow = {"orf1ab":1, "S":1, "M":1, "N":1}
+                var gene = d[2];
+                var lks = listChange[gene],
+                    tipTxt = '<em>' + gene + (lks? '<br><span>black arrows - presence of<br>non-synomous mutations</span>' : '') + '</em>'
+                $("#tipNet").css("left", (d3.event.pageX-(lks?120:16))+"px").css("top", (d3.event.pageY-(lks?103:73))+"px").html(tipTxt).show()
+                if (!lks){return}
+                var ll = lks.map(function(l){return '#ll_'+l}).join(','),
+                    ar = lks.map(function(l){return '#arrow'+l+' path'}).join(',');
+                d3.selectAll('#netGraph .link').style("stroke","#eee").classed("redStroke",false);
+                d3.selectAll(ll).style('stroke','black')
+                d3.selectAll('#netGraph marker path').style("fill","#eee").classed("redFill",false);
+                d3.selectAll(ar).style("fill",'black')
+            })
+            .on('mouseout', function(){
+                 d3.select(this).style("fill", "#ffe4b2")
+                $("#tipNet").hide()
+                d3.selectAll('#netGraph .link').style("stroke","#999");
+                d3.selectAll('#netGraph marker path').style("fill","#999")
+            })
+
+    var toShow = {"orf1ab":1, "S":1}
     orfChart.append("g").attr("class","refSym")
             .selectAll(".refSym").data(orfs).enter()
             .append("text")
@@ -510,22 +544,21 @@ function drawRef(){
             .attr("id", function(d){return "site_"+d })
             .attr("x1", function(d){ return scale(d)})
             .attr("x2", function(d){return scale(d)})
+            .attr("y1", 6)
             .attr("y2", 30)
 }
 
 
 var wMap=560, transK=1;
 function drawGeoW(){
-    var height = 252;
-    var projection = d3.geoMercator().translate([wMap/2, height/2]).scale(71).center([0,34]),
+    var height = 192;
+    var projection = d3.geoMercator().translate([wMap/2, height/2]).scale(71).center([0,24]),
         mapPath = d3.geoPath().projection(projection);
 
     var active = d3.select(null);
     var zoom = d3.zoom().scaleExtent([1,8]).on("zoom", zoomed);
 
     var svg = d3.select("#mapW svg").attr("width",wMap).attr("height",height);
-
-//    svg.append("text").attr("class","colTt").attr("x",wMap/2).attr("y",14).html("Collection Site");
 
     var svgMap = svg.append("g");
     svg.call(zoom);
@@ -598,17 +631,18 @@ function drawGeoW(){
     }
 }
 function overGeo(d){
+    un_hl();
     hlGeo(d);
     var accs = listVirus.filter(function(ac){return annoDataW[ac].geoId == d});
     overM(accs);
 //    if (accs.length==1){overM(accs[0])} else {hlNode(accs)}
 }
 
+var tParser = d3.timeParse("%Y-%m-%d");
 function drawDateChart(){
     var width = wMap, height=66;
-    var tParser = d3.timeParse("%Y-%m-%d");
 //    var lastday = tParser('2020-03-15');
-    var margin = {top:42, left:0, bottom:0, right:0},
+    var margin = {top:43, left:0, bottom:0, right:0},
         chartWidth = width - (margin.left+margin.right),
         chartHeight = height - (margin.top+margin.bottom);
 
@@ -623,29 +657,67 @@ function drawDateChart(){
 //    rg = [rg[0],lastday];
     var scale = d3.scaleLinear().domain(rg).range([stdR*2,chartWidth-stdR*2]);
 
-    dateArr.push(annoDataW.EPI_ISL_402131.col);
     var svg = d3.select("#dateChart").append("svg").attr("width",width).attr("height",height),
         chart = svg.append("g")
             .attr("width", chartWidth).attr("height", chartHeight)
             .attr("transform", "translate("+[margin.left, margin.top]+")");
+
+    var opRange = [1,0.05];
+    dateScale = d3.scaleLinear().domain(rg).range(opRange);
+
+    var linearGrad = chart.append("defs").append("linearGradient").attr("id", "dateGrad");
+    linearGrad.append("stop").attr("offset",  "0%").attr("stop-color","purple").attr("stop-opacity", opRange[0]);
+    linearGrad.append("stop").attr("offset","100%").attr("stop-color","white").attr("stop-opacity", opRange[1]);
+
+    chart.append("rect").attr("id","dateGradient")
+        .attr("width", scale(rg[1]) - scale(rg[0])).attr("height", 8)
+        .attr("x",scale(rg[0])).attr("y",-5)
+        .attr("class","grayLine")
+        .style("fill", "url(#dateGrad)")
+        .style("opacity", "url(#dateGrad)")
+
+    
+    dateArr.push(annoDataW[outGrp].col);
     chart.selectAll("line").data(dateArr).enter()
         .append("line").attr('id', function(d){ return 'date_'+d})
-        .attr("transform", function(d){return "translate(" + scale(tParser(d)) + ",0)"})
-        .attr("y2",10)
+        .attr("transform", function(d){return "translate(" + scale(tParser(d)) + ",3)"})
+        .attr("y2",8)
         .on('mouseover',overDate)
         .on('mouseout',un_hl)
         
-    var xAxis = d3.axisTop().scale(scale).ticks(5).tickFormat(d3.timeFormat("%m/%d/%y"));
+    var xAxis = d3.axisTop().scale(scale).ticks(5).tickSize(-12, 0).tickFormat(d3.timeFormat("%m/%d/%y"));
     chart.append("g").attr("class", "xaxis")
-        .attr("transform", "translate(" + 0 + "," + (-2) + ")")
+        .attr("transform", "translate(" + 0 + "," + (-9) + ")")
         .call(xAxis);
-    svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",13).html("Collection Date")
+    svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",14).html("Collection Date");
 }
 function overDate(d){
+    un_hl();
     hlDate(d);
     var accs = listVirus.filter(function(ac){return annoDataW[ac].col == d});
     overM(accs)
-//    if (accs.length==1){overM(accs[0])} else {hlNode(accs)}
+}
+
+function changeColor(val){
+    for (var i=0; i<listVirus.length; i++){
+        var ac = listVirus[i];
+        if (ac==outGrp) continue;
+        var an = annoDataW[ac];
+        if (val){
+            var col = tParser(an.col);
+            d3.select('#nn_'+ac).style("fill-opacity", dateScale(col))
+        } else {
+            var ctr = geoDataW[an.geoId].ctry;
+            d3.select('#nn_'+ac).transition().duration(duration).style("fill", geoColor(ctr)).style("fill-opacity",1)
+        }
+    }
+    if (val){
+        d3.selectAll('.iso').transition().duration(duration).style("fill","purple").style("stroke","none");
+//        d3.select("#dateGradient").transition().duration(duration).style("fill", "url(#dateGrad2)")
+    } else {
+        d3.selectAll('.iso').style("stroke","white")
+//        d3.select("#dateGradient").style("fill", "url(#dateGrad)")
+    }
 }
 
 function drawTree(obj){
@@ -1416,8 +1488,6 @@ function readHaps(data){
     }
     listSite = Object.keys(site).map(d=>d*1)
 }
-
-var batPath = "M598.935,485.829c-2.286,5.292-8.146,7.917-8.146,7.917c0.025-0.684-0.068-1.365-0.279-2.016	c1.077-1.284,1.363-3.057,0.745-4.614c-1.251,0.396-2.317,1.229-3.006,2.345c-0.419-0.118-0.853-0.175-1.287-0.169	c-0.426,0.016-0.848,0.09-1.253,0.22c-0.711-1.098-1.788-1.908-3.04-2.286c-0.587,1.574-0.262,3.344,0.847,4.606	c-0.229,0.639-0.346,1.312-0.347,1.99c0,0-5.928-2.54-8.299-7.799c-3.796,4.166-8.123,7.815-12.87,10.855	c0,0,5.69-0.991,7.553,3.073c0,0,6.029-3.167,7.553,2.092c0,0,5.826-5.927,10,7.781c3.963-13.76,9.873-7.942,9.873-7.942	c1.432-5.283,7.52-2.21,7.52-2.21c1.795-4.09,7.502-3.192,7.502-3.192C607.195,493.521,602.802,489.939,598.935,485.829z	 M574.016,490.63c-1.797,2.231-3.075,4.834-3.743,7.621c-0.024,0.147-0.154,0.256-0.305,0.254H569.9	c-0.173-0.008-0.307-0.154-0.3-0.327c0.002-0.033,0.009-0.065,0.021-0.097c0.683-2.876,2.009-5.56,3.878-7.85	c0.102-0.14,0.298-0.169,0.438-0.067c0.14,0.103,0.17,0.299,0.067,0.438c-0.007,0.01-0.015,0.019-0.022,0.027H574.016z	 M578.748,494.212c-0.708,1.744-1.022,3.623-0.923,5.504c0.021,0.172-0.1,0.329-0.271,0.355h-0.042	c-0.159,0.005-0.296-0.113-0.313-0.271c-0.123-1.983,0.204-3.969,0.957-5.809c0.052-0.16,0.225-0.247,0.385-0.194	c0.007,0.003,0.014,0.005,0.021,0.008c0.162,0.06,0.247,0.238,0.188,0.401C578.75,494.208,578.749,494.21,578.748,494.212	L578.748,494.212z M586.217,492.561c-0.102,0.22-0.627,0.187-1.177-0.068c-0.551-0.254-0.923-0.635-0.847-0.847	c0.076-0.211,0.618-0.186,1.177,0.068S586.31,492.349,586.217,492.561z M588.901,492.459c-0.542,0.263-1.076,0.305-1.178,0.093	s0.263-0.601,0.847-0.847c0.585-0.245,1.076-0.305,1.178-0.085C589.85,491.841,589.451,492.196,588.901,492.459z M596.793,499.673	c-0.024,0.158-0.154,0.278-0.313,0.288l0,0c-0.172-0.022-0.295-0.175-0.279-0.348c0.068-1.883-0.276-3.759-1.008-5.495	c-0.063-0.161,0.016-0.343,0.177-0.406h0.001c0.163-0.063,0.349,0.016,0.415,0.178C596.545,495.719,596.889,497.694,596.793,499.673	z M604.058,498.217h-0.06c-0.148,0-0.277-0.102-0.313-0.246c-0.718-2.761-2.039-5.329-3.869-7.519c-0.117-0.127-0.117-0.322,0-0.449	c0.136-0.11,0.336-0.092,0.448,0.043c1.926,2.248,3.318,4.902,4.073,7.765c0.029,0.175-0.089,0.341-0.265,0.37	c-0.005,0.001-0.01,0.002-0.015,0.002V498.217z";
 
 //function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
 
