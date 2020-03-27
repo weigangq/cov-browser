@@ -41,13 +41,15 @@
         <td valign="top" style="position:relative; height:300px">
             <div class="colorC"><input type="radio" name="colorCode" value="0" checked> colored by</div>
             <div class="colorC"><input type="radio" name="colorCode" value="1"> colored by</div>
+            <div class="colorC" id="selCtry">Select <span>&#9660;</span></div>
             <div id="mapW" class="map">
                 <table>
+                    <tr><td class="infoTitle" colspan="2">Collection Site</td></tr>
                     <tr>
-                        <td class="infoTitle">Collection Site</td>
+                        <td><svg></svg></td>
+                        <td rowspan="2"><div id="admin"></div></td>
                     </tr>
-                    <tr><td><svg></svg></td></tr>
-                    <tr><td id="siteName"></td></tr>
+                    <tr><td>&nbsp;<span id="siteName"></span></td></tr>
                 </table>
             </div>
             <div id="dateChart" class="map"></div>
