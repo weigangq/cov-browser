@@ -76,12 +76,12 @@ body>table, #genome, #col2, #refOrf, #chgTbl .infoTitle {position:relative}
 
 #graphLg {
     margin:0 0 0 9px;
-    font-size:11.5px;
+    font-size:11px;
     font-family:sans-serif
 }
 #graphLg a {text-decoration:underline; fill:gray}
 .lgTitle {font-weight:bold}
-.lgExp {font-size:10.5px}
+.lgExp {font-size:10px}
 .grayFill {fill:gray}
 .fillOrange{fill:orange}
 
@@ -133,14 +133,20 @@ marker path {fill:#999}
 #siteName {height:20px; margin-left:7px}
 #mapW td{padding:0}
 #admin {
-    width:92px;
+    width:94px;
     height:220px;
     margin-left:3px;
     overflow-y:scroll;
     overflow-x:hidden;
-    font-size:10.5px;
+    font-size:10.2px;
     border-top:lightgray thin solid
 /*    overflow:auto;*/
+}
+#admin table {margin:2px 0 0 0}
+#admin td {
+    height:15px;
+    cursor:pointer;
+    white-space:nowrap
 }
 
 #dateChart, #refOrf, .node_edge {margin:12px 0 0 0}
@@ -178,8 +184,9 @@ marker path {fill:#999}
 #symbol {font-size:13px; text-anchor:middle; font-style:italic }
 
 .hidden { display:none }
-
 .finger { cursor:pointer}
+.crosshair {cursor:crosshair}
+
 .shade { fill:none; stroke:#4CC6FF}
 
 .xaxis line, .xaxis path { stroke:#999}
@@ -228,8 +235,12 @@ marker path {fill:#999}
 .path2 { stroke:DodgerBlue }
 #compY, #mapW, #ack {font-size:13px}
 
-.redStroke { stroke:red!important}
-.redFill {fill:red!important; color:red}
+.orangeStroke{stroke:orange!important}
+.orangeFill{fill:orange!important}
+
+.redStroke { stroke:red}
+.redFill {fill:red; color:red}
+
 .blueColor {color:DodgerBlue}
 .hlLine {stroke:red; stroke-width:3px}
 
@@ -274,6 +285,6 @@ marker path {fill:#999}
 
 .colorC {position:absolute; left:100px; color:#808080; font-weight:100; font-size:12px; z-index:1500}
 .colorC:nth-of-type(2) {top:249px}
-#selCtry {left:430px}
+#selCtry {left:428px}
 #selCtry span {font-size:9px}
 /*.bat {text-anchor:middle; font-size:30px}
