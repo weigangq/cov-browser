@@ -6,7 +6,7 @@
 # Done (3/15/2020):  add additional attributes including gene, codon, AA, syn/nonsyn (by parsing VCF & BED file)
 # Done (3/15/2020):  uniq_seq: consolidate sequences with internal missing bases; solved bioaln --gap-char "n" (not ideal)
 # Done (3/16/2020):  outgroup rooting: re-orient MSP path (Single-Source Shortest Paths, SSSP, won't work because it doesn't cover all nodes)
-# To Do: @diff => %diff
+# To Do: Impute missing NTs? currently STs are represented by seqs encountered first (input order)
 # To Do: sub genome_info has redundant code to extract codon => subroutine
 # Perl modules for Graphs: https://metacpan.org/release/Graph
 #
@@ -26,18 +26,24 @@ use Bio::Tools::CodonTable;
 my $myCodonTable   = Bio::Tools::CodonTable->new();
 my $writer = Graph::Writer::Dot->new();
 #die "Usage: $0 --hap <fasta> --vcf <vcf> --genome <fasta>\n" unless;
-# e.g.: perl hapnet.pl --vcf snps-ref.vcf --genome ref.gb --hap samples4.aln  --output json  > net.json 2> tmp.log
+# Usage: perl hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log > net.json
 my %options;
 my $outgroup = 'EPI_ISL_402131';
 my $orfShift = 13468; # orf1ab reading frame shift
+#my $impute_aln = 'imputed.aln';
+#my $impute_log = 'impute.log';
+#my $gb = 'ref.gb';
 GetOptions (
     \%options,
-    "hap=s",
-    "vcf=s",
-    "genome=s",
+    "hap=s", # required
+    "vcf=s", # required
+    "genome=s", # required
     "output=s",
+    "impute-log=s", # required
     "help",
     "debug|d",
+    "majority-parent=s",
+#    "no-uniq-seq", # do not consolidate into uniq STs (for bootstrap analysis, with STs as input)
     ) or pod2usage(2);
 
 pod2usage(1) if $options{'help'};
@@ -45,34 +51,57 @@ pod2usage(1) if $options{'help'};
 #####################################
 # Read Files
 #######################################
+my %hapST;
+my %STs;
+
+# Read impute log file
+open IMP, "<", $options{'impute-log'} || die "need impute.log file\n";
+my @sites_bound;
+my $rootST; # default
+while(<IMP>) {
+    chmod;
+    if (/^(\d+)\s+(\d+)$/) {
+	@sites_bound = ($1, $2);
+    }
+
+    if (/^(ST\d+)\s+(EPI_ISL_\d+).*/) {
+	my ($st, $hap) = ($1, $2);
+	$rootST = $st if $hap eq $outgroup;
+	if ($hapST{$st}) {
+	    my $ref = $hapST{$st};
+	    push @$ref, $hap;
+	} else { # not seen
+	    $hapST{$st} = [ ($hap) ]
+	}
+    }
+}
+close IMP;
+print Dumper(\%hapST) if $options{'debug'}; 
+die "root ST not found\n" unless $rootST;
+
+#exit;
 # Read FASTA alignment
 my $in = Bio::AlignIO->new(-file=>$options{'hap'}, -format=>'clustalw');
 my $aln = $in->next_aln();
 my $alnLen = $aln->length();
-my ($stAln, $refSt) = $aln->uniq_seq(); # this doesn't count gaps on edges but still treats internal gaps as distinct seqs (solved)
-my %STs;
-foreach my $st ($stAln->each_seq) {
+foreach my $st ($aln->each_seq) {
     $STs{$st->display_id()} = $st;
 }
 
-warn "Number of STs:", scalar keys %STs, "\n"; 
-
-my %hapST;
-foreach my $st (keys %$refSt) {
-    $hapST{'ST'. $st} = $refSt->{$st}
-}
-
-print Dumper(\%hapST) if $options{'debug'};
 # Read VCF file
 my @pos;
-open VCF, "<", $options{'vcf'};
+open VCF, "<", $options{'vcf'} || die "need a pre-imputed vcf file\n";;
+my $ct_site = 0;
 while(<VCF>){
     chomp;
     next unless /^NC_/;
+    $ct_site ++;
+    next unless $ct_site >= $sites_bound[0] && $ct_site <= $sites_bound[1]; # remove ends (based on impute.log file)
     my @a = split;
     push @pos, $a[1];
 }
 close VCF;
+#print scalar @pos, "\n"; exit;
 
 my $gIN = Bio::SeqIO->new(-file => $options{'genome'}, -format => 'genbank');
 my $ge = $gIN->next_seq();
@@ -109,90 +138,139 @@ push @utr_feats, Bio::SeqFeature::Generic->new(-seq_id => '3-UTR',
 					       -end => 29903, # end of NC_045512.2 
 					       -strand => 1);
 
+
 print Dumper(\@utr_feats) if $options{'debug'};
 #############################
 # Make a graph, calculate MST & polorize with root
 #############################
-my $graph = Graph->new(undirected => 1);
-my @sts = sort keys %STs;
-for (my $i=0; $i<$#sts; $i++) { # build a complete graph from edges
-    my $idI = $STs{$sts[$i]}->display_id();
-    for (my $j=$i+1; $j<=$#sts; $j++) {
-	my $idJ = $STs{$sts[$j]}->display_id();
-	$graph->add_edge($idI, $idJ);
-	my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); # could be optimized to store in a hash, to be re-used later
-#	print Dumper(\@diffs);
-	$graph->set_edge_weight($idI, $idJ, scalar @diffs); # seq diff as weight (to be minimized in MST)
-    }
-}
 
+my ($graph, $mstg, $mrpg);
 my (@nodelist, @edgelist);
-my $mstg = $graph->MST_Kruskal();  # Krustal's MST Algorithm
-my @Vs = $mstg->unique_vertices();
-my $root;
+my %edge_diff;
+&make_complete_graph();
 
+if ($options{'majority-parent'}) {
+    $mrpg = &graph_from_edges();
+    &attach_attributes_and_polarize($mrpg);
+    print Dumper($mrpg) if $options{'debug'};
+} else {
+    $mstg = $graph->MST_Kruskal(); # Krustal's MST Algorithm
+    &attach_attributes_and_polarize($mstg);
+    print Dumper($mstg) if $options{'debug'};
+}
+#my @Vs = $mstg->unique_vertices();
 # Call back function to process each vertex using an anonymous sub
-my $find_root_and_attach_haps = sub {
-    my ($v, $self) = @_;
-    my $ref = $hapST{$v};
-    foreach (@$ref) { 
-	if ($_ eq $outgroup) {
-	    $root = $v;
-	    last; 
-	}
-    }
-    $mstg->set_vertex_attribute($v, 'haps', $hapST{$v});
-    $mstg->set_vertex_attribute($v, 'id', $v);
-    push @nodelist, $mstg->get_vertex_attributes($v);
-};
-
-# 1st traversal
-my $traversal = Graph::Traversal::DFS->new(
-    $mstg,
-    pre => $find_root_and_attach_haps # process each vertex by pre-order traversal
-    );
-$traversal->dfs();
-
-# Call back function to process each edge using an anonymous sub
-my $polarize_an_edge = sub {
-    my ($u, $v, $self) = @_;
-    if ($u eq $root) { warn "root position:", $u, "=>", $v, "\n"}
-    my @diffs = &comp_seq($STs{$u}, $STs{$v});
-    $mstg->set_edge_attribute($u, $v, 'change', \@diffs);
-    $mstg->set_edge_attribute($u, $v, 'source', $u);
-    $mstg->set_edge_attribute($u, $v, 'target', $v);
-    $mstg->set_edge_attribute($u, $v, 'id', join "-", ($u, $v));
-    push @edgelist, $mstg->get_edge_attributes($u, $v);
-};
-
-# 2nd traversal
-$traversal = Graph::Traversal::DFS->new(
-    $mstg,
-    start => $root,
-    pre_edge => $polarize_an_edge
-    );
-$traversal->dfs();
 
 #############################
 # Write outputs
 ##############################
 
 print to_json([\@nodelist, \@edgelist]) if $options{'output'} eq 'json';
-$writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
-&print_edge_list($mstg) if $options{'output'} eq 'edge';
-
+#$writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
+if ($options{'majority-parent'}) {
+    &print_edge_list($mrpg) if $options{'output'} eq 'edge';
+    &print_node_list($mrpg) if $options{'output'} eq 'node';
+} else {
+    &print_edge_list($mstg) if $options{'output'} eq 'edge';
+    &print_node_list($mstg) if $options{'output'} eq 'node';
+}
 exit;
 
 #####################################
 # subroutines
 ###################################
 
+sub make_complete_graph {
+    $graph = Graph->new(undirected => 1);
+    my @sts = sort keys %STs;
+    for (my $i=0; $i<$#sts; $i++) { # build a complete graph from edges
+	my $idI = $STs{$sts[$i]}->display_id();
+	for (my $j=$i+1; $j<=$#sts; $j++) {
+	    my $idJ = $STs{$sts[$j]}->display_id();
+	    $graph->add_edge($idI, $idJ);
+	    my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); 
+#	print Dumper(\@diffs);
+	    $edge_diff{$idI}{$idJ} = $edge_diff{$idJ}{$idI} = \@diffs; # save for later use
+	    $graph->set_edge_weight($idI, $idJ, scalar @diffs); # seq diff as weight (to be minimized in MST)
+	}
+    }
+}
+
+sub graph_from_edges {
+    my $mpa_file = $options{'majority-parent'};
+    open MP, "<", $mpa_file;
+    my $g = Graph->new(undirected => 1);
+    while(<MP>) {
+	chomp;
+	if (/(\S+)\s+(\S+)\|(\d+)\s+/) {
+	    my ($child, $parent, $perc) = ($1, $2, $3);
+	    $g->add_edge($child, $parent);
+	}
+    }
+    close MP;
+    return $g;
+}
+
+sub attach_attributes_and_polarize {
+    my $g = shift;
+    my $attach_haps = sub {
+	my ($v, $self) = @_;
+	my $ref = $hapST{$v};
+	$g->set_vertex_attribute($v, 'haps', $hapST{$v});
+	$g->set_vertex_attribute($v, 'id', $v);
+	push @nodelist, $g->get_vertex_attributes($v);
+    };
+
+# 1st traversal
+    my $traversal = Graph::Traversal::DFS->new(
+	$g,
+	pre => $attach_haps # process each vertex by pre-order traversal
+	);
+    $traversal->dfs();
+    print Dumper(\@nodelist) if $options{'debug'};
+
+# Call back function to process each edge using an anonymous sub
+    my $polarize_an_edge = sub {
+	my ($u, $v, $self) = @_;
+	if ($u eq $rootST) { warn "root position:", $u, "=>", $v, "\n"}
+	$g->set_edge_attribute($u, $v, 'change', $edge_diff{$u}{$v});
+	$g->set_edge_attribute($u, $v, 'source', $u);
+	$g->set_edge_attribute($u, $v, 'target', $v);
+	$g->set_edge_attribute($u, $v, 'id', join "-", ($u, $v));
+	push @edgelist, $g->get_edge_attributes($u, $v);
+    };
+
+# 2nd traversal
+    $traversal = Graph::Traversal::DFS->new(
+	$g,
+	start => $rootST,
+	pre_edge => $polarize_an_edge
+	);
+    $traversal->dfs();
+}
+
+sub print_node_list {
+    foreach my $nd (@nodelist) {
+	my $ref  = $nd->{haps};
+	foreach my $iso (@$ref) {
+	    print $nd->{id}, "\t", $iso, "\n";
+	}	
+    }
+}
+
+
 sub print_edge_list {
     my $g = shift;
     foreach my $e ($g->edges) {
 	my ($u, $v) = ($e->[0], $e->[1]);
 	my $from = $g->get_edge_attribute($u, $v, 'source');
-	my $to = $g->get_edge_attribute($u, $v, 'target');
+	my $to = $g->get_edge_attribute($u, $v, 'target');	
+	my $refFrom = $hapST{$u}; # print Dumper($refFrom);
+	my @a = @$refFrom; @a = sort @a;
+	my $hapFrom = shift @a; # take the first EPI as node ID 
+	my $refTo = $hapST{$v}; # print Dumper($refTo);
+	my @b = @$refTo; @b = sort @b;
+	my $hapTo = shift @b; 
 	my $ref = $g->get_edge_attribute($u, $v, 'change');
 	foreach my $mut (@$ref) {
 	    my $syn_nonsyn = 'NA';
@@ -211,7 +289,7 @@ sub print_edge_list {
     }
 }
 
-sub comp_seq { # possibly no change? due to missing base? yes; fix uniq_seq
+sub comp_seq { # count only definitive changes (assuming no change at positions with missing values)
     my ($i, $j) = @_;
     my @str1 = split '', $i->seq();
     my @str2 = split '', $j->seq();
