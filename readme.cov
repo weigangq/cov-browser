@@ -2,18 +2,20 @@ B################################################
 # From Edgar: FASTA file
 ################################################
 cat covid-3-12.fasta | sed  -E 's/>.+(EPI_ISL_[0-9]+)/>\1/' > cov.fas (to avoid this step: don't export isolate id)
-cat gisaid_covid19_3_19.tsv | grep [Hh]uman | cut -f2 > epi-human  
+cat gisaid_covid19_3_19.tsv | grep [Hh]uman | cut -f2 > epi-human 2> error 
 bioseq -p"file:epi-human" cov.fas > cov-human.fas
+#check host info:
+cut -f7 gisaid-3-24.tsv | sort | uniq -c
 
 # CSV file
 # better to be TSV (comma problem when using cut)
-cut -f2,7 -d',' gisaid_covid19_3_12.csv | grep -v host | tr ',' '\t' > host-info.tsv
-grep Human host-info.tsv | cut -f1 > ids-human
-grep Environment host-info.tsv | cut -f1 > ids-environ
-grep Rhinolophus host-info.tsv | cut -f1 > ids-outgroup
-grep -v "Human\|Rhinolophus\|Environ" host-info.tsv | cut -f1 > ids-animal
-bioseq -p"file:ids-human" cov.fas > cov-human.fas
-bioseq -p"file:ids-outgroup" cov.fas > cov-outgroup.fas
+# cut -f2,7 -d',' gisaid_covid19_3_12.csv | grep -v host | tr ',' '\t' > host-info.tsv
+# grep Human host-info.tsv | cut -f1 > ids-human
+# grep Environment host-info.tsv | cut -f1 > ids-environ
+# grep Rhinolophus host-info.tsv | cut -f1 > ids-outgroup
+# grep -v "Human\|Rhinolophus\|Environ" host-info.tsv | cut -f1 > ids-animal
+# bioseq -p"file:ids-human" cov.fas > cov-human.fas
+# bioseq -p"file:ids-outgroup" cov.fas > cov-outgroup.fas
 
 #######################################
 # Parse GISAID sequences fasta
@@ -168,17 +170,19 @@ x
 106 108 110 111 112 118 119 122 123 124 125 126 127 128 129 130 131 132 
   4   1   2   1   1   1   1   1   1   1   4 370 385 398 415 421 427 424 
 
+perl impute-hap.pl --dump-missing samples.aln > missing | sort -n | uniq -c
 => remove end 12 sites 1-5 & 126-132; then impute the seq with the nearest non-ATCG nabe:
 
 perl impute-hap.pl sample-03-19.aln > sample-03-19-impute.aln 2> sample-03-19-impute.log &
 
 # 1. Position-specific imputation:
 perl impute-hap.pl test-impute.aln 2> log
-./hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-log impute.log --output json > net.json
+./hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-log impute.log 
+=> output 3 files: net.json; nodes.tsv; edges.tsv)
 
 # 2. bootstrap
 boot-net.bash 99
 
 # 3. reconstruct majority-parent network (MPN)
-hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --majority-parent pa-cts > mpn.json
+hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --majority-parent pa-cts.long > mpn.json
 

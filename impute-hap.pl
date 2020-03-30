@@ -32,7 +32,7 @@ GetOptions (
 
 pod2usage(1) if $options{'help'};
 my $perc_missing = 0.1;
-my @edges = qw(6 125); # exclude sites 1 - 5 & 126 - end # to be determined by running "dump-missing"
+my @edges = qw(9 127); # exclude sites 1 - 5 & 126 - end # to be determined by running "dump-missing | sort -n | uniq -c"
 my $in = Bio::AlignIO->new(-file => shift @ARGV);
 my $aln = $in->next_aln();
 my $len = $aln->length();
@@ -58,7 +58,9 @@ my @ids = sort keys %seqs;
 #print Dumper(\@ids); exit;
 #my %nabes;
 # pairwise diff is the most costly with O(n2); don't scale well. Simplify by stop at the closest non-ATCG nabes?
+my $ct = 0;
 foreach my $id1 (@ids) {
+    $ct++;
     next unless @{$seqs{$id1}->{'missing_pos'}}; # no ambig; no need to impute
     my %nabes;
     foreach my $id2 (@ids) {
@@ -70,6 +72,7 @@ foreach my $id1 (@ids) {
 	$nabes{$id2} = $diff;
     }
     my @nabes = sort { $nabes{$a} <=> $nabes{$b} } keys %nabes;
+    print STDERR "processing seq $ct ... \t";
     if (@nabes) {
 	$seqs{$id1}->{'imputed'} = 1; 
 	my $id2 = shift @nabes;

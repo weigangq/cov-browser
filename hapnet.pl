@@ -26,7 +26,7 @@ use Bio::Tools::CodonTable;
 my $myCodonTable   = Bio::Tools::CodonTable->new();
 my $writer = Graph::Writer::Dot->new();
 #die "Usage: $0 --hap <fasta> --vcf <vcf> --genome <fasta>\n" unless;
-# Usage: perl hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log > net.json
+# Usage: perl hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-log impute.log > net.json
 my %options;
 my $outgroup = 'EPI_ISL_402131';
 my $orfShift = 13468; # orf1ab reading frame shift
@@ -42,7 +42,8 @@ GetOptions (
     "impute-log=s", # required
     "help",
     "debug|d",
-    "majority-parent=s",
+    "majority-parent=s", # read pa-cts.long file
+    "unique-root", # force single root edge
 #    "no-uniq-seq", # do not consolidate into uniq STs (for bootstrap analysis, with STs as input)
     ) or pod2usage(2);
 
@@ -165,14 +166,16 @@ if ($options{'majority-parent'}) {
 # Write outputs
 ##############################
 
-print to_json([\@nodelist, \@edgelist]) if $options{'output'} eq 'json';
+open JS, ">", "net.json";
+print JS to_json([\@nodelist, \@edgelist]); # if $options{'output'}; # eq 'json';
+close JS;
 #$writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
 if ($options{'majority-parent'}) {
-    &print_edge_list($mrpg) if $options{'output'} eq 'edge';
-    &print_node_list($mrpg) if $options{'output'} eq 'node';
+    &print_edge_list($mrpg); # if $options{'output'}; # eq 'edge';
+    &print_node_list($mrpg); # if $options{'output'}; # eq 'node';
 } else {
-    &print_edge_list($mstg) if $options{'output'} eq 'edge';
-    &print_node_list($mstg) if $options{'output'} eq 'node';
+    &print_edge_list($mstg); # if $options{'output'}; # eq 'edge';
+    &print_node_list($mstg); # if $options{'output'}; # eq 'node';
 }
 exit;
 
@@ -200,14 +203,42 @@ sub graph_from_edges {
     my $mpa_file = $options{'majority-parent'};
     open MP, "<", $mpa_file;
     my $g = Graph->new(undirected => 1);
+    my %seen_child;
+    my %seen_parent;
     while(<MP>) {
 	chomp;
-	if (/(\S+)\s+(\S+)\|(\d+)\s+/) {
+	if (/(\S+)\s+(\S+)\s+(\d+)/) {
 	    my ($child, $parent, $perc) = ($1, $2, $3);
-	    $g->add_edge($child, $parent);
+	    $seen_child{$child}{$parent} = $perc;
+	    $seen_parent{$parent}{$child} = $perc;
+#	    push @output, { 'child' => $1, 'parent' => $2, 'cts' => $3 }
 	}
     }
     close MP;
+
+    if ( $options{'unique-root'} ) {
+# get unique root edge based on "majority-child" rule
+	my $refRoot = $seen_parent{$rootST};
+	my @chRoot = sort { $refRoot->{$b} <=> $refRoot->{$a}} keys %$refRoot;
+	my $chRoot = shift @chRoot;
+	$g->add_edge($rootST, $chRoot);
+	
+# get all other edges based on "majority-parent" or "second best parent" rule
+	foreach my $ch (sort keys %seen_child ) {
+	    next if $ch eq $chRoot; # don't change root edge
+	    my $refPa = $seen_child{$ch};
+	    my @pa = sort { $refPa->{$b} <=> $refPa->{$a}} keys %$refPa;
+	    my $pa = $pa[0] eq $rootST ? $pa[1] : $pa[0]; # majority pa for all edges except 2nd majority for those connected to root
+	    $g->add_edge($ch, $pa);
+	}
+    } else {
+	foreach my $ch (sort keys %seen_child ) {
+	    my $refPa = $seen_child{$ch};
+	    foreach my $pa (sort keys %$refPa) {
+		$g->add_edge($pa, $ch);
+	    }
+	}
+    }
     return $g;
 }
 
@@ -250,17 +281,20 @@ sub attach_attributes_and_polarize {
 }
 
 sub print_node_list {
+    open ND, ">", "nodes.tsv";
     foreach my $nd (@nodelist) {
 	my $ref  = $nd->{haps};
 	foreach my $iso (@$ref) {
-	    print $nd->{id}, "\t", $iso, "\n";
+	    print ND $nd->{id}, "\t", $iso, "\n";
 	}	
     }
+    close ND;
 }
 
 
 sub print_edge_list {
     my $g = shift;
+    open EG, ">", "edges.tsv";
     foreach my $e ($g->edges) {
 	my ($u, $v) = ($e->[0], $e->[1]);
 	my $from = $g->get_edge_attribute($u, $v, 'source');
@@ -277,16 +311,17 @@ sub print_edge_list {
 	    if ($mut->{src_aa}) {
 		$syn_nonsyn = $mut->{src_aa} eq $mut->{tgt_aa} ? 1 : 0;
 	    }
-	    print join "\t", ($from, $to, 
+	    print EG join "\t", ($from, $to, 
 			      $mut->{site}, $mut->{label}, 
 			      $mut->{src_base}, $mut->{tgt_base}, 
 			      $mut->{src_codon} || 'NA', $mut->{tgt_codon} || 'NA',
 			      $mut->{src_aa} || 'NA', $mut->{tgt_aa} || 'NA',
 			      $syn_nonsyn
 	    );
-	    print "\n";
+	    print EG "\n";
 	}
     }
+    close EG;
 }
 
 sub comp_seq { # count only definitive changes (assuming no change at positions with missing values)
