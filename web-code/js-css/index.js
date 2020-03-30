@@ -1,11 +1,11 @@
 var listNode, listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, listChange={}, outGrp='EPI_ISL_402131', nodePie={}
-var wMap=504, stdR=5, cR1=4, cR=4, cR2=8, distance=12//, lnkdist=1;
+var wMap=504, stdR=5, cR1=4, mapR=3.5, cR2=8, distance=12//, lnkdist=1;
 var annoDataW, geoDataW, countryData, refData,
     ids=[], annoDataC, geoDataC, pubData, source, symData, orfData, compData, seqData, dndData;
 var wTotal=1100, wTree=100, tabW, unit=30, marginL=1, wYear=140,
     hUnit=19.5, yEdge=22, hTree, hSvg,
     orgColor = {1:"DodgerBlue", 2:"magenta", 3:"yellowGreen", 4:"orange"},
-    geoColor, dateScale,
+    geoColor, dateScale, shipColor='navy',
     ratio = 38.5, hORF=6, transBar, orfLine, wLg, sub_site=[],
     unitW=6.6, showAA;
 var ratioC, cid_comp=[1,2,3,4,5,6,8,9,10], compLine, seqCid, tabNum, seqScroll;
@@ -124,9 +124,10 @@ function asignColor(){
     var geo={};
     listVirus.forEach(function(d){
         var an = annoDataW[d];
-        geo[an.geoId]=1
+        if (an.geoId<500) geo[an.geoId]=1
     });
     geoList = Object.keys(geo).map(d=>d*1);
+    console.log(geoList)
     
     var ctr = {};
     geoList.forEach(function(d){ ctr[geoDataW[d].ctry]=1 });
@@ -134,6 +135,9 @@ function asignColor(){
     
     var l = ctryList.length+5;
     geoColor = d3.scaleOrdinal().domain(ctryList).range(d3.range(1,l).map(function(d){return d3.hsl(360/l * d, 1, 0.45)}));
+    geoList.push(501,502,503)
+    console.log(geoList);
+    ctryList.push(701)
 }
 
 var chartW=655, chartH=554;
@@ -145,6 +149,10 @@ function drawChart(){
     var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
 
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
+    svg.append("rect").attr("width", width).attr("height", height)
+                    .attr("class", 'whiteFill')
+                    .on('click',function(d){ unlight(); ulGeo() })
+
 
     for (var i=0; i<listLink.length; i++){
         var lk = listLink[i];
@@ -254,7 +262,7 @@ function drawChart(){
                 .attr('d', sector)
                 .style('fill', function(n){
                     var an = annoDataW[n.data];
-                    return an? geoColor(geoDataW[an.geoId].ctry) : "gray"
+                    return an? (an.geoId<500? geoColor(geoDataW[an.geoId].ctry) : shipColor) : "gray"
                 })
                 .on('click',function(n){
                     unlight()
@@ -273,8 +281,6 @@ function drawChart(){
                 n.append("circle").attr("r", d.radius)
                     .style('fill',"white").style('stroke','#999')
                     .on('mouseover',function(d){
-                        unlight();
-                        ulGeo()
                         $("#tipNet").css("left", (d3.event.pageX-50)+"px").css("top", (d3.event.pageY-77)+"px")
                         .html('Hypothetical root').show()
                     })
@@ -286,11 +292,15 @@ function drawChart(){
                 if (ac!=outGrp){
                     circle = n.append("circle").attr("id", 'nn_'+ac).attr("class","iso crosshair")
                         .attr("r", d.radius)
-                        .style('fill', an? geoColor(geoDataW[an.geoId].ctry) : "gray");
+                        .style('fill', an? (an.geoId<500? geoColor(geoDataW[an.geoId].ctry) : shipColor) : "gray");
                 } else {
                     $("#bat").appendTo(('#'+d.id));
-                    circle = n.attr("id", 'nn_'+ac).attr("class","finger").style("fill","gray")
-//                    circle = n.append("svg").attr("id", 'nn_'+ac).attr("d",batPath)
+                    circle = n.append("svg")
+                            .attr("id", 'nn_'+ac).attr("class","finger").style("fill","gray")
+                            .attr("x",-40).attr("y",-13)
+                            .attr("width",50).attr("height",23.996)
+                            .attr("viewBox","562 485.829 50 23.996")
+                            .append("path").attr("d",batPath)
 /*                    circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
                         .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
@@ -338,7 +348,7 @@ function overM(){
         an = annoDataW[ac];
     if (ac!=outGrp) hlDate(an.col)
 
-    hlGeo(an.geoId)
+    hlGeo(an.geoId, an.city? an.city : '')
     $("#virusName").html(an.iso);
     $("#accNo").html(ac);
 
@@ -410,14 +420,14 @@ function ulNode(fromGeo){
     currAcc=[]
 }
 
-function hlGeo(geoId){
-    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT).attr("r", cR/transK).style("fill-opacity",0.1);
+function hlGeo(geoId, city){
+    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.1);
     d3.select('#mapW_'+geoId).transition().duration(timeT).attr("r", stdR*2/transK).style("fill-opacity",0.7);
-    $("#siteName").html(geoDataW[geoId].name).show()
+    $("#siteName").html(geoDataW[geoId].name + (city? ':'+city : '')).show()
 }
 
 function ulGeo(){
-    d3.selectAll('#mapW circle').transition().duration(timeT).attr("r", cR/transK).style("fill-opacity",0.7);
+    d3.selectAll('#mapW circle').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.7);
 }
 
 function hlDate(d){
@@ -580,7 +590,7 @@ function drawGeoW(){
         mapPath = d3.geoPath().projection(projection);
 
     var active = d3.select(null);
-    var zoom = d3.zoom().scaleExtent([1,8]).on("zoom", zoomed);
+    var zoom = d3.zoom().scaleExtent([1,15]).on("zoom", zoomed);
 
     var svg = d3.select("#mapW svg").attr("width",width).attr("height",height);
 
@@ -604,8 +614,9 @@ function drawGeoW(){
             .data(geoList).enter()
             .append("circle")
             .attr("id", function(d){ return 'mapW_'+d })
-            .attr("fill", function(d){return geoColor(geoDataW[d].ctry)})
-            .attr("r", cR)
+            .attr("fill", function(d){return d<500? geoColor(geoDataW[d].ctry) : shipColor})
+            .style("fill-opacity",0.7)
+            .attr("r", mapR)
             .attr("cx", function(d){
                 var site = geoDataW[d].locate,
                     coords = projection([site[1], site[0]]);
@@ -624,7 +635,7 @@ function drawGeoW(){
             })
             .on('mouseout', function(){
                 d3.selectAll('#mapW circle').transition().duration(timeT).style("fill-opacity",0.7)
-                d3.select(this).transition().duration(timeT).attr("r", cR/transK)
+                d3.select(this).transition().duration(timeT).attr("r", mapR/transK)
                 $("#siteName").hide();
                 showIso()
         });
@@ -632,8 +643,7 @@ function drawGeoW(){
     })
 
     function clicked(d) {
-        if (active.node() === this) return reset();
-//        active.classed("active", false);
+//        if (active.node() === this) return reset();
         active = d3.select(this).classed("active", true);
 
         var bounds = mapPath.bounds(d),
@@ -661,7 +671,7 @@ function drawGeoW(){
         transK=trans.k;
         svgMap.style("stroke-width", 1/transK + "px");
         svgMap.attr("transform", trans);
-        d3.selectAll('#mapW circle').attr("r",cR/transK)
+        d3.selectAll('#mapW circle').attr("r",mapR/transK)
     }
 }
 
@@ -676,7 +686,7 @@ function drawAdmin(){
     d3.selectAll("#admin td")
         .on('mouseover', function(d){
             var id = this.id.split('_')[1];
-            $(this).css("background", geoColor(id)).css("color", "white")
+            $(this).css("background", id<500? geoColor(id) : shipColor).css("color", "white")
             unlight(1)
             var accs = listVirus.filter(function(ac){return geoDataW[annoDataW[ac].geoId].ctry != id && ac!=outGrp});
             hideIso(accs)
@@ -772,7 +782,7 @@ function changeColor(val){
             d3.select('#nn_'+ac).style("fill-opacity", dateScale(col))
         } else {
             var ctr = geoDataW[an.geoId].ctry;
-            d3.select('#nn_'+ac).transition().duration(timeT).style("fill", geoColor(ctr)).style("fill-opacity",1)
+            d3.select('#nn_'+ac).transition().duration(timeT).style("fill", ctr<700? geoColor(ctr) : shipColor).style("fill-opacity",1)
         }
     }
     if (val){
@@ -1552,6 +1562,8 @@ function readHaps(data){
     }
     listSite = Object.keys(site).map(d=>d*1)
 }
+
+var batPath="M598.935,485.829c-2.286,5.292-8.146,7.917-8.146,7.917c0.025-0.684-0.068-1.365-0.279-2.016c1.077-1.284,1.363-3.057,0.745-4.614c-1.251,0.396-2.317,1.229-3.006,2.345c-0.419-0.118-0.853-0.175-1.287-0.169c-0.426,0.016-0.848,0.09-1.253,0.22c-0.711-1.098-1.788-1.908-3.04-2.286c-0.587,1.574-0.262,3.344,0.847,4.606c-0.229,0.639-0.346,1.312-0.347,1.99c0,0-5.928-2.54-8.299-7.799c-3.796,4.166-8.123,7.815-12.87,10.855c0,0,5.69-0.991,7.553,3.073c0,0,6.029-3.167,7.553,2.092c0,0,5.826-5.927,10,7.781c3.963-13.76,9.873-7.942,9.873-7.942c1.432-5.283,7.52-2.21,7.52-2.21c1.795-4.09,7.502-3.192,7.502-3.192C607.195,493.521,602.802,489.939,598.935,485.829zM574.016,490.63c-1.797,2.231-3.075,4.834-3.743,7.621c-0.024,0.147-0.154,0.256-0.305,0.254H569.9c-0.173-0.008-0.307-0.154-0.3-0.327c0.002-0.033,0.009-0.065,0.021-0.097c0.683-2.876,2.009-5.56,3.878-7.85c0.102-0.14,0.298-0.169,0.438-0.067c0.14,0.103,0.17,0.299,0.067,0.438c-0.007,0.01-0.015,0.019-0.022,0.027H574.016zM578.748,494.212c-0.708,1.744-1.022,3.623-0.923,5.504c0.021,0.172-0.1,0.329-0.271,0.355h-0.042c-0.159,0.005-0.296-0.113-0.313-0.271c-0.123-1.983,0.204-3.969,0.957-5.809c0.052-0.16,0.225-0.247,0.385-0.194c0.007,0.003,0.014,0.005,0.021,0.008c0.162,0.06,0.247,0.238,0.188,0.401C578.75,494.208,578.749,494.21,578.748,494.212L578.748,494.212z M586.217,492.561c-0.102,0.22-0.627,0.187-1.177-0.068c-0.551-0.254-0.923-0.635-0.847-0.847c0.076-0.211,0.618-0.186,1.177,0.068S586.31,492.349,586.217,492.561z M588.901,492.459c-0.542,0.263-1.076,0.305-1.178,0.093s0.263-0.601,0.847-0.847c0.585-0.245,1.076-0.305,1.178-0.085C589.85,491.841,589.451,492.196,588.901,492.459z M596.793,499.673c-0.024,0.158-0.154,0.278-0.313,0.288l0,0c-0.172-0.022-0.295-0.175-0.279-0.348c0.068-1.883-0.276-3.759-1.008-5.495c-0.063-0.161,0.016-0.343,0.177-0.406h0.001c0.163-0.063,0.349,0.016,0.415,0.178C596.545,495.719,596.889,497.694,596.793,499.673z M604.058,498.217h-0.06c-0.148,0-0.277-0.102-0.313-0.246c-0.718-2.761-2.039-5.329-3.869-7.519c-0.117-0.127-0.117-0.322,0-0.449c0.136-0.11,0.336-0.092,0.448,0.043c1.926,2.248,3.318,4.902,4.073,7.765c0.029,0.175-0.089,0.341-0.265,0.37c-0.005,0.001-0.01,0.002-0.015,0.002V498.217z"
 
 //function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
 

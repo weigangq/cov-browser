@@ -20,14 +20,19 @@ body>table, #genome, #col2, #refOrf, #chgTbl .infoTitle {position:relative}
 #top_area {
     position:absolute;
     top:3px; left:3px;
-    padding-left:215px; padding-top:7px;
+    padding-left:55px; padding-top:7px;
     z-index:2000;
-    width:579px;
-    height:33px;
+    width:739px; height:33px;
     font-size:21px;
     color:white;
     font-weight:bold;
     background: linear-gradient(to right, gray, 90%, #d3d3d3);
+}
+#top_area span {
+    font-size:12px;
+    margin-left:25px;
+    vertical-align:middle;
+    font-weight:normal
 }
 
 #bottom_area {
@@ -53,7 +58,7 @@ body>table, #genome, #col2, #refOrf, #chgTbl .infoTitle {position:relative}
     width:450px;
     color:black
 }
-#ack ul {padding:0 2px 0 27px}
+#ack ul {padding:0 2px 0 27px; margin-bottom:6px}
 #ack li {padding:3px 0}
 #ack a {color:#428bca}
 
