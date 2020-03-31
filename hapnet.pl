@@ -234,9 +234,8 @@ sub graph_from_edges {
     } else {
 	foreach my $ch (sort keys %seen_child ) {
 	    my $refPa = $seen_child{$ch};
-	    foreach my $pa (sort keys %$refPa) {
-		$g->add_edge($pa, $ch);
-	    }
+	    my @pa = sort { $refPa->{$b} <=> $refPa->{$a}} keys %$refPa;
+	    $g->add_edge($ch, $pa[0]);
 	}
     }
     return $g;
