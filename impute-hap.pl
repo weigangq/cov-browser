@@ -27,13 +27,19 @@ GetOptions (
     \%options,
     "help",
     "debug|d",
+    "no-imputation|n",
+    "start=i",
+    "end=i",
+    "format=s",
     "dump-missing",
     ) or pod2usage(2);
 
 pod2usage(1) if $options{'help'};
+die "Usage: $0 --start <n> --end <n> [--dump-missing] [--no-imputation] samples.aln\n" unless $options{'start'};
 my $perc_missing = 0.1;
-my @edges = qw(9 127); # exclude sites 1 - 5 & 126 - end # to be determined by running "dump-missing | sort -n | uniq -c"
-my $in = Bio::AlignIO->new(-file => shift @ARGV);
+my $format = $options{format} || 'fasta';
+my @edges = ($options{start}, $options{end}); # retain coords excludes between # to be determined by running "dump-missing | sort -n | uniq -c"
+my $in = Bio::AlignIO->new(-file => shift @ARGV, -format => $format);
 my $aln = $in->next_aln();
 my $len = $aln->length();
 foreach my $seq ($aln->each_seq) {
@@ -62,6 +68,7 @@ my $ct = 0;
 foreach my $id1 (@ids) {
     $ct++;
     next unless @{$seqs{$id1}->{'missing_pos'}}; # no ambig; no need to impute
+    next if $options{'no-imputation'}; # do not impute
     my %nabes;
     foreach my $id2 (@ids) {
 	next if @{$seqs{$id2}->{'missing_pos'}}; # has ambig; can't be used to impute
@@ -117,7 +124,7 @@ my %haps = %$ref_hap;
 foreach my $st (sort {$a <=> $b} keys %haps) {
     my @hap = @{$haps{$st}};
     foreach my $hap (@hap) {
-	print LOG "ST", $st, "\t", $hap;
+	print LOG "ST", $st, "\t", $hap eq 'cov-outgroup' ? 'EPI_ISL_402131' : $hap;
 	if ($hap =~ /(EPI_\S+)\|by-EPI_\S+/) {
 	    my $id = $1;
 	    print LOG "\t";
