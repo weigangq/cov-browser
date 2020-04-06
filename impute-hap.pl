@@ -35,13 +35,13 @@ GetOptions (
     ) or pod2usage(2);
 
 pod2usage(1) if $options{'help'};
-die "Usage: $0 --start <n> --end <n> [--dump-missing] [--no-imputation] samples.aln\n" unless $options{'start'};
+#die "Usage: $0 --start <n> --end <n> [--dump-missing] [--no-imputation] samples.aln\n" unless $options{'dump-missing'};
 my $perc_missing = 0.1;
 my $format = $options{format} || 'fasta';
-my @edges = ($options{start}, $options{end}); # retain coords excludes between # to be determined by running "dump-missing | sort -n | uniq -c"
 my $in = Bio::AlignIO->new(-file => shift @ARGV, -format => $format);
 my $aln = $in->next_aln();
 my $len = $aln->length();
+my @edges = ($options{start}||1, $options{end}||$len); # retain coords excludes between # to be determined by running "dump-missing | sort -n | uniq -c"
 foreach my $seq ($aln->each_seq) {
     my @pos = @{&count_nonATCG($seq->seq)}; 
 

@@ -84,16 +84,6 @@ print Dumper(\%hapST) if $options{'debug'};
 die "root ST not found\n" unless $rootST;
 
 #exit;
-# Read FASTA alignment
-my $in = Bio::AlignIO->new(-file=>$options{'hap'}, -format=>'clustalw');
-my $aln = $in->next_aln();
-my $alnLen = $aln->length();
-foreach my $seq ($aln->each_seq) {
-    my $id = $seq->display_id();
-    $id =~ s/ST/H/; # hap ids, H1, H2, etc
-    $seq->display_id($id);
-    $STs{$id} = $seq; # hap seq obj
-}
 
 # Read VCF file
 my @pos;
@@ -147,53 +137,40 @@ push @utr_feats, Bio::SeqFeature::Generic->new(-seq_id => '3-UTR',
 
 
 print Dumper(\@utr_feats) if $options{'debug'};
+
 #############################
 # Make a graph, calculate MST & polorize with root
 #############################
-
-my ($graph, $mstg, $mrpg);
-my (@nodelist, @edgelist);
 my %edge_diff;
-&make_complete_graph();
+my $alnLen;
+# Read alignments
+my $in = Bio::AlignIO->new(-file=>$options{'hap'}, -format=>'clustalw');
+my $ct = 0; # could be multiple alignments (e.g., bootstrap)
+while (my $aln = $in->next_aln()) {
+    $ct++;
+    $alnLen = $aln->length();
+    foreach my $seq ($aln->each_seq) {
+	my $id = $seq->display_id();
+	$id =~ s/ST/H/; # hap ids, H1, H2, etc
+	$seq->display_id($id);
+	$STs{$id} = $seq; # hap seq obj
+    }
 
-if ($options{'majority-parent'}) {
-    $mrpg = &graph_from_edges();
-    &attach_attributes_and_polarize($mrpg);
-    print Dumper($mrpg) if $options{'debug'};
-} else {
-    $mstg = $graph->MST_Kruskal(); # Krustal's MST Algorithm
-    # the following enforce root to $rootST;
-#    my @outE = $mstg->edges_from($outST); # remove all edges from & to outST
-#    foreach my $e (@outE) {
-#	my ($u, $v) = ($e->[0], $e->[1]);
-#	my $other = $u eq $outST ? $v : $u;
-#	my @vs = $
-#	$mstg->delete_edge($e);
-#    }
-#    my $mstg->add_vertex("hypo"); # add an edge from outST to hypothetic ancestor
-#    my $mstg->add_edge($outST, "hypo"); # add an edge from outST to hypothetic ancestor
-#    my $mstg->add_edge("hypo", $rootST); # add an edge from hypothetic to rootST
-#    $mstg->add_edge($outST, $rootST); # create a new edge to attach root with outgroup
-    &attach_attributes_and_polarize($mstg);
+    my (@nodelist, @edgelist);
+    my $graph = &make_complete_graph();
+    my $mstg = $graph->MST_Kruskal(); # Krustal's MST Algorithm
+    &attach_attributes_and_polarize($mstg, \@nodelist, \@edgelist);
     print Dumper($mstg) if $options{'debug'};
-}
-#my @Vs = $mstg->unique_vertices();
-# Call back function to process each vertex using an anonymous sub
 
 #############################
 # Write outputs
 ##############################
 
-open JS, ">", "net.json";
-print JS to_json([\@nodelist, \@edgelist]); # if $options{'output'}; # eq 'json';
-close JS;
-#$writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
-if ($options{'majority-parent'}) {
-    &print_edge_list($mrpg); # if $options{'output'}; # eq 'edge';
-    &print_node_list($mrpg); # if $options{'output'}; # eq 'node';
-} else {
-    &print_edge_list($mstg); # if $options{'output'}; # eq 'edge';
-    &print_node_list($mstg); # if $options{'output'}; # eq 'node';
+    open JS, ">", "net-$ct.json";
+    print JS to_json([\@nodelist, \@edgelist]); 
+    close JS;
+    &print_node_list(\@nodelist, $ct); 
+    &print_edge_list($mstg, $ct); 
 }
 exit;
 
@@ -202,30 +179,34 @@ exit;
 ###################################
 
 sub make_complete_graph {
-    $graph = Graph->new(undirected => 1);
+    my $g = Graph->new(undirected => 1);
     my @sts = sort keys %STs;
     for (my $i=0; $i<$#sts; $i++) { # build a complete graph from edges
 	my $idI = $STs{$sts[$i]}->display_id();
 	for (my $j=$i+1; $j<=$#sts; $j++) {
 	    my $idJ = $STs{$sts[$j]}->display_id();
-	    $graph->add_edge($idI, $idJ);
-	    my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); 
+	    $g->add_edge($idI, $idJ);
+	    my ($ref1, $ref2) = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); 
 #	print Dumper(\@diffs);
-	    $edge_diff{$idI}{$idJ} = $edge_diff{$idJ}{$idI} = \@diffs; # save for later use
-	    $graph->set_edge_weight($idI, $idJ, scalar @diffs); # seq diff as weight (to be minimized in MST)
+	    $edge_diff{$idI}{$idJ} = $ref1; # save for later use
+	    $edge_diff{$idJ}{$idI} = $ref2;
+	    $g->set_edge_weight($idI, $idJ, scalar @$ref1); # seq diff as weight (to be minimized in MST)
 	}
     }
+    return $g;
 }
 
 sub attach_attributes_and_polarize {
     my $g = shift;
+    my $refNode = shift;
+    my $refEdge = shift;
 # 1st traversal
     my $attach_haps = sub {
 	my ($v, $self) = @_;
 	my $ref = $hapST{$v};
 	$g->set_vertex_attribute($v, 'haps', $hapST{$v});
 	$g->set_vertex_attribute($v, 'id', $v);
-	push @nodelist, $g->get_vertex_attributes($v);
+	push @$refNode, $g->get_vertex_attributes($v);
     };
 
     my $traversal = Graph::Traversal::DFS->new(
@@ -233,7 +214,7 @@ sub attach_attributes_and_polarize {
 	pre => $attach_haps # process each vertex by pre-order traversal
 	);
     $traversal->dfs();
-    print Dumper(\@nodelist) if $options{'debug'};
+    print Dumper($refNode) if $options{'debug'};
 
 # 2nd traversal
 # Call back function to process each edge using an anonymous sub
@@ -244,7 +225,7 @@ sub attach_attributes_and_polarize {
 	$g->set_edge_attribute($u, $v, 'source', $u);
 	$g->set_edge_attribute($u, $v, 'target', $v);
 	$g->set_edge_attribute($u, $v, 'id', join "-", ($u, $v));
-	push @edgelist, $g->get_edge_attributes($u, $v);
+	push @$refEdge, $g->get_edge_attributes($u, $v);
     };
 
     $traversal = Graph::Traversal::DFS->new(
@@ -256,8 +237,10 @@ sub attach_attributes_and_polarize {
 }
 
 sub print_node_list {
-    open ND, ">", "nodes.tsv";
-    foreach my $nd (@nodelist) {
+    my $refNode = shift;
+    my $i = shift;
+    open ND, ">", "nodes-$i.tsv";
+    foreach my $nd (@$refNode) {
 	my $ref  = $nd->{haps};
 	foreach my $iso (@$ref) {
 	    print ND $nd->{id}, "\t", $iso, "\n";
@@ -269,7 +252,8 @@ sub print_node_list {
 
 sub print_edge_list {
     my $g = shift;
-    open EG, ">", "edges.tsv";
+    my $i = shift;
+    open EG, ">", "edges-$i.tsv";
     foreach my $e ($g->edges) {
 	my ($u, $v) = ($e->[0], $e->[1]);
 	my $from = $g->get_edge_attribute($u, $v, 'source');
@@ -305,26 +289,42 @@ sub comp_seq { # count only definitive changes (assuming no change at positions 
     my @str2 = split '', $j->seq();
     my $id1 = $i->display_id();
     my $id2 = $j->display_id();
-    my @dif;
+    my (@diff_pos, @diff_rev);
     for (my $k=0; $k<$alnLen; $k++) {
 	next unless $str1[$k] =~ /[atcg]/i; # i is missing, skip
 	next unless $str2[$k] =~ /[atcg]/i; # j is missing, skip
 	next if $str1[$k] eq $str2[$k]; # no diff, skip
 	my $ref = &genome_info($pos[$k], $i->subseq($k+1,$k+1), $j->subseq($k+1,$k+1));
-	push @dif, {'site' => $pos[$k], 
-		    'src_base' => $i->subseq($k+1,$k+1), 
-		    'tgt_base' => $j->subseq($k+1,$k+1),
-		    'label' => $ref->[0],
-#		    'length' => $ref->[1],
-		    'pos' => $ref->[2],
-		    'cd_pos' => $ref->[3] || undef,
-		    'src_codon' => lc($ref->[4]) || undef,
-		    'tgt_codon' => lc($ref->[5]) || undef,
-		    'src_aa' => $ref->[6] || undef,
-		    'tgt_aa' => $ref->[7] || undef,
-	}; # found a diff
+	# save two items for polorize changes
+	push @diff_pos, {'site' => $pos[$k], 
+			    'src_base' => $i->subseq($k+1,$k+1), 
+			    'tgt_base' => $j->subseq($k+1,$k+1),
+			    'label' => $ref->[0],
+			    'pos' => $ref->[2],
+			    'cd_pos' => $ref->[3] || undef,
+			    'src_codon' => lc($ref->[4]) || undef,
+			    'tgt_codon' => lc($ref->[5]) || undef,
+			    'src_aa' => $ref->[6] || undef,
+			    'tgt_aa' => $ref->[7] || undef,
+			    'src_id' => $id1,
+			    'tgt_id' => $id2,
+	};
+	
+	push @diff_rev, {'site' => $pos[$k], 
+			     'src_base' => $j->subseq($k+1,$k+1), 
+			     'tgt_base' => $i->subseq($k+1,$k+1),
+			     'label' => $ref->[0],
+			     'pos' => $ref->[2],
+			     'cd_pos' => $ref->[3] || undef,
+			     'tgt_codon' => lc($ref->[4]) || undef,
+			     'src_codon' => lc($ref->[5]) || undef,
+			     'tgt_aa' => $ref->[6] || undef,
+			     'src_aa' => $ref->[7] || undef,
+			     'tgt_id' => $id1,
+			     'src_id' => $id2,
+	} ;
     } 
-    return @dif;
+    return (\@diff_pos, \@diff_rev);
 }
 
 sub genome_info {

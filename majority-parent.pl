@@ -7,7 +7,7 @@ use Data::Dumper;
 my %seen;
 while(<>) {
     chomp;
-    next unless /^\s+(\d+)\s+(ST\d+)-(ST\d+)$/;
+    next unless /^\s+(\d+)\s+(H\d+)-(H\d+)$/;
     my ($ct, $parent, $child) = ($1, $2, $3);
     $seen{$child}->{$parent} = $ct;
 }

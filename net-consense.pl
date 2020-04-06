@@ -1,21 +1,15 @@
 #!/usr/bin/env perl
-# 3/15/2020
-# calculate minimum spanning tree of a set of haplotypes
+# 3/6/2020
+# calculate consensus network of bootstrapped MST networks
 # Inputs: haplotype seq alignment in FASTA; VCF file; BED file (embeded)
 # Output: JSON for D3-force rendering
-# Done (3/15/2020):  add additional attributes including gene, codon, AA, syn/nonsyn (by parsing VCF & BED file)
-# Done (3/15/2020):  uniq_seq: consolidate sequences with internal missing bases; solved bioaln --gap-char "n" (not ideal)
-# Done (3/16/2020):  outgroup rooting: re-orient MSP path (Single-Source Shortest Paths, SSSP, won't work because it doesn't cover all nodes)
-# To Do: Impute missing NTs? currently STs are represented by seqs encountered first (input order)
-# To Do: sub genome_info has redundant code to extract codon => subroutine
-# Perl modules for Graphs: https://metacpan.org/release/Graph
 #
 
 use strict;
 use Bio::AlignIO;
 use Data::Dumper;
 use Graph;
-use Graph::Writer::Dot;
+#use Graph::Writer::Dot;
 use Graph::Traversal::DFS;
 use Bio::SeqFeature::Generic;
 use JSON;
@@ -39,11 +33,11 @@ GetOptions (
     "hap=s", # required
     "vcf=s", # required
     "genome=s", # required
-    "output=s",
+#    "output=s",
     "impute-log=s", # required
     "help",
     "debug|d",
-    "majority-parent=s", # read pa-cts.long file
+    "boot-file=s", # read pa-cts.tsv file
     "unique-root", # force single root edge
 #    "no-uniq-seq", # do not consolidate into uniq STs (for bootstrap analysis, with STs as input)
     ) or pod2usage(2);
@@ -94,6 +88,7 @@ foreach my $seq ($aln->each_seq) {
     $seq->display_id($id);
     $STs{$id} = $seq; # hap seq obj
 }
+
 
 # Read VCF file
 my @pos;
@@ -147,74 +142,90 @@ push @utr_feats, Bio::SeqFeature::Generic->new(-seq_id => '3-UTR',
 
 
 print Dumper(\@utr_feats) if $options{'debug'};
+
+# read boot-file
+my $mpa_file = $options{'boot-file'};
+open MP, "<", $mpa_file;
+my $g = Graph->new(undirected => 1);
+my %seen_child;
+#my %seen_parent;
+while(<MP>) {
+    chomp;
+    if (/ST(\d+)\s+ST(\d+)\s+(\d+)/) {
+	my ($child, $parent, $boot) = ("H" . $1, "H" . $2, $3);
+	$seen_child{$child}{$parent} = { 'boot' => $boot};
+#	$seen_child{$parent}{$child} = $boot;
+    }
+}
+close MP;
+
+# normalize boot among total parents
+foreach my $ch (sort keys %seen_child ) {
+    my $refPa = $seen_child{$ch};
+    my $sumBoot=0;
+    foreach my $pa (sort keys %$refPa) {
+	$sumBoot += $refPa->{$pa}->{boot};
+    }
+    
+    foreach my $pa (sort keys %$refPa) {
+	$seen_child{$ch}{$pa}->{'boot_norm'} = sprintf "%.4f", $seen_child{$ch}{$pa}->{'boot'}/$sumBoot;
+    }
+    
+}
+
+print Dumper(\%seen_child) if $options{'debug'};
+
+   
 #############################
 # Make a graph, calculate MST & polorize with root
 #############################
 
-my ($graph, $mstg, $mrpg);
 my (@nodelist, @edgelist);
 my %edge_diff;
-&make_complete_graph();
+my $graph = &make_complete_graph_add_boot();
+my $mstg = $graph->MST_Kruskal(); # MST with boot support as wts
+&attach_attributes_and_polarize($mstg);
 
-if ($options{'majority-parent'}) {
-    $mrpg = &graph_from_edges();
-    &attach_attributes_and_polarize($mrpg);
-    print Dumper($mrpg) if $options{'debug'};
-} else {
-    $mstg = $graph->MST_Kruskal(); # Krustal's MST Algorithm
-    # the following enforce root to $rootST;
-#    my @outE = $mstg->edges_from($outST); # remove all edges from & to outST
-#    foreach my $e (@outE) {
-#	my ($u, $v) = ($e->[0], $e->[1]);
-#	my $other = $u eq $outST ? $v : $u;
-#	my @vs = $
-#	$mstg->delete_edge($e);
-#    }
-#    my $mstg->add_vertex("hypo"); # add an edge from outST to hypothetic ancestor
-#    my $mstg->add_edge($outST, "hypo"); # add an edge from outST to hypothetic ancestor
-#    my $mstg->add_edge("hypo", $rootST); # add an edge from hypothetic to rootST
-#    $mstg->add_edge($outST, $rootST); # create a new edge to attach root with outgroup
-    &attach_attributes_and_polarize($mstg);
-    print Dumper($mstg) if $options{'debug'};
-}
-#my @Vs = $mstg->unique_vertices();
-# Call back function to process each vertex using an anonymous sub
 
 #############################
 # Write outputs
 ##############################
 
 open JS, ">", "net.json";
-print JS to_json([\@nodelist, \@edgelist]); # if $options{'output'}; # eq 'json';
+print JS to_json([\@nodelist, \@edgelist]); 
 close JS;
-#$writer->write_graph($mstg, 'mst.dot') if $options{'output'} eq 'dot';
-if ($options{'majority-parent'}) {
-    &print_edge_list($mrpg); # if $options{'output'}; # eq 'edge';
-    &print_node_list($mrpg); # if $options{'output'}; # eq 'node';
-} else {
-    &print_edge_list($mstg); # if $options{'output'}; # eq 'edge';
-    &print_node_list($mstg); # if $options{'output'}; # eq 'node';
-}
+&print_edge_list($mstg); 
+&print_node_list($mstg); 
+
 exit;
 
 #####################################
 # subroutines
 ###################################
 
-sub make_complete_graph {
-    $graph = Graph->new(undirected => 1);
+sub make_complete_graph_add_boot {
+    $g = Graph->new(undirected => 1);
     my @sts = sort keys %STs;
     for (my $i=0; $i<$#sts; $i++) { # build a complete graph from edges
 	my $idI = $STs{$sts[$i]}->display_id();
 	for (my $j=$i+1; $j<=$#sts; $j++) {
 	    my $idJ = $STs{$sts[$j]}->display_id();
-	    $graph->add_edge($idI, $idJ);
+	    $g->add_edge($idI, $idJ);
+	    my $boot = $seen_child{$idI}{$idJ}->{'boot'} || $seen_child{$idJ}{$idI}->{'boot'} || 0;
+	    my $boot_norm = $seen_child{$idI}{$idJ}->{'boot_norm'} || $seen_child{$idJ}{$idI}->{'boot_norm'} || 0;
+	    my $wt = 1 - $boot_norm;
 	    my @diffs = &comp_seq($STs{$sts[$i]}, $STs{$sts[$j]}); 
 #	print Dumper(\@diffs);
-	    $edge_diff{$idI}{$idJ} = $edge_diff{$idJ}{$idI} = \@diffs; # save for later use
-	    $graph->set_edge_weight($idI, $idJ, scalar @diffs); # seq diff as weight (to be minimized in MST)
+	    $edge_diff{$idI}{$idJ} = $edge_diff{$idJ}{$idI} = {
+		'boot' => $boot,
+		    'boot_norm' => $boot_norm,
+		    'wt' => $wt,
+		    'diff' => \@diffs,
+	    }; # save for later use
+	    $g->set_edge_weight($idI, $idJ, $wt); # seq diff as weight (to be minimized in MST)
 	}
     }
+    return $g;
 }
 
 sub attach_attributes_and_polarize {
@@ -239,8 +250,13 @@ sub attach_attributes_and_polarize {
 # Call back function to process each edge using an anonymous sub
     my $polarize_an_edge = sub {
 	my ($u, $v, $self) = @_;
-	if ($u eq $outST) { warn "root position:", $u, "=>", $v, "\n"}
-	$g->set_edge_attribute($u, $v, 'change', $edge_diff{$u}{$v});
+	if ($u eq $outST) { warn "outgroup position:", $u, "=>", $v, "\n"}
+	$g->set_edge_attribute($u, $v, 'change', $edge_diff{$u}{$v}->{'diff'});
+	$g->set_edge_attribute($u, $v, 'boot', { 'boot' => $edge_diff{$u}{$v}->{'boot'},
+						     'boot-norm' => $edge_diff{$u}{$v}->{'boot_norm'},
+						     'wt' => $edge_diff{$u}{$v}->{'wt'}
+						 });
+#	$g->set_edge_attribute($u, $v, 'boot', $edge_diff{$u}{$v});
 	$g->set_edge_attribute($u, $v, 'source', $u);
 	$g->set_edge_attribute($u, $v, 'target', $v);
 	$g->set_edge_attribute($u, $v, 'id', join "-", ($u, $v));
@@ -266,7 +282,6 @@ sub print_node_list {
     close ND;
 }
 
-
 sub print_edge_list {
     my $g = shift;
     open EG, ">", "edges.tsv";
@@ -279,20 +294,24 @@ sub print_edge_list {
 	my $hapFrom = shift @a; # take the first EPI as node ID 
 	my $refTo = $hapST{$v}; # print Dumper($refTo);
 	my @b = @$refTo; @b = sort @b;
-	my $hapTo = shift @b; 
-	my $ref = $g->get_edge_attribute($u, $v, 'change');
-	foreach my $mut (@$ref) {
+	my $hapTo = shift @b;
+	my $refDiff = $g->get_edge_attribute($u, $v, 'change');
+	my $refBoot = $g->get_edge_attribute($u, $v, 'boot');
+	foreach my $mut (@{$refDiff}) {
 	    my $syn_nonsyn = 'NA';
 	    if ($mut->{src_aa}) {
 		$syn_nonsyn = $mut->{src_aa} eq $mut->{tgt_aa} ? 1 : 0;
 	    }
 	    print EG join "\t", ($from, $to, 
-			      $mut->{site}, $mut->{label}, 
-			      $mut->{src_base}, $mut->{tgt_base}, 
-			      $mut->{src_codon} || 'NA', $mut->{tgt_codon} || 'NA',
-			      $mut->{src_aa} || 'NA', $mut->{tgt_aa} || 'NA',
-			      $syn_nonsyn
-	    );
+				 $mut->{site}, $mut->{label}, 
+				 $mut->{src_base}, $mut->{tgt_base}, 
+				 $mut->{src_codon} || 'NA', $mut->{tgt_codon} || 'NA',
+				 $mut->{src_aa} || 'NA', $mut->{tgt_aa} || 'NA',
+				 $syn_nonsyn,
+				 $refBoot->{'boot'}, 
+				 $refBoot->{'boot-nrom'},
+				 $refBoot->{'wt'}, 
+		);
 	    print EG "\n";
 	}
     }
