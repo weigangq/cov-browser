@@ -40,7 +40,7 @@ weigang@wallace:~/cov-03-09-2020/cov57$ cat ploidy.txt
 ###############################
 # 3d. outgroup mapping:
 ################################
-bcftools mpileup -Ou -f ../ref.fas  otg.sorted.bam | bcftools call -mv --ploidy-file ../ploidy.txt  -Ob -o otg.bcf -P 0.05
+bcftools mpileup -Ou -f ../ref.fas  otg.sorted.bam | bcftools call -mv --ploidy-file ../ploidy.txt  -Ob -o otg.bcf -P 0.1
 
 # Not used: 3a.  samtools mpileup -uf ../ref.fas *.sorted.bam > cov.mpileup &
 
@@ -58,7 +58,7 @@ weigang@wallace:~/cov-03-12-2020$ bgzip otg.vcf
 weigang@wallace:~/cov-03-12-2020$ tabix otg.vcf.gz
 
 bcftools isec -n=2 -w1 otg.vcf.gz snps2.vcf.gz > otg-isec-sites.vcf
-gzip & tabix to index
+bgzip & tabix to index
 vcf-merge -d -R 0 otg-isec-sites.vcf.gz snps2.vcf.gz > snps-ref.vcf ( no duplicated line; add ref state "0" instead of missing)
 
 7. filter sites by allele counts: only informative sites
@@ -67,36 +67,51 @@ vcftools --vcf snps.vcf --mac 2 --recode --recode-INFO-all --out snps2.vcf
 
 7. Get sample FASTA:
 bcftools query -l snps.bcf > samples
-cat samples | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' snps.bcf; echo; done > samples.fas
+cat samples | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' snps-ref.vcf; echo; done > samples.fas
 
 (8 get ref FASTA; if necessary
 echo ">ref" >> sample.fas
 grep "^CP" gbs50-snps2.vcf | cut -f4 | paste -s -d '' >> sample.fas)
 
 9. SNP counts (for verification)
-bcftools view snps.bcf > snps.vcf
-vcftools --vcf --counts snps.vcf
+bcftools view snps.bcf > snps-ref.vcf
+vcftools --vcf --counts snps-ref.vcf
 
-10. Remove gapped samples
-bioseq -d'ambig:20' samples.fas > samples2.fas # remove seqs with 20 or more missing/non-ATCG bases "."
+#10. Remove gapped samples
+#bioseq -d'ambig:20' samples.fas > samples2.fas # remove seqs with 20 or more missing/non-ATCG bases "."
 cat samples2.fas | sed "s/.sorted.bam//" > samples3.fas # fix names
-bioaln -i'fasta' --gap-char 'n' samples3.fas  > samples4.aln # change gaps to "n" to help reducing unique haps
+#bioaln -i'fasta' --gap-char 'n' samples3.fas  > samples4.aln # change gaps to "n" to help reducing unique haps
 
 
-9. Annotate with gff
+#9. Annotate with gff
 
 
 #####################
 # MST by Perl
 ##################
 # 1. replace gap char
-bioaln -i'fasta' --gap-char 'n' cov-275-outgroup.fas  > sample4.aln
+# bioaln -i'fasta' --gap-char 'n' cov-275-outgroup.fas  > sample4.aln
 
 # 2. run sssp_from_haps.pl
-perl hapnet.pl --vcf snps-ref.vcf --genome ref.gb --hap samples4.aln --output json 2> tmp.log > net.json
+# perl hapnet.pl --vcf snps-ref.vcf --genome ref.gb --hap samples4.aln --output json 2> tmp.log > net.json
+
+# 1. Impute: run "impute-hap.pl" twice
+perl impute-hap.pl --dump-missing samples.aln > missing | sort -n | uniq -c
+=> get start\end
+
+# (a) removed seqs > 10% "." (non-ATCG); 
+# (b) impute positions by the closest all-ATCG seq; 
+# (c) output uniq STs ("imputed.aln" & "impute.log")
+perl impute-hap.pl --start 5 --end 156 samples.aln > log
+
+# 2. Get MST
+hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-log impute.log
+# (a) net.json
+# (b) edges.tsv
+# (c) nodes.tsv
 
 ############################
-# Bootstrap analysis
+# Bootstrap analysis (not working yet)
 #############################
 
 1. Level 1: multiple runs (of the same haplotype alignmement)
@@ -183,6 +198,9 @@ perl impute-hap.pl test-impute.aln 2> log
 # 2. bootstrap
 boot-net.bash 99
 
-# 3. reconstruct majority-parent network (MPN)
-hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --majority-parent pa-cts.long > mpn.json
+# 3. reconstruct majority-parent network (doesn't work: cycles in majority parents, leading to unconnected graph)
+# hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --majority-parent pa-cts.long > mpn.json
+
+# 3. reconstruct MST using boot edges
+hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --boot-edges pa-cts.tsv
 
