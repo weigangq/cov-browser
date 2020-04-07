@@ -44,7 +44,7 @@ GetOptions (
     "help",
     "debug|d",
     "majority-parent=s", # read pa-cts.long file
-    "unique-root", # force single root edge
+    "add-root", # force root edge
 #    "no-uniq-seq", # do not consolidate into uniq STs (for bootstrap analysis, with STs as input)
     ) or pod2usage(2);
 
@@ -159,6 +159,19 @@ while (my $aln = $in->next_aln()) {
     my (@nodelist, @edgelist);
     my $graph = &make_complete_graph();
     my $mstg = $graph->MST_Kruskal(); # Krustal's MST Algorithm
+
+    if ($options{'add-root'}) {
+    # the following enforce root to $rootST;
+	my @outE = $mstg->edges_from($outST); # remove all edges from & to outST
+	foreach my $e (@outE) {
+#	    my ($u, $v) = ($e->[0], $e->[1]);
+#	    my $other = $u eq $outST ? $v : $u;
+#	    my @vs = $
+	    $mstg->delete_edge($e);
+	}
+	$mstg->add_edge($outST, $rootST); # create a new edge to attach root with outgroup	
+    }
+    
     &attach_attributes_and_polarize($mstg, \@nodelist, \@edgelist);
     print Dumper($mstg) if $options{'debug'};
 
