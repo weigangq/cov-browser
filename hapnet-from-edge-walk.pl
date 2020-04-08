@@ -149,6 +149,7 @@ my $graph = Graph->new(undirected => 1);
 my %seen_child;
 my %inodes;
 my $unit = 1/$alnLen;
+my (%parent, %child);
 while(<MP>) {
     chomp;
     if (/^(\d+)\s+(\S+)\s+(\S+)$/) {
@@ -175,20 +176,91 @@ foreach my $child (keys %seen_child) {
 	my $pa = $inodes{$parent} || $parent;
 	$pa =~ s/ST/H/;
 	next if $ch eq $pa;
+	$pa = "I" . $pa unless $pa =~ /H\d+/;
+	$ch = "I" . $ch unless $ch =~ /H\d+/;
 	$graph->add_edge($pa, $ch);
+	$parent{$ch} = $pa;
+	if ($child{$pa}) {
+	    push @{$child{$pa}}, $ch;
+	} else {
+	    $child{$pa} = [ ($ch) ];
+	}
 	if ($pa =~ /^H\d+/ && $ch =~ /^H\d+/) {
 	    my ($ref1, $ref2) = &comp_seq($STs{$pa}, $STs{$ch});
 	    $edge_diff{$pa}{$ch} = $ref1; 
 	    $edge_diff{$ch}{$pa} = $ref2;
-	} else {
-	    $edge_diff{$pa}{$ch} = &diff_na(); 
-	    $edge_diff{$ch}{$pa} = &diff_na();
 	}
+#	} else {
+#	    $edge_diff{$pa}{$ch} = &diff_na(); 
+#	    $edge_diff{$ch}{$pa} = &diff_na();
+#	}
 #	print join "\t", ($ch, $pa, $seen_child{$child}{$parent});
 #	print "\n";
     }
 }
 print Dumper(\%inodes) if $options{'debug'};
+
+#################################
+# impute inode (hopefully all like below; no recursive searching):
+#   H21 -> I127 -> H42
+#           |
+#           v
+#          H174
+##############################
+
+foreach my $ch (keys %parent) {
+    next if $ch =~ /^H/; # haplotype node
+    my $pa = $parent{$ch}; # single parent
+    die "Hypothetical node $ch: parent is not haplotype $pa\n" unless $pa =~ /^H/; 
+    my $pa_seq = $STs{$pa}; # multiple children
+    my $refCh = $child{$ch};
+    my %seen_diff;
+    my (%diff_pos, %diff_rev);
+    foreach my $c (@$refCh) {
+	die "Hypothetical node $ch: child is not haplotype $c\n" unless $c =~ /^H/;
+	my $ch_seq = $STs{$c};
+	my ($ref1, $ref2) = &comp_seq($pa_seq, $ch_seq);
+	foreach my $d (@$ref1) {
+	    $seen_diff{$d->{pos}}++;
+	    $diff_pos{$d->{pos}} = $d;
+	}  
+	foreach my $d (@$ref2) {
+	    $diff_rev{$d->{pos}} = $d;
+	}  
+    }
+
+    my (@diff_intersect_1, @diff_private_1, @diff_intersect_2, @diff_private_2, %is_private);
+    foreach my $pos (keys %seen_diff) {
+	if ($seen_diff{$pos} > 1) {
+	    push @diff_intersect_1, $diff_pos{$pos};
+	    push @diff_intersect_2, $diff_rev{$pos};
+	    $is_private{$pos} = 0;
+	} else {
+	    push @diff_private_1, $diff_pos{$pos};
+	    push @diff_private_2, $diff_rev{$pos};
+	    $is_private{$pos} = 1;
+	}
+    }
+
+    $edge_diff{$pa}{$ch} = [ @diff_intersect_1 ]; 
+    $edge_diff{$ch}{$pa} = [ @diff_intersect_2 ]; 
+
+    foreach my $c (@$refCh) {
+	my $ch_seq = $STs{$c};
+	my ($ref1, $ref2) = &comp_seq($pa_seq, $ch_seq);
+	my (@pos, @rev);
+	foreach my $d (@$ref1) {
+	    next unless $is_private{$d->{pos}};
+	    push @pos, $d;
+	}  
+	foreach my $d (@$ref2) {
+	    next unless $is_private{$d->{pos}};
+	    push @rev, $d;
+	}  
+	$edge_diff{$ch}{$c} = [ @pos ]; 
+	$edge_diff{$c}{$ch} = [ @rev ]; 
+    }
+}
 
 &attach_attributes_and_polarize($graph);
 #my $writer = Graph::Writer::Dot->new();
@@ -198,7 +270,7 @@ print Dumper(\%inodes) if $options{'debug'};
 # Write outputs
 ##############################
 
-open JS, ">", "net-edge.json";
+open JS, ">", "net-pars.json";
 print JS to_json([\@nodelist, \@edgelist]); 
 close JS;
 &print_edge_list($graph); 
@@ -212,16 +284,16 @@ exit;
 
 sub diff_na {
     my @edges;
-    push @edges, {'site' => undef, 
-		  'src_base' => undef, 
-		  'tgt_base' => undef,
-		  'label' => 'to-do',
-		  'pos' => undef,
-		  'cd_pos' => undef,
-		  'src_codon' => undef,
-		  'tgt_codon' => undef,
-		  'src_aa' => undef,
-		  'tgt_aa' => undef,
+    push @edges, {'site' => 1, 
+		  'src_base' => 'n', 
+		  'tgt_base' => 'n',
+		  'label' => 'no-gene',
+		  'pos' => 1,
+		  'cd_pos' => 1,
+		  'src_codon' => 'xxx',
+		  'tgt_codon' => 'yyy',
+		  'src_aa' => 'X',
+		  'tgt_aa' => 'X',
     }; 
     return \@edges;
 }
@@ -232,8 +304,8 @@ sub attach_attributes_and_polarize {
 # 1st traversal: attach node attributes
     my $attach_haps = sub {
 	my ($v, $self) = @_;
-	my $ref = $hapST{$v};
-	$g->set_vertex_attribute($v, 'haps', $hapST{$v} || undef);
+#	my $ref = $hapST{$v};
+	$g->set_vertex_attribute($v, 'haps', $hapST{$v}) if $hapST{$v};
 	$g->set_vertex_attribute($v, 'id', $v);
 	push @nodelist, $g->get_vertex_attributes($v);
     };

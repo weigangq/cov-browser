@@ -110,6 +110,8 @@ hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-l
 # (b) edges.tsv
 # (c) nodes.tsv
 
+cat impute.log | sed 's/cov-outgroup/EPI_ISL_402131/' > impute.log2
+perl cov-browser/hapnet.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --hap imputed.aln --impute-log impute.log2
 ############################
 # Bootstrap analysis (not working yet)
 #############################
@@ -204,3 +206,213 @@ boot-net.bash 99
 # 3. reconstruct MST using boot edges
 hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --output json --impute-log impute.log --boot-edges pa-cts.tsv
 
+##############
+# No imputation
+###################
+
+On azure:
+
+perl cov-browser/impute-hap.pl --no-imputation samples3.aln
+perl cov-browser/hapnet.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --impute-log impute.log2 --hap imputed.aln > log 
+
+# homolasy check:
+azureuser@myVM:~$ cut -f3 edges.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     67 1 # no homoplasy/143
+     40 2
+     22 3
+      7 4
+      5 5
+      1 6
+      1 15
+Homoplasy=53.1%
+
+# edge check
+cut -f1,2 edges.tsv | sort | uniq -c | sort -n
+      3 ST117   ST174
+      3 ST13    ST59
+      3 ST21    ST116
+      3 ST50    ST120
+      4 ST18    ST130
+      4 ST36    ST178
+     11 ST213   ST129 # root edge
+     29 ST85    ST90 # BAD ST90; don't know why. Remove & recompute
+
+# remove ST90
+bioaln -d'ST90' imputed.aln > imputed2.aln
+perl cov-browser/hapnet.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --impute-log impute.log2 --hap imputed2.aln > log
+     85 1
+     29 2
+     14 3
+      9 4
+      3 5
+      1 6
+      1 16
+homoplasy = 40.1% (much improved)
+
+# check syn/nonsyn
+    140 0 # nonsyn
+     22 NA # non-coding
+     96 1 # syn
+dn/ds: 140/3/96 = 0.486
+
+check "*"
+cut -f10 edges.tsv | sort | uniq -c
+cut -f9 edges.tsv | sort | uniq -c
+
+"*" 2
+azureuser@myVM:~$ grep "*" edges.tsv: same site
+ST32    ST92    13402   orf1ab  T       G       tat     tag     Y       *       0
+ST49    ST134   13402   orf1ab  G       T       tag     tat     *       Y       0
+ST31    ST96    13402   orf1ab  T       G       tat     tag     Y       *       0
+ST135   ST133   13402   orf1ab  G       T       tag     tat     *       Y       0
+
+(my $orfShift = 13468)
+
+###############################
+# Root analysis
+#################################
+
+1. pick STs
+2. remove gaps: tr 'N' '-' | bioaln -g
+3. run DNAPARS with root
+4. Plot
+
+#############################################
+# boot & consense net
+#############################################
+# original
+perl ../cov-browser/hapnet-boot.pl --genome ../cov-browser/ref.gb --vcf ../snps-ref.vcf --hap ../imputed2.aln --impute-log ../impute.log2
+
+# get boot align
+for i in {1..100}; do bioaln --boot imputed2.aln > boot-$i.aln; done
+cat boot-$i.aln > boots.aln
+
+# read multiple alignemtns:
+perl ../cov-browser/hapnet-boot.pl --genome ../cov-browser/ref.gb --vcf ../snps-ref.vcf --hap boots.aln --impute-log ../impute.log2
+
+# count unique edges
+for f in edges-*.tsv; do cut -f1,2 $f | tr '\t' '-' | sort -u; done | sort | uniq -c > unique-edges
+
+# count parents
+../cov-browser/majority-parent.pl unique-edges > pa-ct.tsv
+
+# get consensus network
+perl cov-browser/hapnet-consense.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --hap imputed2.aln --impute-log impute.log2 --boot-file boot-files/pa-ct.tsv
+=> net-con.json; nodes-con.tsv; edges-con.tsv
+
+# check homoplasy
+azureuser@myVM:~$ cut -f3 edges-con.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     59 1
+     32 2
+     14 3
+     12 4
+     15 5
+      6 6
+      1 7
+      1 11
+      1 18
+
+####################
+# force root
+######################
+azureuser@myVM:~$ perl cov-browser/hapnet-root.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --hap imputed2.aln --impute-log impute.log2 --add-root
+
+azureuser@myVM:~$ cut -f3 edges-1.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     86 1
+     27 2
+     14 3
+     11 4
+      4 5
+      1 13
+
+####################
+# impute 
+####################
+# trim ends
+perl cov-browser/impute-hap.pl --dump-missing samples2.fas > missing
+
+azureuser@myVM:~$ sort -n missing | uniq -c | head
+   1734 1
+   1382 2
+   1241 3
+   1206 4
+   1097 5
+   1002 6
+    767 7 
+    751 8
+    741 9
+     16 10 <= start
+
+azureuser@myVM:~$ sort -n missing | uniq -c | tail
+     12 151
+     33 152
+     18 153
+     19 154
+     26 155 <= end
+    824 156
+    874 157
+    980 158
+   1376 159
+   1393 160
+
+# impute (this takes long: 2500 seqs takes 45 min)
+azureuser@myVM:~$ perl cov-browser/impute-hap.pl --start 10 --end 155 samples2.fas 2> log &
+
+# remove ST90
+bioaln -d'ST90' imputed.aln > with-impute.aln
+
+# get MST
+azureuser@myVM:~/with-impute$ perl ../cov-browser/hapnet-boot.pl --genome ../cov-browser/ref.gb --vcf ../snps-ref.vcf --hap with-impute.aln --impute-log with-impute.log
+
+# check homoplasy (similar to un-imputed)
+azureuser@myVM:~/with-impute$ cut -f3 edges-1.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     85 1
+     32 2
+     16 3
+      6 4
+      3 5
+      2 6
+      1 13
+-----------
+  N = 145
+Homoplasy Index = 0.41
+
+# check syn/nonsyn
+azureuser@myVM:~/with-impute$ cut -f3,11 edges-impute.tsv | sort -n | uniq -c | cut -f2 | sort | uniq -c
+     77 0
+     55 1
+     13 NA
+-------------
+  N = 145
+dn/ds =~ 77/3/55 = 0.47
+
+####################################
+# DNApars
+#######################################
+
+# phylip options:
+"S" - no thorough search (fast, starting with a single MP tree)
+"Y"
+"o" - 212 (reset outgroup)
+"4"
+"5"
+"."
+
+# phylip DNApars (similar homoplasy scores; total steps = 260; 304 equally parsimonious trees)
+     86 1
+     31 2
+     17 3
+      5 4
+      3 5
+      2 6
+      1 15
+
+# biotree --walk-edge 'ST213' > walk.edge
+
+# To view graph with DOT: neato -Tpdf mygraph.dot > mygraph.pdf
+
+# SNP sites:
+bcftools query -f "%POS\n" snps-ref.vcf > snps.pos
+
+# Make network (including adding hypothetical nodes and edges)
+perl ../cov-browser/hapnet-from-edge-walk.pl --genome ref.gb --vcf snps.pos --hap with-impute.aln --impute-log with-impute.log --edge-file walk.edge
