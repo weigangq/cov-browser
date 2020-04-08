@@ -1,12 +1,12 @@
-var listNode, listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, listChange={}, outGrp='EPI_ISL_402131', nodePie={}
-var wMap=504, stdR=5, cR1=4, mapR=3.5, cR2=8, distance=12//, lnkdist=1;
-var annoDataW, geoDataW, countryData, refData,
+var listNode=[], listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, listChange={}, outGrp='EPI_ISL_402131';
+var wMap=504, stdR=4.5, cR1=4, mapR=3.5, cR2=8, distance=12//, lnkdist=1;
+var annoDataW, geoDataW, countryData, map_ctry, refData,
     ids=[], annoDataC, geoDataC, pubData, source, symData, orfData, compData, seqData, dndData;
-var wTotal=1100, wTree=100, tabW, unit=30, marginL=1, wYear=140,
+var wTree=100, tabW, unit=30, marginL=1, wYear=140,
     hUnit=19.5, yEdge=22, hTree, hSvg,
     orgColor = {1:"DodgerBlue", 2:"magenta", 3:"yellowGreen", 4:"orange"},
     geoColor, dateScale, shipColor='navy',
-    ratio = 38.5, hORF=6, transBar, orfLine, wLg, sub_site=[],
+    ratio = 36.4, hORF=6, transBar, orfLine, sub_site=[],
     unitW=6.6, showAA;
 var ratioC, cid_comp=[1,2,3,4,5,6,8,9,10], compLine, seqCid, tabNum, seqScroll;
 var dbLink ={"pubmed":"http://www.ncbi.nlm.nih.gov/pubmed/","ncbi":"http://www.ncbi.nlm.nih.gov/nuccore/"};
@@ -23,6 +23,7 @@ $(document).ready(function(){
             annoDataW = data.annoW;
             geoDataW = data.geoW;
             countryData = data.country;
+            map_ctry = data.map_geo;
             refData = data.ref;
             annoDataC = data.annoC;
             geoDataC = data.geoC;
@@ -127,7 +128,6 @@ function asignColor(){
         if (an.geoId<500) geo[an.geoId]=1
     });
     geoList = Object.keys(geo).map(d=>d*1);
-    console.log(geoList)
     
     var ctr = {};
     geoList.forEach(function(d){ ctr[geoDataW[d].ctry]=1 });
@@ -136,22 +136,22 @@ function asignColor(){
     var l = ctryList.length+5;
     geoColor = d3.scaleOrdinal().domain(ctryList).range(d3.range(1,l).map(function(d){return d3.hsl(360/l * d, 1, 0.45)}));
     geoList.push(501,502,503)
-    console.log(geoList);
     ctryList.push(701)
 }
 
-var chartW=655, chartH=554;
-var currAcc=[]
+var chartW=655, node_gid=[];
+var currAcc=[], currLink
 function drawChart(){
-    var width = chartW, height=chartH;
+    var width = chartW, height=582;
     var linewidth = 1;
 
-    var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
+//    var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
+    var pie = d3.pie().sort(null).value(function(d){return 1});
 
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
     svg.append("rect").attr("width", width).attr("height", height)
                     .attr("class", 'whiteFill')
-                    .on('click',function(d){ unlight(); ulGeo() })
+                    .on('click',function(d){ unlight(); ulGeo(); currAcc=[]; currLink=0 })
 
 
     for (var i=0; i<listLink.length; i++){
@@ -163,7 +163,7 @@ function drawChart(){
             .attr('refX', lk.target.radius*0.6+5)
             .attr('refY', -0.5)
             .attr('markerWidth', 8)
-            .attr('markerHeight', 8)
+            .attr('markerHeight', 7)
             .attr('orient', 'auto')
             .append('path')
             .attr("d", "M0,-3L7,0L0,3")
@@ -180,13 +180,12 @@ function drawChart(){
         }
     }
 
-//    var chrg=-100;
-    var chrg=-90;
+    var chrg=-102;
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink()
                .id(function(d){ return d.index })
-               .distance(function(d){ return d.source.haps? d.ldist : d.ldist*2.5})
-               .iterations(8))
+               .distance(function(d){ return d.source.haps? d.ldist : d.ldist*2.4})
+               .iterations(35))
         .force("charge", d3.forceManyBody().strength(chrg))
         .force("center", d3.forceCenter(width/2, height/2))
         .force("y", d3.forceY(0))
@@ -194,25 +193,23 @@ function drawChart(){
 
     var link = svg.selectAll(".link").data(listLink).enter()
         .append("line").attr('class', function(d){
-                return 'link finger' + (d.target.haps && d.target.haps[0]==outGrp? ' dashStroke' : '')
+                return 'link ' + (d.change? 'finger': 'dashStroke')
             })
         .attr("id", function(d,i){return 'll_'+i})
         .attr('marker-end', function(d,i){return 'url(#arrow' + i + ')'})
         .on('click',function(d,i){
+            if (!d.change){return}
             unlight();
-            if (!d.change){d3.select(this).classed("finger",false).classed("orangeStroke",false); return}
-            d3.select(this).classed("orangeStroke",true);
-            d3.select('#arrow'+i+' path').classed("orangeFill",true);
 
+            $('#chgTbl td').remove();
             var trs = [];
             d.change.forEach(function(c){
                 var noSyn = c.src_aa && c.src_aa != c.tgt_aa;
                 d3.select('#site_'+c.site)
                     .style("stroke", noSyn? "red" : "DodgerBlue")
-                    .classed("hidden",false);
                 var tds = [];
                 tds.push(c.site);
-                tds.push(/igs/.test(c.label)? 'IGS' : c.label);
+                tds.push(c.label);
                 if (c.src_aa){
                     tds.push(hlCodonP(c.src_codon,c.cd_pos, noSyn) + '(' + c.src_aa + ')');
                     tds.push(hlCodonP(c.tgt_codon,c.cd_pos, noSyn) + '(' + c.tgt_aa + ')')
@@ -223,7 +220,10 @@ function drawChart(){
                 trs.push('<tr><td>' + tds.join('</td><td>') + '</td></tr>')
             });
             $('#chgTbl').append(trs.join(''))
-            $('#chgTbl td').show();
+
+            currLink = i;
+            currAcc = []
+            hlLink()
             $("#chgInf").fadeIn("slow")
             $("#nodeInf").fadeOut("slow");
         })
@@ -249,20 +249,22 @@ function drawChart(){
         });
     simulation.force("link").links(listLink);
 
+    var nLab=10;
     listNode.forEach(function(d){
         var n = d3.select('#'+d.id);
         n.append("circle").attr("r", d.radius).style('fill',"white")
+
         if (d.haps && d.haps.length>1){
-            d.haps.forEach(function(n){ nodePie[n]=d.id});
             var sector = d3.arc().innerRadius(0).outerRadius(d.radius);
+            
             n.selectAll('path')
                 .data(pie(d.haps)).enter()
                 .append('path')
-                .attr("id", function(n){return 'nn_'+n.data}).attr("class","iso crosshair")
+                .attr("class", function(n){return 'nn_' + n.data[0] + " iso crosshair"})
                 .attr('d', sector)
                 .style('fill', function(n){
-                    var an = annoDataW[n.data];
-                    return an? (an.geoId<500? geoColor(geoDataW[an.geoId].ctry) : shipColor) : "gray"
+                    var gid = n.data[0];
+                    return gid<500? geoColor(geoDataW[gid].ctry) : shipColor
                 })
                 .on('click',function(n){
                     unlight()
@@ -272,51 +274,66 @@ function drawChart(){
                     } else {
                         d3.select(this).transition().duration(timeT).attr('d', sector2).style("fill-opacity",0.6)
                     }
-                    currAcc = [n.data, d.radius]
-                    overM()}
-                )
-//                .on('mouseout',un_hl)
+                    currAcc = [d.id, n.data[0], n.data[1], d.radius]
+                    overM()
+                })
+                .on("mouseover", function(n){
+                    var num =  n.data[1].length
+                    tipNet(num + ' pateint' + (num==1? '' : 's'))
+                })
+                .on('mouseout',function(){$("#tipNet").hide()})
+            
+            var center = n.append("circle").attr("r", (d.haps.length>nLab? 7 : 2)).style('fill',"white")
+            if (d.haps.length>nLab){
+                n.append("text").attr("class","nodeId").attr("dy",3).text(d.id)
+            } else {
+                center.style("fill-opacity",0.1).style("stroke","none")
+                    .on("mouseover", function(){tipNet(d.id, 20)})
+                    .on('mouseout',function(){$("#tipNet").hide()})
+            }
         } else {
             if (!d.haps){
                 n.append("circle").attr("r", d.radius)
-                    .style('fill',"white").style('stroke','#999')
-                    .on('mouseover',function(d){
-                        $("#tipNet").css("left", (d3.event.pageX-50)+"px").css("top", (d3.event.pageY-77)+"px")
-                        .html('Hypothetical root').show()
-                    })
-                    .on('mouseout', function(){ $("#tipNet").hide() })
+                    .style('fill',"white").style('stroke','#999').style('stroke-width','1px')
+                    .on('mouseover',function(d){tipNet('Hypothetical ' + (d.id=='H0'? 'root' : 'haplotype'))})
+                    .on('mouseout',function(){$("#tipNet").hide()})
             } else {
-                var ac = d.haps[0],
-                    an = annoDataW[ac];
+                var sl = d.haps[0],
+                    gid = sl[0],
+                    ac = sl[1][0],
+                    an = annoDataW[ac]
                 var circle;
                 if (ac!=outGrp){
-                    circle = n.append("circle").attr("id", 'nn_'+ac).attr("class","iso crosshair")
+                    circle = n.append("circle")
+                        .attr("class",'nn_' + gid + " iso crosshair")
                         .attr("r", d.radius)
-                        .style('fill', an? (an.geoId<500? geoColor(geoDataW[an.geoId].ctry) : shipColor) : "gray");
+                        .style('fill', gid<500? geoColor(geoDataW[gid].ctry) : shipColor);
+//                n.append("circle").attr("r", 8).style('fill',"white")
+//                n.append("text").attr("class","nodeId").attr("dy",3).text(d.id.replace(/ST/,'H'))
                 } else {
                     $("#bat").appendTo(('#'+d.id));
                     circle = n.append("svg")
-                            .attr("id", 'nn_'+ac).attr("class","finger").style("fill","gray")
-                            .attr("x",-40).attr("y",-13)
-                            .attr("width",50).attr("height",23.996)
+                            .attr("class",'nn_' + gid + " finger").style("fill","gray")
+                            .attr("x",-40).attr("y",-7)
+                            .attr("width",48).attr("height",23.996)
                             .attr("viewBox","562 485.829 50 23.996")
                             .append("path").attr("d",batPath)
 /*                    circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
                         .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
-                if (an){
-                    circle.on('click',function(){
-                        unlight()
-                        if (Number($(':radio:checked').val())){
-                            d3.select(this).transition().duration(timeT).attr("r", stdR+cR2)
-                        } else {
-                            d3.select(this).transition().duration(timeT).attr("r", stdR+cR2).style("fill-opacity",0.6)
-                        }
-                        currAcc = [ac]
-                        overM()
-                    })
-//                          .on('mouseout',un_hl)
-                }
+
+                circle.on('click',function(){
+                    unlight()
+                    if (Number($(':radio:checked').val())){
+                        d3.select(this).transition().duration(timeT).attr("r", stdR+cR2)
+                    } else {
+                        d3.select(this).transition().duration(timeT).attr("r", stdR+cR2).style("fill-opacity",0.6)
+                    }
+                    currAcc = [d.id, gid, [ac]]
+                    overM()
+                })
+                .on("mouseover", function(n){if(n.haps[0][1][0]==outGrp) return; tipNet('1 pateint (' + d.id + ')')})
+                .on('mouseout',function(){$("#tipNet").hide()})
             }
         }
     })
@@ -344,51 +361,93 @@ function drawChart(){
 }
 
 function overM(){
-    var ac = currAcc[0],
-        an = annoDataW[ac];
-    if (ac!=outGrp) hlDate(an.col)
+    currLink=0
+    var accs = currAcc[2],
+        gid = currAcc[1]
 
-    hlGeo(an.geoId, an.city? an.city : '')
-    $("#virusName").html(an.iso);
-    $("#accNo").html(ac);
-
-    var patient = '';
-    if (ac==outGrp){
-        $("#host").html('Host');
-        patient = an.patient + ' (Collect on ' + an.col + ')'
-    } else if (/Environment/i.test(an.patient)){
-        $("#host").html('Environment');
-        patient = an.patient.split(":")[1]
+    if (currAcc[3]){
+        var rg = d3.extent(accs, d=>tParser(annoDataW[d].col));
+        hlDate(rg);
     } else {
-        $("#host").html('Patient');
-        if (an.patient){patient = an.patient}
-    }
-    $("#patient").html(patient)
-
-    $("#lab").html(an.author + '<em> et al</em><br>Submit: ' + an.subdate + '<br>' + an.lab);
-
-    if (ac==outGrp){
-        d3.select("#nn_"+ac).style("fill", geoColor(geoDataW[an.geoId].ctry))
+        var ac = accs[0]
+        if (ac!=outGrp) hlDate([tParser(annoDataW[ac].col)])
     }
 
-    $("#nodeInf td").show();
+    hlGeo(gid)
+
+    $("#nPatient").html(accs.length + ' patient' + (accs.length==1? '' : 's'))
+    for (var i=0; i<accs.length; i++){
+        var ac = accs[i],
+            an = annoDataW[ac],
+            lab = an.author + '<em> et al</em><br>Submit: ' + an.subdate + '<br>' + an.lab
+
+        var host, patient = '';
+        if (ac==outGrp){
+            host = 'Host'
+            patient = an.patient
+            d3.select("#" + currAcc[0] + " .nn_"+gid).style("fill", geoColor(geoDataW[gid].ctry))
+        } else if (/Environment/i.test(an.patient)){
+            host = 'Environment';
+            patient = an.patient.split(":")[1]
+        } else {
+            host = 'Patient';
+            if (an.patient){patient = an.patient}
+        }
+
+        var tbl = '<hr><table>' + '<tr><th>Name</th><td>' + an.iso + '</td><th>Accession</th><td>' + ac + '</td></tr><tr><th>Collect</th><td>' + an.col + '</td><th>' + (an.city? 'City' : '') + '</th><td>' + (an.city? an.city : '') + '</td></tr><tr><th>' + host + '</th><td colspan="3">' + patient + '</td></tr><tr><th>Citation</th><td colspan="3">' + lab + '</td></tr></table>'
+        $('#isoInf').append(tbl)
+    }
+
+    $("#isoInf, #nPatient").show();
+    $("#nodeInf").scrollTop(0);
     $("#chgInf").fadeOut("slow")
     $("#nodeInf").fadeIn("slow");
 }
 
-function ulNode(fromGeo){
-    $("#nodeInf td:nth-of-type(2)").hide()
+function hlGeo(geoId){
+    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.1);
+    d3.select('#mapW_'+geoId).transition().duration(timeT).attr("r", stdR*2/transK).style("fill-opacity",0.7);
+    $("#siteName").html(geoDataW[geoId].name).show()
+}
 
-    var ac = currAcc[0],
-        sel = d3.select("#nn_"+ac)
-    if (ac==outGrp){
-        sel.style("fill","gray");
-        return
-    }
+function ulGeo(){
+    d3.selectAll('#mapW circle').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.7);
+    $("#siteName").hide()
+}
 
-    var val = Number($(':radio:checked').val());
-    if (currAcc[1]){
-        var sector = d3.arc().innerRadius(0).outerRadius(currAcc[1]);
+function hlDate(arr){
+    d3.select('#dateRg').classed("hidden",false)
+        .transition().duration(transTime)
+        .attr("x", ddScale(arr[0])).attr("width",arr[1]? (ddScale(arr[0])==ddScale(arr[1])? 1 : ddScale(arr[1])-ddScale(arr[0])) : 1);
+}
+
+function hlLink(){
+    d3.select('#ll_'+currLink).classed("orangeStroke",true);
+    d3.select('#arrow'+currLink+' path').classed("orangeFill",true);
+    $('#chgTbl td').show()
+
+    var sel = listLink[currLink].change.map(d=>'#site_'+d.site).join(',');
+    d3.selectAll(sel).classed("hidden",false)
+}
+function ulLink(){
+    d3.selectAll('#netGraph .link').classed("orangeStroke",false)//.style("stroke","#999");
+    d3.selectAll('#netGraph marker path').classed("orangeFill",false)//.style("fill","#999")
+    $("#chgTbl td").hide()
+    d3.selectAll('.siteLine').classed("hidden",true)
+}
+
+function unlight(fromGeo){
+    if (currLink) ulLink()
+
+    if (!currAcc[0]) return
+    
+    $("#isoInf table, #isoInf hr").remove()
+    $("#isoInf, #nPatient").hide()
+
+    var val = Number($(':radio:checked').val()),
+        sel = d3.select("#"+currAcc[0] + ' .nn_' + currAcc[1])
+    if (currAcc[3]){
+        var sector = d3.arc().innerRadius(0).outerRadius(currAcc[3]);
         if (!fromGeo){
             if (val){
                 sel.transition().duration(timeT).attr('d', sector)
@@ -403,6 +462,7 @@ function ulNode(fromGeo){
             }
         }
     } else {
+        if (currAcc[2][0]==outGrp){ sel.style("fill","gray"); return}
         if (!fromGeo){
             if (val){
                 sel.transition().duration(timeT).attr("r", stdR)
@@ -417,85 +477,62 @@ function ulNode(fromGeo){
             }
         }
     }
-    currAcc=[]
-}
 
-function hlGeo(geoId, city){
-    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.1);
-    d3.select('#mapW_'+geoId).transition().duration(timeT).attr("r", stdR*2/transK).style("fill-opacity",0.7);
-    $("#siteName").html(geoDataW[geoId].name + (city? ':'+city : '')).show()
-}
-
-function ulGeo(){
-    d3.selectAll('#mapW circle').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.7);
-}
-
-function hlDate(d){
-    d3.select('#date_'+d).style("stroke","orange").style("stroke-width","5px");
-    var dateNode = $("#date_"+d)[0].attributes,
-        of = $("#dateChart").offset();
-    $("#tipDate").css("left", (dateNode.transform.value.split('(')[1].split(',')[0]*1-35)+"px").css("top", (of.top+2)+"px").html(d).show()
-}
-function ulDate(){
-    d3.selectAll("#dateChart line").style("stroke","gray").style("stroke-width","2px");
-    $("#tipDate").hide();
-}
-
-function ulLnk(){
-    d3.selectAll('#netGraph .link').classed("orangeStroke",false)//.style("stroke","#999");
-    d3.selectAll('#netGraph marker path').classed("orangeFill",false)//.style("fill","#999")
-    $('#chgTbl td').remove();
-    d3.selectAll('.siteLine').classed("hidden",true)
-}
-
-function unlight(fromGeo){
-    if (currAcc[0]) ulNode(fromGeo)
-    ulDate()
-    ulLnk()
+    d3.select('#dateRg').classed("hidden", true)
 }
 
 function drawLg(){
-    var width=chartW-12, height=580-chartH,
-        margin_left=40, margin_top=2,
-        radius=10, wpic=radius*2+5;
+    var width=wMap, height=26,
+        margin_left=1, margin_top=2,
+        radius=9, wpic=radius*2+3;
     var svg = d3.select("#graphLg").append("svg").attr("width", width).attr("height", height),
         chart = svg.append("g").attr("transform", "translate("+[margin_left, margin_top]+")"),
-        pic = chart.append("g").attr("class", "blackLine")
+        pic = chart.append("g").attr("class", "blackLine whiteFill")
                 .attr("transform", "translate("+[radius, radius]+")"),
         txt1 = chart.append("g").attr("class","lgTitle").attr("transform", "translate("+[0, 9]+")"),
         txt2 = chart.append("g").attr("class","lgExp").attr("transform", "translate("+[0, 22]+")"),
         txt3 = chart.append("g").attr("class","lgExp grayFill").attr("transform", "translate("+[0,9]+")")
  
-    pic.append("circle").attr("r", radius);
-    txt1.append("text").text("Haplotype").attr("x",wpic);
+    pic.append("circle").attr("r", radius)
+        .on("mouseover", function(){tipNet('Node size proportional to geographic range')})
+        .on('mouseout',function(){$("#tipNet").hide()})
+    txt1.append("text").text("Haplotype").attr("x",wpic)
     txt2.append("text").html("a group of similar genomes").attr("x",wpic);
-    txt3.append("text").html("N=151").attr("x",wpic+60)
+    txt3.append("text").html("N=212").attr("x",wpic+59)
 
-    ww = 187
-    pic.append("circle").attr("r", radius).attr("cx", ww).style("stroke","#ccc");
+    ww = 156
+    pic.append("circle").attr("r", radius).attr("cx", ww).style("stroke","#ccc")
+        .on("mouseover", function(){tipNet('One or more isolates from one location')})
+        .on('mouseout',function(){$("#tipNet").hide()})
     
     var pie = d3.pie().startAngle(0.5*Math.PI).endAngle(0.7*Math.PI),
         arc = d3.arc().innerRadius(0).outerRadius(radius);
     pic.append("g").attr("transform", "translate("+[ww, 0]+")")
         .selectAll("g").data(pie([10])).enter()
         .append("path").attr("d", arc);  
-    txt1.append("text").text("Isolate").attr("x",ww+wpic);
-    txt2.append("text").html("a patient sample").attr("x",ww+wpic);
-    txt3.append("text").html('N=712 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+43)
+    txt1.append("text").text("Isolate(s)").attr("x",ww+wpic);
+    txt2.append("text").html("from the same location").attr("x",ww+wpic);
+    txt3.append("text").html('N=2347 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+52)
     
-    ww += 190//249
+    ww += 177//249
     svg .append('defs').append('marker').attr('id', 'arrow')
         .attr('viewBox', [0, -5, 10, 10])
-        .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 8).attr('markerHeight', 8)
+        .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 7).attr('markerHeight', 7)
         .attr('orient', 'auto').append('path').attr("d", "M0,-3L7,0L0,3");
     pic.append("line").attr("class","link")
         .attr("transform", "translate("+[ww-radius+3, 0]+")")
         .attr("y1",radius-3).attr("x2",2*radius-6).attr("y2", 3-radius)
         .attr('marker-end', 'url(#arrow)')
+        .on("mouseover", function(){tipNet('Changes between two haplotypes')})
+        .on('mouseout',function(){$("#tipNet").hide()})
 
-    txt1.append("text").attr("x",ww+wpic-1).text("Mutation(s)");
-    txt2.append("text").attr("x",ww+wpic-1).html("genetic changes");
-    txt3.append("text").html("at 132 genome sites").attr("x",ww+wpic+68)
+    txt1.append("text").attr("x",ww+wpic-3).text("Mutation(s)");
+    txt2.append("text").attr("x",ww+wpic-3).html("genetic changes");
+    txt3.append("text").html("at 146 genome sites").attr("x",ww+wpic+64)
+}
+
+function tipNet(txt,x){
+    $("#tipNet").css("left", (d3.event.pageX-(x? x : 50))+"px").css("top", (d3.event.pageY-77)+"px").html(txt).show()
 }
 
 function drawRef(){
@@ -532,7 +569,7 @@ function drawRef(){
             .attr("height", halfH*2)
             .on('mouseover',function(d){
                 d3.select(this).style("fill", "orange");
-                unlight()
+                ulLink()
 
                 var gene = d[2];
                 var lks = listChange[gene],
@@ -558,6 +595,7 @@ function drawRef(){
                 }
                 d3.selectAll('#netGraph .link').style("stroke","#999");
                 d3.selectAll('#netGraph marker path').style("fill","#999")
+                hlLink()
             })
 
     var toShow = {"orf1ab":1, "S":1}
@@ -585,8 +623,8 @@ function drawRef(){
 var transK=1, wAdmin=95;
 function drawGeoW(){
     var width = wMap - wAdmin,
-        height = 192;
-    var projection = d3.geoMercator().translate([width/2, height/2]).scale(71).center([0,24]),
+        height = $('#mapW').height() - 45;
+    var projection = d3.geoMercator().translate([width/2, height/2]).scale(70).center([18,22]),
         mapPath = d3.geoPath().projection(projection);
 
     var active = d3.select(null);
@@ -599,15 +637,22 @@ function drawGeoW(){
 
     svgMap.append("rect").attr("class","mapBg").attr("width",width).attr("height",height).on("click",reset);
 
-    d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, world){
+    d3.json("js-css/110m.json", function(error, world){
         var countries = topojson.feature(world, world.objects.countries).features;
         svgMap.selectAll(".country")
             .data(countries).enter()
             .append("path")
             .attr("class", "country")
             .attr("d", mapPath)
-            .on('mouseover', function(d){d3.select(this).classed("country_sel",true)})
-            .on('mouseout', function(d){ d3.select(this).classed("country_sel",false)})
+            .on('mouseover', function(d){
+                d3.select(this).classed("country_sel",true)
+                var id = map_ctry[d.id*1]
+                if (id){hlCtry(id,1)}
+            })
+            .on('mouseout', function(d){
+                d3.select(this).classed("country_sel",false)
+                if (map_ctry[d.id*1]){ulCtry()}
+            })
             .on("click", clicked);
  
         svgMap.selectAll("circle")
@@ -628,15 +673,11 @@ function drawGeoW(){
                 return coords[1]
             })
             .on('mouseover', function(d){
-                unlight(1)
                 hlGeo(d)
-                var accs = listVirus.filter(function(ac){return annoDataW[ac].geoId != d && ac!=outGrp});
-                hideIso(accs)
+                hideIso([d])
             })
             .on('mouseout', function(){
-                d3.selectAll('#mapW circle').transition().duration(timeT).style("fill-opacity",0.7)
-                d3.select(this).transition().duration(timeT).attr("r", mapR/transK)
-                $("#siteName").hide();
+                if (currAcc[0]){ hlGeo(currAcc[1]) } else {ulGeo()}
                 showIso()
         });
         
@@ -669,14 +710,15 @@ function drawGeoW(){
     function zoomed() {
         var trans = d3.event.transform;
         transK=trans.k;
-        svgMap.style("stroke-width", 1/transK + "px");
+        d3.selectAll('.country, circle').style("stroke-width", 1/transK + "px");
         svgMap.attr("transform", trans);
         d3.selectAll('#mapW circle').attr("r",mapR/transK)
     }
 }
 
+var ctry;
 function drawAdmin(){
-    var ctry = ctryList.sort((a,b) => countryData[a] > countryData[b] ? 1 : (countryData[b] > countryData[a] ? -1 : 0));
+    ctry = ctryList.sort((a,b) => countryData[a] > countryData[b] ? 1 : -1);
     
     var trs = ctry.map(function(d){
         return '<tr><td id="adm_'+ d + '">' + countryData[d] + '</td></tr>'
@@ -684,40 +726,61 @@ function drawAdmin(){
     $('#admin table').append(trs.join(''))
  
     d3.selectAll("#admin td")
-        .on('mouseover', function(d){
+        .on('mouseover', function(){
             var id = this.id.split('_')[1];
-            $(this).css("background", id<500? geoColor(id) : shipColor).css("color", "white")
-            unlight(1)
-            var accs = listVirus.filter(function(ac){return geoDataW[annoDataW[ac].geoId].ctry != id && ac!=outGrp});
-            hideIso(accs)
+            hlCtry(id)
         })
-        .on('mouseout', function(){
-            $(this).css("background", "none").css("color", "inherit")
-            showIso()
-        })
+        .on('mouseout', ulCtry)
 }
 
-function hideIso(accs){
-    var sel = accs.map(function(d){return '#nn_'+d}).join(',')
+function hlCtry(id,fromMap){
+    ulGeo()
+    hideIso(geoList.filter(function(d){return geoDataW[d].ctry==id}))
+    $('#adm_'+id).css("background", id<700? geoColor(id) : shipColor).css("color", "white")
+    if (fromMap){
+        var or = ctry.indexOf(id),
+            h = $('#admin td').height(),
+            H = $('#admin').height()
+        $("#admin").scrollTop(or*h-H/2);
+    }
+}
+function ulCtry(){
+    $('#admin td').css("background", "none").css("color", "inherit")
+    if (currAcc[0]){ hlGeo(currAcc[1]) } else {ulGeo()}
+    showIso()
+}
 
+function hideIso(gids){
+    var arr = gids.map(function(d){return '.nn_'+d}),
+        sel = d3.selectAll(arr.join(','))
     var val = Number($(':radio:checked').val());
     if (!val){
-        d3.selectAll(sel).transition().duration(timeT).style('opacity',0.1)
+        d3.selectAll('.iso').transition().duration(timeT).style('opacity',0.1)
+        sel.transition().duration(timeT).style('opacity',1)
     } else {
-         d3.selectAll(sel).transition().duration(timeT).style('fill','#999')
+        d3.selectAll('.iso').transition().duration(timeT).style("fill","#999")
+        sel.transition().duration(timeT).style('fill','purple')
     }
+    if (currAcc[0]){
+        $("#isoInf, #nPatient").hide()
+        d3.select('#dateRg').classed("hidden",true)
+    }
+    if (currLink) ulLink()
 }
 function showIso(){
     var val = Number($(':radio:checked').val());
     if (!val){d3.selectAll('.iso').transition().duration(timeT).style("opacity",1)}
     else {d3.selectAll('.iso').transition().duration(timeT).style("fill","purple")}
-
+    if (currAcc[0]){
+        $("#isoInf, #nPatient").show()
+        d3.select('#dateRg').classed("hidden",false)
+    }
+    if (currLink) hlLink()
 }
 
-var tParser = d3.timeParse("%Y-%m-%d");
+var tParser = d3.timeParse("%Y-%m-%d"), ddScale;
 function drawDateChart(){
-    var width = wMap, height=66;
-//    var lastday = tParser('2020-03-15');
+    var width = wMap, height=56;
     var margin = {top:43, left:0, bottom:0, right:0},
         chartWidth = width - (margin.left+margin.right),
         chartHeight = height - (margin.top+margin.bottom);
@@ -730,8 +793,7 @@ function drawDateChart(){
 
     var dateArr = Object.keys(dateObj),
         rg = d3.extent(dateArr, d=>tParser(d));
-//    rg = [rg[0],lastday];
-    var scale = d3.scaleLinear().domain(rg).range([stdR*2,chartWidth-stdR*2]);
+    ddScale = d3.scaleLinear().domain(rg).range([stdR*2,chartWidth-stdR*2]);
 
     var svg = d3.select("#dateChart").append("svg").attr("width",width).attr("height",height),
         chart = svg.append("g")
@@ -746,51 +808,38 @@ function drawDateChart(){
     linearGrad.append("stop").attr("offset","100%").attr("stop-color","white").attr("stop-opacity", opRange[1]);
 
     chart.append("rect").attr("id","dateGradient")
-        .attr("width", scale(rg[1]) - scale(rg[0])).attr("height", 8)
-        .attr("x",scale(rg[0])).attr("y",-5)
+        .attr("width", ddScale(rg[1]) - ddScale(rg[0])).attr("height", 8)
+        .attr("x",ddScale(rg[0])).attr("y",-5)
         .attr("class","grayLine")
         .style("fill", "url(#dateGrad)")
         .style("opacity", "url(#dateGrad)")
 
-    
-//    dateArr.push(annoDataW[outGrp].col);
-    chart.selectAll("line").data(dateArr).enter()
-        .append("line").attr('id', function(d){ return 'date_'+d})
-        .attr("transform", function(d){return "translate(" + scale(tParser(d)) + ",3)"})
-        .attr("y2",6)
-/*        .on('mouseover',function(d){
-                hlDate(d)
-                var accs = listVirus.filter(function(ac){return annoDataW[ac].col !=d && ac!=outGrp});
-                hideIso(accs)
-        })
-        .on('mouseout',unlight)*/
+    chart.append("rect").attr("id","dateRg").attr("class","hidden grayFill")
+        .attr("y",3).attr("height",8).attr("width", 200)
         
-    var xAxis = d3.axisTop().scale(scale).ticks(5).tickSize(-12, 0).tickFormat(d3.timeFormat("%m/%d/%y"));
+    var xAxis = d3.axisTop().scale(ddScale).ticks(6).tickSize(-12, 0).tickFormat(d3.timeFormat("%m/%d/%y"));
     chart.append("g").attr("class", "xaxis")
-        .attr("transform", "translate(" + 0 + "," + (-9) + ")")
+        .attr("transform", "translate(" + 0 + "," + (-8) + ")")
         .call(xAxis);
     svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",14).html("Collection Date");
 }
 
 function changeColor(val){
-    for (var i=0; i<listVirus.length; i++){
-        var ac = listVirus[i];
-        if (ac==outGrp) continue;
-        var an = annoDataW[ac];
+    for (var i=0; i<node_gid.length; i++){
+        var oo = node_gid[i],
+            gid = oo[1],
+            sel = d3.select('#'+oo[0] + ' .nn_'+gid);
         if (val){
-            var col = tParser(an.col);
-            d3.select('#nn_'+ac).style("fill-opacity", dateScale(col))
+            sel.style("fill-opacity", dateScale(oo[2]))
         } else {
-            var ctr = geoDataW[an.geoId].ctry;
-            d3.select('#nn_'+ac).transition().duration(timeT).style("fill", ctr<700? geoColor(ctr) : shipColor).style("fill-opacity",1)
+            var ctr = geoDataW[gid].ctry;
+            sel.transition().duration(timeT).style("fill", ctr<700? geoColor(ctr) : shipColor).style("fill-opacity",1)
         }
     }
     if (val){
         d3.selectAll('.iso').transition().duration(timeT).style("fill","purple").style("stroke","none");
-//        d3.select("#dateGradient").transition().duration(timeT).style("fill", "url(#dateGrad2)")
     } else {
         d3.selectAll('.iso').style("stroke","white")
-//        d3.select("#dateGradient").style("fill", "url(#dateGrad)")
     }
 }
 
@@ -960,8 +1009,6 @@ function drawGeoC(){
         mapPath = d3.geoPath().projection(projection);
 
     var svg = d3.select("#mapC").append("svg").attr("width",wMap).attr("height",hMap);
-
-//    svg.append("rect").attr("class","mapBg").attr("width",wMap).attr("height",hMap)
 
     d3.json("js-css/china.geo.json", function(error, china){
         svg.selectAll(".country")
@@ -1142,9 +1189,7 @@ function drawORF(){
 
     orfLine = svg.append("line").attr("class","redStroke").attr("x1",-50).attr("x2",-50).attr("y2",hSvg);
     
-//    wLg = wTree + 200; //$('#col1').width();
     tabW = $('#tabs').width();
-    wLg =  wTotal - tabW -5;
     $("#dnaComp").css("width", (tabW-5)+"px");
     $("#seqContainer").css("width", (tabW-10)+"px");
 
@@ -1314,7 +1359,7 @@ function drawSeq(cid){
     $("#seqContainer").scrollLeft(0);
     $('#showWhat').html("Show AA").fadeIn(3000);
     showAA=1;
-    $("#guideH").css("left",(wTree+12)+'px').css("width", (wTotal-wTree-5)+"px").css("top", "-50px");
+    $("#guideH").css("left",(wTree+12)+'px').css("width", ($('#mainTab').width()-wTree-18)+"px").css("top", "-50px");
     $("#guideV").css("height",(hSvg)+"px").css("left", "-50px");
 
     if ($.inArray(cid*1, cid_comp)==-1){seqCid=0; $('#compContainer').hide()}
@@ -1322,15 +1367,14 @@ function drawSeq(cid){
 }
 function aaSeqTbl(){
     var seqAA = {};
-    Object.keys(seqNt).forEach(function(d){ seqAA[d] = transAA(seqNt[d]) });
-    
+    Object.keys(seqNt).forEach(function(d){seqAA[d] = transAA(seqNt[d])})
+
     d3.select("#seq svg").append("g").attr("id", "seqAA")
         .attr("transform", "translate(" + unitW + "," + yEdge + ")")
         .selectAll("text").data(id).enter().append("text")
         .attr("transform", function(d,i) { return "translate(0," + (i*hUnit) + ")" })
         .attr("dy", "1em")
         .html(function(d,i) {
-//            if (!seqAA[d]){ return ''}
             var ss = seqAA[d];
             if (d==firstId){ firstAA = ss.split('')}
             var arr = matchSeqAA(ss,d);
@@ -1361,6 +1405,7 @@ function transAA(s){
 }
 
 function drawComp(){
+    var wLg=300;
 //maxComp
     var maxComp = d3.max(Object.keys(compData).map(function(d){
             var arr = compData[d];
@@ -1502,24 +1547,46 @@ function showComp(d){
 
 function showAck(){$('#ack').show()}
 
-//var maxChange=1;
 function readHaps(data){
-    listNode = data[0];
+    var allNodes = data[0];
     var outId;
-    var area = Math.PI*Math.pow(stdR,2);
-    for (var i=0; i<listNode.length; i++){
-        var node = listNode[i],
-            nn = node.haps;
-        listVirus = listVirus.concat(nn)
-        var radius = stdR;
-        if (nn.length>1){
-            radius = Math.sqrt(nn.length*area/Math.PI);
+    var area = Math.PI*Math.pow(stdR,2)
+
+    for (var i=0; i<allNodes.length; i++){
+        var node = allNodes[i],
+            radius = stdR;
+
+        if (!node.haps){
+            listNode.push({id:node.id, radius:radius})
+            continue
         }
-        listNode[i].radius = radius;
+
+        var nn = node.haps
+        
+        listVirus = listVirus.concat(nn)
+
+        var grp={};
+        nn.forEach(function(ac){
+            var gid = annoDataW[ac].geoId;
+            var gg = [];
+            if (grp[gid]){gg = grp[gid]}
+            gg.push(ac);
+            grp[gid] = gg
+        })
+        var grps = Object.keys(grp).map(function(id){return [id*1, grp[id]]})
+                .sort(function(a,b){return geoDataW[a[0]].ctry - geoDataW[b[0]].ctry}),
+            ng = grps.map(function(oo){
+                    var min = d3.min(oo[1].map(function(ac){ return tParser(annoDataW[ac].col)}));
+                    return [node.id, oo[0], min]})
+        node_gid = node_gid.concat(ng)
+
+        if (grps.length>1) radius = Math.sqrt(grps.length*area/Math.PI);
+        listNode.push({id:node.id, haps:grps, radius:radius})
+            
         if (nn[0]==outGrp){outId=node.id}
     }
 
-    var ro = {id:"ST0", radius:stdR};
+    var ro = {id:"H0", radius:stdR};
     var listEdge = data[1],
         listChg = [];
 //    var rObj={};
@@ -1528,6 +1595,7 @@ function readHaps(data){
         var so = listNode.filter(function(n){ return n.id==edge.source})[0],
             ta = listNode.filter(function(n){ return n.id==edge.target})[0],
             ch = edge.change;
+
         if (so.id==outId){
             listLink.push({
                 source: ro,
@@ -1549,13 +1617,9 @@ function readHaps(data){
             })
         }
         listChg = listChg.concat(ch)
-
-//        rObj[ta.radius.toFixed(1)]=1;
-//        if (ch.length>maxChange){maxChange=ch.length} 
     }
     listNode.push(ro);
     
-//    rList = Object.keys(rObj)
     var site = {};
     for (var i=0; i<listChg.length; i++){
         site[listChg[i].site]=1

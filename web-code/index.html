@@ -27,12 +27,8 @@
 <div id="main_tab1">
 <table>
     <tr>
-        <td rowspan="2" style="position:relative">
-            <div>
-                <svg id="netGraph"></svg>
-            </div>
-            <div id="graphLg">
-            </div>
+        <td rowspan="3" style="position:relative">
+            <div><svg id="netGraph"></svg></div>
             <div id="tipNet" class="tip tooltip hidden"></div>
         </td>
         <td valign="top" style="position:relative; height:300px">
@@ -54,18 +50,14 @@
                 <div><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
                 <svg></svg>
             </div>
-            <div id="tipDate"></div>
         </td>
     </tr>
     <tr>
-        <td style="position:relative">
+        <td id="infoContainer">
             <div id="nodeInf" class="map node_edge">
                 <table>
-                    <tr><th colspan="2" class="infoTitle">Isolate Information</th></tr>
-                    <tr><td>Name</td><td id="virusName"></td></tr>
-                    <tr><td>Accession</td><td id="accNo"></td></tr>
-                    <tr><td id="host">Patient</td><td id="patient"></td></tr>
-                    <tr><td>Citation</td><td id="lab"></td></tr>
+                    <tr><th colspan="2" class="infoTitle">Isolate Information<span id="nPatient"></span></th></tr>
+                    <tr><td id="isoInf" class="hidden"></td></tr>
                 </table>
             </div>
             <div id="chgInf" class="map node_edge hidden">
@@ -75,6 +67,11 @@
                 </table>
             </div>
         </td></tr>
+    <tr>
+        <td>
+            <div id="graphLg"></div>
+        </td>
+    </tr>
 </table>
 </div>
 
@@ -104,10 +101,13 @@
                     <tr valign="top">
                         <td><table class="pheno" id="citation"><tr><th>Citation</th></tr></table></td>
                         <td>
-                            <table><tr class="pheno"><th>China Map</th></tr><tr><td><div id="mapC" class="map"></div><div id="lg_org"></div></td></tr></table>
+                            <table>
+                                <tr class="pheno"><th>China Map</th></tr>
+                                <tr><td><div id="mapC" class="map"></div><div id="lg_org"></div></td></tr>
+                            </table>
                         </td>
-                    <td id="col_year"></td>
-                </tr>
+                        <td id="col_year"></td>
+                    </tr>
                 <tr><td colspan="3" id="affiliation"></td></tr>
                 </table>
             </div>
@@ -149,7 +149,7 @@
                 <li>Our work was made possible by supports from <a href="https://www.niaid.nih.gov" target="_blank">NIH/NIAID</a> & <a href="https://hunter.cuny.edu" target="_blank">Hunter College of City University of New York</a></li>
             </ul>
         </div>
-        <div id="version">Release 4.2 (Mar 26, 2020)</div>
+        <div id="version">Release 5.5 (Apr 8, 2020)</div>
     </td>
 </tr>
 </table>
