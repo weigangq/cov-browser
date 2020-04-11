@@ -122,6 +122,7 @@ $(document).ready(function(){
 });
 
 function asignColor(){
+//    d3.select('body').append("div").html(listVirus.map(function(d){return d+' '+ annoDataW[d].iso}).join("<br>"))
     var geo={};
     listVirus.forEach(function(d){
         var an = annoDataW[d];
@@ -142,7 +143,7 @@ function asignColor(){
 var chartW=655, node_gid=[];
 var currAcc=[], currLink
 function drawChart(){
-    var width = chartW, height=582;
+    var width = chartW, height=592;
     var linewidth = 1;
 
 //    var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
@@ -151,7 +152,7 @@ function drawChart(){
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
     svg.append("rect").attr("width", width).attr("height", height)
                     .attr("class", 'whiteFill')
-                    .on('click',function(d){ unlight(); ulGeo(); currAcc=[]; currLink=0 })
+                    .on('click',function(d){ ulNodes(); hideNodeInf(); ulLink(); ulGeo() })
 
 
     for (var i=0; i<listLink.length; i++){
@@ -180,7 +181,7 @@ function drawChart(){
         }
     }
 
-    var chrg=-102;
+    var chrg=-100;
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink()
                .id(function(d){ return d.index })
@@ -199,7 +200,7 @@ function drawChart(){
         .attr('marker-end', function(d,i){return 'url(#arrow' + i + ')'})
         .on('click',function(d,i){
             if (!d.change){return}
-            unlight();
+            ulLink();
 
             $('#chgTbl td').remove();
             var trs = [];
@@ -222,10 +223,9 @@ function drawChart(){
             $('#chgTbl').append(trs.join(''))
 
             currLink = i;
-            currAcc = []
             hlLink()
-            $("#chgInf").fadeIn("slow")
-            $("#nodeInf").fadeOut("slow");
+            $('#chgTbl').show()
+//            $('#nodeInf table').hide()
         })
 //        .on('mouseout', function(){ un_hl})
 
@@ -267,14 +267,8 @@ function drawChart(){
                     return gid<500? geoColor(geoDataW[gid].ctry) : shipColor
                 })
                 .on('click',function(n){
-                    unlight()
-                    var sector2 = d3.arc().innerRadius(0).outerRadius(d.radius+stdR*2);
-                    if (Number($(':radio:checked').val())){
-                        d3.select(this).transition().duration(timeT).attr('d', sector2)
-                    } else {
-                        d3.select(this).transition().duration(timeT).attr('d', sector2).style("fill-opacity",0.6)
-                    }
-                    currAcc = [d.id, n.data[0], n.data[1], d.radius]
+                    $('#searchAcc').val('')
+                    currAcc = [d.id, n.data[0], n.data[1]]
                     overM()
                 })
                 .on("mouseover", function(n){
@@ -286,6 +280,8 @@ function drawChart(){
             var center = n.append("circle").attr("r", (d.haps.length>nLab? 7 : 2)).style('fill',"white")
             if (d.haps.length>nLab){
                 n.append("text").attr("class","nodeId").attr("dy",3).text(d.id)
+                    .on("mouseover", function(){tipNet(d.id, 20)})
+                    .on('mouseout',function(){$("#tipNet").hide()})
             } else {
                 center.style("fill-opacity",0.1).style("stroke","none")
                     .on("mouseover", function(){tipNet(d.id, 20)})
@@ -305,7 +301,6 @@ function drawChart(){
                 var circle;
                 if (ac!=outGrp){
                     circle = n.append("circle")
-                        .attr("class",'nn_' + gid + " iso crosshair")
                         .attr("r", d.radius)
                         .style('fill', gid<500? geoColor(geoDataW[gid].ctry) : shipColor);
 //                n.append("circle").attr("r", 8).style('fill',"white")
@@ -313,7 +308,7 @@ function drawChart(){
                 } else {
                     $("#bat").appendTo(('#'+d.id));
                     circle = n.append("svg")
-                            .attr("class",'nn_' + gid + " finger").style("fill","gray")
+                            .style("fill","gray")
                             .attr("x",-40).attr("y",-7)
                             .attr("width",48).attr("height",23.996)
                             .attr("viewBox","562 485.829 50 23.996")
@@ -322,13 +317,9 @@ function drawChart(){
                         .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
 
-                circle.on('click',function(){
-                    unlight()
-                    if (Number($(':radio:checked').val())){
-                        d3.select(this).transition().duration(timeT).attr("r", stdR+cR2)
-                    } else {
-                        d3.select(this).transition().duration(timeT).attr("r", stdR+cR2).style("fill-opacity",0.6)
-                    }
+                circle.attr("class",'nn_' + gid + " iso crosshair")
+                    .on('click',function(){
+                    $('#searchAcc').val('')
                     currAcc = [d.id, gid, [ac]]
                     overM()
                 })
@@ -360,22 +351,39 @@ function drawChart(){
     }      
 }
 
+function hlNodes(sel){
+    if (!Number($(':radio:checked').val())){
+        d3.selectAll('.iso').transition().duration(timeT).style('fill-opacity',0.1)
+        sel.transition().duration(timeT).style('fill-opacity',1)
+    } else {
+        d3.selectAll('.iso').transition().duration(timeT).style("fill","#999")
+        sel.transition().duration(timeT).style('fill','purple')
+    }
+}
+
+
 function overM(){
-    currLink=0
+//    currLink=0
     var accs = currAcc[2],
         gid = currAcc[1]
 
-    if (currAcc[3]){
-        var rg = d3.extent(accs, d=>tParser(annoDataW[d].col));
-        hlDate(rg);
+    var sel = d3.select("#"+currAcc[0] + ' .nn_' + currAcc[1])
+    hlNodes(sel)
+
+    var rg=[]
+    if (accs.length>1){
+        rg = d3.extent(accs, d=>tParser(annoDataW[d].col));
     } else {
         var ac = accs[0]
-        if (ac!=outGrp) hlDate([tParser(annoDataW[ac].col)])
+        if (ac!=outGrp) rg = [tParser(annoDataW[ac].col)]
+        
     }
-
+    if (rg[0]) hlDate(rg)
+    
     hlGeo(gid)
 
-    $("#nPatient").html(accs.length + ' patient' + (accs.length==1? '' : 's'))
+    $("#nPatient").html(rg[0]? (accs.length + ' patient' + (accs.length==1? '' : 's')) : 'Outgroup').show();
+    var tbls=[]
     for (var i=0; i<accs.length; i++){
         var ac = accs[i],
             an = annoDataW[ac],
@@ -394,24 +402,30 @@ function overM(){
             if (an.patient){patient = an.patient}
         }
 
-        var tbl = '<hr><table>' + '<tr><th>Name</th><td>' + an.iso + '</td><th>Accession</th><td>' + ac + '</td></tr><tr><th>Collect</th><td>' + an.col + '</td><th>' + (an.city? 'City' : '') + '</th><td>' + (an.city? an.city : '') + '</td></tr><tr><th>' + host + '</th><td colspan="3">' + patient + '</td></tr><tr><th>Citation</th><td colspan="3">' + lab + '</td></tr></table>'
-        $('#isoInf').append(tbl)
+        tbls.push('<table>' + '<tr><th>Name</th><td>' + an.iso + '</td><th>Accession</th><td>' + ac + '</td></tr><tr><th>Collect</th><td>' + an.col + '</td><th>' + (an.city? 'City' : '') + '</th><td>' + (an.city? an.city : '') + '</td></tr><tr><th>' + host + '</th><td colspan="3">' + patient + '</td></tr><tr><th>Citation</th><td colspan="3">' + lab + '</td></tr></table>')
     }
-
-    $("#isoInf, #nPatient").show();
-    $("#nodeInf").scrollTop(0);
-    $("#chgInf").fadeOut("slow")
-    $("#nodeInf").fadeIn("slow");
+    $('#nodeInf').html(tbls.join('<hr>')).scrollTop(0)
+//    $('#chgTbl').hide()
 }
 
 function hlGeo(geoId){
-    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.1);
-    d3.select('#mapW_'+geoId).transition().duration(timeT).attr("r", stdR*2/transK).style("fill-opacity",0.7);
+    d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT)
+        .attr("r", mapR/transK).style("fill-opacity",0.1).style("stroke","none");
+    d3.select('#mapW_'+geoId).transition().duration(timeT)
+        .attr("r", stdR*2/transK).style("fill-opacity",0.8);
     $("#siteName").html(geoDataW[geoId].name).show()
+}
+function hlGeos(gids){
+    var arr = gids.map(function(d){return '#mapW_'+d}),
+        sel = d3.selectAll(arr.join(','))
+    d3.selectAll('#mapW circle').transition().duration(timeT)
+        .attr("r", mapR/transK).style("fill-opacity",0).style("stroke","none");
+    sel.transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.8).style("stroke","white");
 }
 
 function ulGeo(){
-    d3.selectAll('#mapW circle').transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.7);
+    d3.selectAll('#mapW circle').transition().duration(timeT)
+        .attr("r", mapR/transK).style("fill-opacity",0.8).style("stroke","white");
     $("#siteName").hide()
 }
 
@@ -424,7 +438,7 @@ function hlDate(arr){
 function hlLink(){
     d3.select('#ll_'+currLink).classed("orangeStroke",true);
     d3.select('#arrow'+currLink+' path').classed("orangeFill",true);
-    $('#chgTbl td').show()
+    $('#chgTbl').show()
 
     var sel = listLink[currLink].change.map(d=>'#site_'+d.site).join(',');
     d3.selectAll(sel).classed("hidden",false)
@@ -432,58 +446,35 @@ function hlLink(){
 function ulLink(){
     d3.selectAll('#netGraph .link').classed("orangeStroke",false)//.style("stroke","#999");
     d3.selectAll('#netGraph marker path').classed("orangeFill",false)//.style("fill","#999")
-    $("#chgTbl td").hide()
+    $("#chgTbl").hide()
     d3.selectAll('.siteLine').classed("hidden",true)
 }
 
-function unlight(fromGeo){
-    if (currLink) ulLink()
-
+function hideNodeInf(){
     if (!currAcc[0]) return
-    
-    $("#isoInf table, #isoInf hr").remove()
-    $("#isoInf, #nPatient").hide()
+    $("#nodeInf table, #nodeInf hr, #nPatient").hide()
+    d3.select('#dateRg').classed("hidden",true)
+    currAcc=[]
+}
+function geo2node(gids){
+    var arr = gids.map(function(d){return '.nn_'+d}),
+        sel = d3.selectAll(arr.join(','));
+    hlNodes(sel)
+    hideNodeInf()
+}
 
-    var val = Number($(':radio:checked').val()),
-        sel = d3.select("#"+currAcc[0] + ' .nn_' + currAcc[1])
-    if (currAcc[3]){
-        var sector = d3.arc().innerRadius(0).outerRadius(currAcc[3]);
-        if (!fromGeo){
-            if (val){
-                sel.transition().duration(timeT).attr('d', sector)
-            } else {
-                sel.transition().duration(timeT).attr('d', sector).style("fill-opacity",1)
-            }
-        } else {
-            if (val){
-                sel.attr('d', sector)
-            } else {
-                sel.attr('d', sector).style("fill-opacity",1)
-            }
-        }
+function ulNodes(){
+    if (!Number($(':radio:checked').val())){
+        d3.selectAll('.iso').transition().duration(timeT).style("fill-opacity",1)
+        d3.select('#'+outId + ' path').style("fill","gray")
     } else {
-        if (currAcc[2][0]==outGrp){ sel.style("fill","gray"); return}
-        if (!fromGeo){
-            if (val){
-                sel.transition().duration(timeT).attr("r", stdR)
-            } else {
-                sel.transition().duration(timeT).attr("r", stdR).style("fill-opacity",1)
-            }
-        } else {
-            if (val){
-                sel.attr("r", stdR)
-            } else {
-                sel.attr("r", stdR).style("fill-opacity",1)
-            }
-        }
+        d3.selectAll('.iso').transition().duration(timeT).style("fill","purple")
     }
-
-    d3.select('#dateRg').classed("hidden", true)
 }
 
 function drawLg(){
-    var width=wMap, height=26,
-        margin_left=1, margin_top=2,
+    var width=wMap, height=24,
+        margin_left=7, margin_top=2,
         radius=9, wpic=radius*2+3;
     var svg = d3.select("#graphLg").append("svg").attr("width", width).attr("height", height),
         chart = svg.append("g").attr("transform", "translate("+[margin_left, margin_top]+")"),
@@ -498,23 +489,23 @@ function drawLg(){
         .on('mouseout',function(){$("#tipNet").hide()})
     txt1.append("text").text("Haplotype").attr("x",wpic)
     txt2.append("text").html("a group of similar genomes").attr("x",wpic);
-    txt3.append("text").html("N=212").attr("x",wpic+59)
+    txt3.append("text").html("N=212").attr("x",wpic+56)
 
-    ww = 156
+    ww = 152
     pic.append("circle").attr("r", radius).attr("cx", ww).style("stroke","#ccc")
-        .on("mouseover", function(){tipNet('One or more isolates from one location')})
-        .on('mouseout',function(){$("#tipNet").hide()})
     
     var pie = d3.pie().startAngle(0.5*Math.PI).endAngle(0.7*Math.PI),
         arc = d3.arc().innerRadius(0).outerRadius(radius);
     pic.append("g").attr("transform", "translate("+[ww, 0]+")")
         .selectAll("g").data(pie([10])).enter()
-        .append("path").attr("d", arc);  
+        .append("path").attr("d", arc)
+        .on("mouseover", function(){tipNet('One or more isolates from one location')})
+        .on('mouseout',function(){$("#tipNet").hide()})
     txt1.append("text").text("Isolate(s)").attr("x",ww+wpic);
     txt2.append("text").html("from the same location").attr("x",ww+wpic);
-    txt3.append("text").html('N=2347 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+52)
+    txt3.append("text").html('N=2334 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+52)
     
-    ww += 177//249
+    ww += 173//249
     svg .append('defs').append('marker').attr('id', 'arrow')
         .attr('viewBox', [0, -5, 10, 10])
         .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 7).attr('markerHeight', 7)
@@ -528,7 +519,7 @@ function drawLg(){
 
     txt1.append("text").attr("x",ww+wpic-3).text("Mutation(s)");
     txt2.append("text").attr("x",ww+wpic-3).html("genetic changes");
-    txt3.append("text").html("at 146 genome sites").attr("x",ww+wpic+64)
+    txt3.append("text").html("at 146 genome sites").attr("x",ww+wpic+61)
 }
 
 function tipNet(txt,x){
@@ -537,24 +528,24 @@ function tipNet(txt,x){
 
 function drawRef(){
     var width = wMap-6,
-        height=56,
+        height=52,
         margin=2, margin_top=12,
         chartW = width-2*margin,
-        base = 18,
-        halfH = 6;
+        base = 16,
+        halfH = 5.5;
     var seqL = refData.len;
     var svg = d3.select("#refOrf svg").attr("width", width).attr("height", height),
         chart = svg.append("g")
             .attr("width", chartW).attr("height", height)
             .attr("transform", "translate("+[margin, margin_top]+")");
 
-    svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",14).html('Genome map');
+    svg.append("text").attr("class","infoTitle").attr("y",13).html('&nbsp; Genome map & mutations');
 
     var scale = d3.scaleLinear().domain([1, seqL]).range([0, chartW]);
     
     var xAxis = d3.axisBottom().scale(scale).tickSize(-3, 0).ticks(seqL/1000)
                 .tickFormat(function(f){ return f<2000? '1k' : f/1000 });
-    chart.append("g").attr("class", "xaxis").attr("transform", "translate(0," + (base+10) + ")").call(xAxis);
+    chart.append("g").attr("class", "xaxis").attr("transform", "translate(0," + (base+9.5) + ")").call(xAxis);
 
     var orfChart = chart.append("g").attr("transform", "translate("+[0, base]+")");
     orfChart.append("line").attr("id","refLine").attr("x2", scale(seqL));
@@ -579,9 +570,9 @@ function drawRef(){
                 if (!lks){return}
                 var ll = lks.map(function(l){return '#ll_'+l}).join(','),
                     ar = lks.map(function(l){return '#arrow'+l+' path'}).join(',');
-                if (!Number($(':radio:checked').val())){
+/*                if (!Number($(':radio:checked').val())){
                     d3.selectAll('.iso').transition().duration(timeT*2).style('opacity',0.15)
-                }
+                }*/
                 d3.selectAll('#netGraph .link').style("stroke","#eee")//.classed("redStroke",false);
                 d3.selectAll(ll).style('stroke','red')
                 d3.selectAll('#netGraph marker path').style("fill","#eee")//.classed("redFill",false);
@@ -590,12 +581,12 @@ function drawRef(){
             .on('mouseout', function(){
                  d3.select(this).style("fill", "#ffe4b2")
                 $("#tipNet").hide()
-                if (!Number($(':radio:checked').val())){
+/*                if (!Number($(':radio:checked').val())){
                     d3.selectAll('.iso').transition().duration(timeT*2).style('opacity',1)
-                }
+                }*/
                 d3.selectAll('#netGraph .link').style("stroke","#999");
                 d3.selectAll('#netGraph marker path').style("fill","#999")
-                hlLink()
+//                if(currLink) hlLink()
             })
 
     var toShow = {"orf1ab":1, "S":1}
@@ -643,24 +634,30 @@ function drawGeoW(){
             .data(countries).enter()
             .append("path")
             .attr("class", "country")
+            .attr("id",function(d){return 'ctry_'+map_ctry[d.id*1]})
             .attr("d", mapPath)
             .on('mouseover', function(d){
-                d3.select(this).classed("country_sel",true)
                 var id = map_ctry[d.id*1]
-                if (id){hlCtry(id,1)}
+                if (id){
+                    $("#admin").scrollTop(ctry.indexOf(id) * $('#admin td').height() - $('#admin').height()/2);
+                    hlCtry(id)
+                } else {
+                     d3.select(this).classed("country_sel",true)
+                }
             })
             .on('mouseout', function(d){
-                d3.select(this).classed("country_sel",false)
                 if (map_ctry[d.id*1]){ulCtry()}
+                else {d3.select(this).classed("country_sel",false)}
             })
             .on("click", clicked);
  
         svgMap.selectAll("circle")
             .data(geoList).enter()
             .append("circle")
+//            .attr("class","crosshair")
             .attr("id", function(d){ return 'mapW_'+d })
             .attr("fill", function(d){return d<500? geoColor(geoDataW[d].ctry) : shipColor})
-            .style("fill-opacity",0.7)
+//            .style("fill-opacity",0.8)
             .attr("r", mapR)
             .attr("cx", function(d){
                 var site = geoDataW[d].locate,
@@ -674,13 +671,12 @@ function drawGeoW(){
             })
             .on('mouseover', function(d){
                 hlGeo(d)
-                hideIso([d])
+                geo2node([d])
             })
             .on('mouseout', function(){
-                if (currAcc[0]){ hlGeo(currAcc[1]) } else {ulGeo()}
-                showIso()
-        });
-        
+                ulGeo()
+                ulNodes()
+        })
     })
 
     function clicked(d) {
@@ -733,49 +729,22 @@ function drawAdmin(){
         .on('mouseout', ulCtry)
 }
 
-function hlCtry(id,fromMap){
+function hlCtry(id){
     ulGeo()
-    hideIso(geoList.filter(function(d){return geoDataW[d].ctry==id}))
     $('#adm_'+id).css("background", id<700? geoColor(id) : shipColor).css("color", "white")
-    if (fromMap){
-        var or = ctry.indexOf(id),
-            h = $('#admin td').height(),
-            H = $('#admin').height()
-        $("#admin").scrollTop(or*h-H/2);
-    }
-}
-function ulCtry(){
-    $('#admin td').css("background", "none").css("color", "inherit")
-    if (currAcc[0]){ hlGeo(currAcc[1]) } else {ulGeo()}
-    showIso()
+    d3.select('#ctry_'+id).classed('country_sel',true)
+
+    var gids = geoList.filter(function(d){return geoDataW[d].ctry==id})
+    hlGeos(gids)
+    geo2node(gids)
 }
 
-function hideIso(gids){
-    var arr = gids.map(function(d){return '.nn_'+d}),
-        sel = d3.selectAll(arr.join(','))
-    var val = Number($(':radio:checked').val());
-    if (!val){
-        d3.selectAll('.iso').transition().duration(timeT).style('opacity',0.1)
-        sel.transition().duration(timeT).style('opacity',1)
-    } else {
-        d3.selectAll('.iso').transition().duration(timeT).style("fill","#999")
-        sel.transition().duration(timeT).style('fill','purple')
-    }
-    if (currAcc[0]){
-        $("#isoInf, #nPatient").hide()
-        d3.select('#dateRg').classed("hidden",true)
-    }
-    if (currLink) ulLink()
-}
-function showIso(){
-    var val = Number($(':radio:checked').val());
-    if (!val){d3.selectAll('.iso').transition().duration(timeT).style("opacity",1)}
-    else {d3.selectAll('.iso').transition().duration(timeT).style("fill","purple")}
-    if (currAcc[0]){
-        $("#isoInf, #nPatient").show()
-        d3.select('#dateRg').classed("hidden",false)
-    }
-    if (currLink) hlLink()
+function ulCtry(){
+    $('#admin td').css("background", "none").css("color", "inherit")
+    d3.selectAll('#mapW .country').classed("country_sel",false)
+    d3.selectAll('#mapW circle').transition().duration(timeT)
+        .style("fill-opacity",0.8).style("stroke","white");
+    ulNodes()
 }
 
 var tParser = d3.timeParse("%Y-%m-%d"), ddScale;
@@ -821,7 +790,7 @@ function drawDateChart(){
     chart.append("g").attr("class", "xaxis")
         .attr("transform", "translate(" + 0 + "," + (-8) + ")")
         .call(xAxis);
-    svg.append("text").attr("class","infoTitle").attr("x",width/2).attr("y",14).html("Collection Date");
+    svg.append("text").attr("class","infoTitle").attr("y",14).html("&nbsp; Collection Date");
 }
 
 function changeColor(val){
@@ -833,14 +802,43 @@ function changeColor(val){
             sel.style("fill-opacity", dateScale(oo[2]))
         } else {
             var ctr = geoDataW[gid].ctry;
-            sel.transition().duration(timeT).style("fill", ctr<700? geoColor(ctr) : shipColor).style("fill-opacity",1)
+            sel.style("fill", oo[0]==outId? 'gray' : (ctr<700? geoColor(ctr) : shipColor))
         }
     }
     if (val){
         d3.selectAll('.iso').transition().duration(timeT).style("fill","purple").style("stroke","none");
     } else {
-        d3.selectAll('.iso').style("stroke","white")
+        d3.selectAll('.iso').transition().duration(timeT).style("stroke","white").style("fill-opacity",1)
     }
+    if (currAcc[0]){hlNodes(d3.select("#"+currAcc[0] + ' .nn_' + currAcc[1]))}
+}
+
+function searchAcc(){
+    var num = $('#searchAcc').val()
+    if (!$.isNumeric(num) || num<400000 || num>420000) {
+        alert('Please input 6 digit number between 400000 & 420000')
+        return
+    }
+    var ac = 'EPI_ISL_' + num
+    var nodes = listNode.filter(function(d){
+        if (!d.haps) return;
+        var arr=[], hap=d.haps;
+        for (var i=0; i<hap.length; i++){
+            arr = arr.concat(hap[i][1])
+        }
+        return seen(ac,arr)
+    })
+    if (!nodes[0]){ alert('No isolate: ' + ac); return}
+
+    var node = nodes[0],
+        gid = annoDataW[ac].geoId,
+        accs = node.haps.filter(d=>d[0]==gid)[0][1];
+    if (accs.length>1){
+        var idx = accs.indexOf(ac)
+        if (idx) accs.splice(0, 0, accs.splice(idx, 1)[0])
+    }
+    currAcc = [node.id, gid, accs]
+    overM()
 }
 
 function drawTree(obj){
@@ -1547,9 +1545,9 @@ function showComp(d){
 
 function showAck(){$('#ack').show()}
 
+var outId;
 function readHaps(data){
     var allNodes = data[0];
-    var outId;
     var area = Math.PI*Math.pow(stdR,2)
 
     for (var i=0; i<allNodes.length; i++){
@@ -1631,11 +1629,11 @@ var batPath="M598.935,485.829c-2.286,5.292-8.146,7.917-8.146,7.917c0.025-0.684-0
 
 //function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
 
-/*
+
 function seen(s, arr){
     var see={}, yes=0;
     for (var i=0; i<arr.length; i++){
         if (s==arr[i]){yes=1; break}
     }
     return yes
-}*/
+}

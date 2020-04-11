@@ -27,17 +27,18 @@
 <div id="main_tab1">
 <table>
     <tr>
-        <td rowspan="3" style="position:relative">
+        <td rowspan="2" style="position:relative">
             <div><svg id="netGraph"></svg></div>
             <div id="tipNet" class="tip tooltip hidden"></div>
         </td>
         <td valign="top" style="position:relative; height:300px">
-            <div class="colorC"><input type="radio" name="colorCode" value="0" checked> colored by</div>
-            <div class="colorC"><input type="radio" name="colorCode" value="1"> colored by</div>
+            <div class="colorC"><input type="radio" name="colorCode" value="0" checked> color</div>
+            <div class="colorC"><input type="radio" name="colorCode" value="1"> color</div>
             <div class="colorC" id="selCtry">Select &nbsp;<span>&#9660;</span></div>
+
             <div id="mapW" class="map">
                 <table>
-                    <tr><td class="infoTitle" colspan="2">Collection Site</td></tr>
+                    <tr><td class="infoTitle" colspan="2">&nbsp; Collection Site</td></tr>
                     <tr>
                         <td><svg></svg></td>
                         <td rowspan="2"><div id="admin"><table></table></div></td>
@@ -45,28 +46,30 @@
                     <tr><td>&nbsp;<span id="siteName"></span></td></tr>
                 </table>
             </div>
+
             <div id="dateChart" class="map"></div>
+
             <div id="refOrf" class="map">
-                <div><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
+                <div id="ref_ncbi"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
                 <svg></svg>
+                <div id="chgInf" class="node_edge">
+                    <table id="chgTbl" class="hidden">
+                        <tr><th>Site</th><th>Locus</th><th>Source</th><th>Target</th></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="isolateInf" class="map">
+                <div id="isoSearch">
+                    <span class="infoTitle">&nbsp; Isolate</span>
+                    &nbsp; &nbsp; &nbsp; EPI_ISL_
+                    <input type="text" id="searchAcc" placeholder="6 digits" autocomplete="off" spellcheck="false"><a href="#" title="Search by GISAID accession number" onclick="searchAcc()">&nbsp; &#128269;</a>
+                    <span id="nPatient"></span>
+                </div>
+                <div id="nodeInf" class="node_edge"></div>
             </div>
         </td>
     </tr>
-    <tr>
-        <td id="infoContainer">
-            <div id="nodeInf" class="map node_edge">
-                <table>
-                    <tr><th colspan="2" class="infoTitle">Isolate Information<span id="nPatient"></span></th></tr>
-                    <tr><td id="isoInf" class="hidden"></td></tr>
-                </table>
-            </div>
-            <div id="chgInf" class="map node_edge hidden">
-                <table id="chgTbl">
-                    <tr><th colspan="4" class="infoTitle">Mutation(s)</th></tr>
-                    <tr><th>Site</th><th>Locus</th><th>Source</th><th>Target</th></tr>
-                </table>
-            </div>
-        </td></tr>
     <tr>
         <td>
             <div id="graphLg"></div>

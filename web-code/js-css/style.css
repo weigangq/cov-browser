@@ -4,7 +4,7 @@ table {
     border-collapse:collapse;
     border:0
 }
-body>table, #genome, #col2, #refOrf, #chgTbl .infoTitle {position:relative}
+body>table, #genome, #col2, #refOrf, #isolateInf {position:relative}
 
 #mainTab { padding:0 }
 #mainTab>ul {padding:0}
@@ -80,13 +80,13 @@ body>table, #genome, #col2, #refOrf, #chgTbl .infoTitle {position:relative}
 #netGraph {margin:0 6px 0 0; padding:2px 0 2px 2px; border:gray thin solid; position:relative}
 
 #graphLg {
-    margin:7px 0 2px 0;
+    margin:4px 0 0 0;
     font-size:11px;
     font-family:sans-serif
 }
 #graphLg a {text-decoration:underline; fill:gray}
-.lgTitle {font-weight:bold}
-.lgExp {font-size:10px}
+.lgTitle {font-weight:bold; font-size:10.5px}
+.lgExp {font-size:10.5px; font-family:Arial Narrow}
 .grayFill {fill:gray}
 .fillOrange{fill:orange}
 
@@ -143,7 +143,8 @@ marker path {fill:#999}
     margin-left:3px;
     overflow-y:scroll;
     overflow-x:hidden;
-    font-size:10.2px;
+    font-family:Arial Narrow;
+    font-size:11.2px;
     border-top:lightgray thin solid
 /*    overflow:auto;*/
 }
@@ -154,15 +155,14 @@ marker path {fill:#999}
     white-space:nowrap
 }
 
-#dateChart, #refOrf, .node_edge {margin:9px 0 0 0}
+#dateChart, #refOrf, #isolateInf {margin:8px 0 0 0}
 
 .infoTitle {
-    text-align:center; text-anchor:middle;
-    color:gray; fill:gray;
-    font-size:14px
+    font-size:13px;
+    font-weight:bold
 }
-#refOrf div {
-    position:absolute; top:4px; left:311px;
+#ref_ncbi {
+    position:absolute; top:2px; right:20px;
     font-size:11px; color:gray; font-weight:100; text-decoration:underline
 }
 
@@ -200,8 +200,7 @@ marker path {fill:#999}
 #dateChart .xaxis path { stroke:none}
 #dateChart .xaxis text {fill:black}
 
-#mapW circle, #mapC circle {opacity:0.7}
-#mapW circle {stroke:white}
+#mapW circle, #mapC circle {fill-opacity:0.8; stroke:white}
 /*#dateChart line {stroke:gray; stroke-width:2px}*/
 /*#dateRg {fill:red}*/
 
@@ -249,7 +248,6 @@ marker path {fill:#999}
 .redFill {fill:red; color:red}
 
 .blueColor {color:DodgerBlue}
-/*.hlLine {stroke:red; stroke-width:3px}*/
 
 #affiliation {height:15px; color:gray; font-style:italic}
 
@@ -261,40 +259,43 @@ marker path {fill:#999}
     height:183px
 }
 .node_edge {
-    position:absolute;
-    top:0;
-    width:492px; height:164px;
+    width:492px;
     overflow-y:auto;
-    padding:4px 6px;
-    font-size:12px
+    padding:0 6px;
+    font-size:11px
 }
 .node_edge table {width:100%}
-.node_edge th {padding-bottom:4px; padding-top:0; font-weight:normal}
-.node_edge td {line-height:16px}
+.node_edge th {font-weight:normal}
+.node_edge td {line-height:14px}
 
-#nodeInf {position:relative}
-#nPatient {position:absolute; top:7px; right:42px}
-#isoInf th {width:60px; color:#999; vertical-align:top; text-align:left}
-#isoInf td {font-weight:100}
+#isoSearch {border-bottom:1px solid #bbb; padding:2px 0; font-size:11px}
+#isoSearch a {text-decoration:none}
+#searchAcc {width:40px}
+
+#nodeInf {height:112px; padding-top:5px}
+#nodeInf th {width:60px; color:#999; vertical-align:top; text-align:left}
+#nodeInf td {font-weight:100}
+#nodeInf hr {border-top:1px solid lightgray; border-bottom:1px solid white}
+
 #virusName {width:250px}
+#nPatient {position:absolute; top:7px; right:42px}
 
-#chgInf {text-align:center}
-#chgTbl {margin-left:auto; margin-right:auto; width:68%}
-#chgInf td, #chgInf th:not(.infoTitle) {
-    text-align:center;
+#chgInf {padding:0; text-align:center; height:50px}
+#chgInf td, #chgInf th {
     width:70px;
     overflow:hidden; display:inline-block
 }
 #chgInf td { font-family:Courier; padding:0}
 #chgInf th {color: gray}
-/*#chgTbl .infoTitle a {position:absolute; top:2px; right:10px; font-size:10px; color:gray; font-weight:100}*/
+#chgTbl {margin-left:auto; margin-right:auto; width:68%}
 
 #refLine {stroke:#b3b3b3; stroke-width:6px}
 #refOrf rect {fill:#ffe4b2; stroke:gray}
 .refSym {font-size:10px; text-anchor:middle; font-style:italic }
 
-.colorC {position:absolute; left:100px; color:#808080; font-weight:100; font-size:12px; z-index:1500}
+.colorC {position:absolute; left:120px; color:#808080; font-weight:100; font-size:13px; z-index:1500}
 .colorC:nth-of-type(2) {top:239px}
+
 #selCtry {left:428px}
 #selCtry span {font-size:9px}
 .nodeId {font-size:8.5px; text-anchor:middle; font-family: Arial Narrow}
