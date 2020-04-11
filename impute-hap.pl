@@ -79,7 +79,7 @@ foreach my $id1 (@ids) {
 	$nabes{$id2} = $diff;
     }
     my @nabes = sort { $nabes{$a} <=> $nabes{$b} } keys %nabes;
-    print STDERR "processing seq $ct ... \t";
+    print STDERR "processing seq $ct ... \n";
     if (@nabes) {
 	$seqs{$id1}->{'imputed'} = 1; 
 	my $id2 = shift @nabes;
