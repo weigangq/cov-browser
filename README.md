@@ -32,9 +32,7 @@ parse-metadata.ipynb
 ```
   It outputs into the following formats:
 
-- `gisaid-covid19-[current_date].xlsx` 
 - `covid-19-[current_date].tsv` 
-- `covid-19-[current_date].csv`
 - `covid-[current_date].fasta`
 
 
