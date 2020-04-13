@@ -2,9 +2,7 @@
 
 Abstract: Genome sequences constitute the primary evidence on the origin and spread of the 2019-2020 Covid-19 pandemic. Rapid comparative analysis of coronavirus CoV-SARS-2 genomes is critical for disease control, outbreak forecasting, and for developing clinical interventions. With CoV Genome Tracker we trace viral genomic changes in real time using a haplotype network, an accurate and scalable representation of evolutionary changes at micro-evolutionary time scale. We resolve direction of mutations by using a bat-associated genome as the outgroup. At the macro-evolutionary time scale, the Genome Tracker provides gene-by-gene and codon-by-codon evolutionary rates to facilitate the search for molecular targets of clinical interventions.
 
-This is the repository for the CoV-SARS-2 Genome Tracker.  
-
-<cov.genometracker.org>
+This is the repository for the CoV-SARS-2 Genome Tracker <http://cov.genometracker.org>
 
 # Outline 
 
@@ -25,31 +23,28 @@ This is the repository for the CoV-SARS-2 Genome Tracker.
 ![](./img/mermaid-diagram-20200413133635.svg)
 
 
-
 ### Parse metadata
 
 ```
 parse-metadata.ipynb
 ```
-parse-metadata reads GISAID hCov-19 sequence metadata and adds geo-location.  It outputs into the following formats:
+parse-metadata reads the GISAID hCov-19 sequence metadata and adds geo-location.  It outputs into the following formats:
 
 - `gisaid-covid19-[current_date].xlsx` 
 - `covid-19-[current_date].tsv` 
 - `covid-19-[current_date].csv`
-- `a: gisaid-19-`
+- `covid-[current_date].fasta`
 
 
 ### align-genome.sh
-input: fasta containing hCov-19 genome, reference seq Wuhan-Hu-1, ploidy file, folder name bamfile for non-human sequences, outgroup (sorted bam file)
+
+Align each CoV-SARS-2 isolates from GISAID to the NCBI reference genome Wuhan-Hu-1 (Genbank accession ID: [ NC_045512](https://www.ncbi.nlm.nih.gov/nuccore/NC_045512))
+
+input: fasta containing hCov-19 genome, reference seq Wuhan-Hu-1, ploidy file, folder name bamfile for non-human sequences, outgroup (sorted bam file).
 
 ```
 infer-genome.bash [ covid-[file_date.fasta] ] [Wuhan-Hu-1 reference sequence] [vcf ploidy file] [folder name that contains non-human cov genome bam files] [outgroup bam file]
 ```
-
-
-Align each CoV-SARS-2 isolates from GISAID to the NCBI reference genome Wuhan-Hu-1 (Genbank accession ID: NC_045512)
-
-Perl scripts 
 
 ### impute-hap.pl
 
