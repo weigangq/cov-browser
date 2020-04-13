@@ -25,10 +25,12 @@ This is the repository for the CoV-SARS-2 Genome Tracker <http://cov.genometrack
 
 ### Parse metadata
 
+Reads the GISAID hCov-19 sequence metadata and adds geo-location.
+
 ```
 parse-metadata.ipynb
 ```
-parse-metadata reads the GISAID hCov-19 sequence metadata and adds geo-location.  It outputs into the following formats:
+  It outputs into the following formats:
 
 - `gisaid-covid19-[current_date].xlsx` 
 - `covid-19-[current_date].tsv` 
@@ -52,14 +54,15 @@ Estimating missing genotypes from haplotype or genotype reference panel.
 
 - input:
   - SAM file containing haplotypes with each sequence < 10% gaps (any non-ATGC: "n", "." or "-")
-
-- output
-  - log file with the removed sequences with 10% gaps or more
-  - sequence type (ST) alignment 
   
 ```
 impute-hap.pl [input] []
 ```
+
+- output
+  - log file with the removed sequences with 10% gaps or more
+  - sequence type (ST) alignment 
+
 
 ### hapnet.pl
 
