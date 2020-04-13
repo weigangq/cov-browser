@@ -48,15 +48,7 @@ infer-genome.bash [ covid-[file_date.fasta] ] [Wuhan-Hu-1 reference sequence] [v
 
 ### impute-hap.pl
 
-```
-impute-hap.pl [input] []
-```
-
-Reconstruct a network of unique haplotypes
-This program calculates the minimum spanning tree of a set haplotype.
-
-Estimating missing genotypes from haplotype or genotype reference panel
-
+Estimating missing genotypes from haplotype or genotype reference panel.
 
 - input:
   - SAM file containing haplotypes with each sequence < 10% gaps (any non-ATGC: "n", "." or "-")
@@ -65,7 +57,17 @@ Estimating missing genotypes from haplotype or genotype reference panel
   - log file with the removed sequences with 10% gaps or more
   - sequence type (ST) alignment 
   
+```
+impute-hap.pl [input] []
+```
 
+### hapnet.pl
 
+Reconstruct a network of unique haplotypes
+This program calculates the minimum spanning tree of a set haplotype.
+
+```
+hapnet.pl
+```
 
 
