@@ -122,7 +122,6 @@ $(document).ready(function(){
 });
 
 function asignColor(){
-//    d3.select('body').append("div").html(listVirus.map(function(d){return d+' '+ annoDataW[d].iso}).join("<br>"))
     var geo={};
     listVirus.forEach(function(d){
         var an = annoDataW[d];
@@ -141,12 +140,11 @@ function asignColor(){
 }
 
 var chartW=655, node_gid=[];
-var currAcc=[], currLink
+var currAcc=[]
 function drawChart(){
-    var width = chartW, height=592;
-    var linewidth = 1;
+    var width = chartW, height=592,
+        linewidth = 1;
 
-//    var pie = d3.pie().sort(function(a,b){return (geoDataW[annoDataW[a].geoId].ctry+'-'+annoDataW[a].geoId).localeCompare(geoDataW[annoDataW[b].geoId].ctry+'-'+annoDataW[b].geoId)}).value(1);
     var pie = d3.pie().sort(null).value(function(d){return 1});
 
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
@@ -220,14 +218,14 @@ function drawChart(){
                 }
                 trs.push('<tr><td>' + tds.join('</td><td>') + '</td></tr>')
             });
-            $('#chgTbl').append(trs.join(''))
+            $('#chgTbl').append(trs.join('')).show()
 
-            currLink = i;
-            hlLink()
-            $('#chgTbl').show()
-//            $('#nodeInf table').hide()
+            d3.select('#ll_'+i).classed("orangeStroke",true);
+            d3.select('#arrow'+i+' path').classed("orangeFill",true);
+
+            var sel = d.change.map(x=>'#site_'+x.site).join(',');
+            d3.selectAll(sel).classed("hidden",false)
         })
-//        .on('mouseout', function(){ un_hl})
 
     var node = svg.selectAll(".node").data(listNode).enter()
         .append("g")
@@ -363,7 +361,6 @@ function hlNodes(sel){
 
 
 function overM(){
-//    currLink=0
     var accs = currAcc[2],
         gid = currAcc[1]
 
@@ -405,7 +402,6 @@ function overM(){
         tbls.push('<table>' + '<tr><th>Name</th><td>' + an.iso + '</td><th>Accession</th><td>' + ac + '</td></tr><tr><th>Collect</th><td>' + an.col + '</td><th>' + (an.city? 'City' : '') + '</th><td>' + (an.city? an.city : '') + '</td></tr><tr><th>' + host + '</th><td colspan="3">' + patient + '</td></tr><tr><th>Citation</th><td colspan="3">' + lab + '</td></tr></table>')
     }
     $('#nodeInf').html(tbls.join('<hr>')).scrollTop(0)
-//    $('#chgTbl').hide()
 }
 
 function hlGeo(geoId){
@@ -435,14 +431,6 @@ function hlDate(arr){
         .attr("x", ddScale(arr[0])).attr("width",arr[1]? (ddScale(arr[0])==ddScale(arr[1])? 1 : ddScale(arr[1])-ddScale(arr[0])) : 1);
 }
 
-function hlLink(){
-    d3.select('#ll_'+currLink).classed("orangeStroke",true);
-    d3.select('#arrow'+currLink+' path').classed("orangeFill",true);
-    $('#chgTbl').show()
-
-    var sel = listLink[currLink].change.map(d=>'#site_'+d.site).join(',');
-    d3.selectAll(sel).classed("hidden",false)
-}
 function ulLink(){
     d3.selectAll('#netGraph .link').classed("orangeStroke",false)//.style("stroke","#999");
     d3.selectAll('#netGraph marker path').classed("orangeFill",false)//.style("fill","#999")
@@ -570,23 +558,26 @@ function drawRef(){
                 if (!lks){return}
                 var ll = lks.map(function(l){return '#ll_'+l}).join(','),
                     ar = lks.map(function(l){return '#arrow'+l+' path'}).join(',');
-/*                if (!Number($(':radio:checked').val())){
+                if (!Number($(':radio:checked').val())){
                     d3.selectAll('.iso').transition().duration(timeT*2).style('opacity',0.15)
-                }*/
-                d3.selectAll('#netGraph .link').style("stroke","#eee")//.classed("redStroke",false);
+                } else {
+                    d3.selectAll('.iso').transition().duration(timeT*2).style('fill',"#ccc")
+                }
+                d3.selectAll('#netGraph .link').style("stroke","#eee")
                 d3.selectAll(ll).style('stroke','red')
-                d3.selectAll('#netGraph marker path').style("fill","#eee")//.classed("redFill",false);
+                d3.selectAll('#netGraph marker path').style("fill","#eee")
                 d3.selectAll(ar).style("fill",'red')
             })
             .on('mouseout', function(){
                  d3.select(this).style("fill", "#ffe4b2")
                 $("#tipNet").hide()
-/*                if (!Number($(':radio:checked').val())){
+                if (!Number($(':radio:checked').val())){
                     d3.selectAll('.iso').transition().duration(timeT*2).style('opacity',1)
-                }*/
+                } else {
+                    d3.selectAll('.iso').transition().duration(timeT*2).style('fill',"purple")
+                }
                 d3.selectAll('#netGraph .link').style("stroke","#999");
                 d3.selectAll('#netGraph marker path').style("fill","#999")
-//                if(currLink) hlLink()
             })
 
     var toShow = {"orf1ab":1, "S":1}
