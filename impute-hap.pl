@@ -114,10 +114,16 @@ $st_aln->set_displayname_flat();
 # output ST alignment & a log file (with sites and hap xrefs)
 #################
 
-my $out = Bio::AlignIO->new(-file=> ">imputed.aln", -format=>'clustalw');
-$out->write_aln($st_aln);
+my $prefix = $options{'no-imputation'} ? "no" : "with";
 
-open LOG, ">", "impute.log";
+my $out_st = Bio::AlignIO->new(-file=> ">" . $prefix . "-imputed.aln", -format=>'clustalw');
+$out_st->write_aln($st_aln);
+
+$new->set_displayname_flat();
+my $out_full = Bio::AlignIO->new(-file=> ">" . $prefix . "-imputed-sample.aln", -format=>'clustalw');
+$out_full->write_aln($new);
+
+open LOG, ">", $prefix . "-impute.log";
 print LOG $edges[0], "\t", $edges[1], "\n";
 
 my %haps = %$ref_hap;
