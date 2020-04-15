@@ -37,19 +37,21 @@ mv cov-human.fas ../
 # 3b. bcftools mpileup -Ou -f ../ref.fas  *.sorted.bam | bcftools call -mv --ploidy-file ploidy.txt  -Ob -o calls.bcf, with default ploidy as 1:
 weigang@wallace:~/cov-03-09-2020/cov57$ cat ploidy.txt
 *       *       *       M       1
-###############################
-# 3d. outgroup mapping:
-################################
-bcftools mpileup -Ou -f ../ref.fas  otg.sorted.bam | bcftools call -mv --ploidy-file ../ploidy.txt  -Ob -o otg.bcf -P 0.1
-
-# Not used: 3a.  samtools mpileup -uf ../ref.fas *.sorted.bam > cov.mpileup &
-
-## bcftools call -c -v --ploidy 1 cov.mpileup > raw.vcf
-
-5. bcftools stats raw.vcf > vcf.stats # check TsTv ratio
 
 6a. bcftools view -m2 -M2 --types snps calls.bcf > snps.bcf ( get only biallelic SNPs)
 6b. vcftools --vcf input_file.vcf --remove-indels --recode --recode-INFO-all --out cov.vcf # filter SNPs only
+
+7. filter sites by allele counts: only informative sites
+bcftools view snps.bcf > snps.vcf
+vcftools --vcf snps.vcf --mac 2 --recode --recode-INFO-all --out snps2.vcf
+
+###############################
+# 3d. outgroup mapping:
+################################
+bcftools mpileup -Ou -f ../ref.fas  otg.sorted.bam | bcftools call -mv --ploidy-file ../ploidy.txt  -Ob -o otg.bcf -P 0.1 (default if too diverse, e.g., manis genomes)
+
+5. bcftools stats raw.vcf > vcf.stats # check TsTv ratio
+
 6c. fitler outgroup SNPs:
 bcftools view otg.bcf > otg.vcf
 weigang@wallace:~/cov-03-12-2020$ bgzip snps2.vcf
@@ -61,9 +63,6 @@ bcftools isec -n=2 -w1 otg.vcf.gz snps2.vcf.gz > otg-isec-sites.vcf
 bgzip & tabix to index
 vcf-merge -d -R 0 otg-isec-sites.vcf.gz snps2.vcf.gz > snps-ref.vcf ( no duplicated line; add ref state "0" instead of missing)
 
-7. filter sites by allele counts: only informative sites
-bcftools view snps.bcf > snps.vcf
-vcftools --vcf snps.vcf --mac 2 --recode --recode-INFO-all --out snps2.vcf
 
 7. Get sample FASTA:
 bcftools query -l snps.bcf > samples
@@ -406,7 +405,7 @@ dn/ds =~ 77/3/55 = 0.47
       3 5
       2 6
       1 15
-
+=> homoplay: 40.7%
 # biotree --walk-edge 'ST213' > walk.edge
 
 # To view graph with DOT: neato -Tpdf mygraph.dot > mygraph.pdf
@@ -416,3 +415,309 @@ bcftools query -f "%POS\n" snps-ref.vcf > snps.pos
 
 # Make network (including adding hypothetical nodes and edges)
 perl ../cov-browser/hapnet-from-edge-walk.pl --genome ref.gb --vcf snps.pos --hap with-impute.aln --impute-log with-impute.log --edge-file walk.edge
+
+############################################
+# 4/14/2020
+# Add manis & ST90 into outgroup
+############################################
+# 1. identify human SNPs
+azureuser@myVM:~$ l human-files/*.sorted.bam | wc # ST90 removed
+   2544   22896  228960
+
+azureuser@myVM:~$ l host-envion/*.sorted.bam | wc
+      7      63     630
+
+azureuser@myVM:~$ bcftools mpileup -Ou -f cov-browser/ref.fas human-files/*.sorted.bam host-envion/*.sorted.bam  | bcftools call -mv
+--ploidy-file cov-browser/ploidy.txt -Ob -o calls.bcf -P 0.1 &
+azureuser@myVM:~$ [mpileup] 2551 samples in 2551 input files
+bcfools stats:
+SN      0       number of samples:      2551
+SN      0       number of records:      170
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 167
+SN      0       number of MNPs: 0
+SN      0       number of indels:       3
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   7
+SN      0       number of multiallelic SNP sites:       7
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       121     53      2.28    119     48      2.48
+
+# get only biallelic SNPs
+bcftools view -m2 -M2 --types snps calls.bcf > snps.bcf 
+SN      0       number of samples:      2551
+SN      0       number of records:      160
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 160
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       114     46      2.48    114     46      2.48
+
+# filter sites by allele counts: only informative sites
+bcftools view snps.bcf > snps.vcf
+vcftools --vcf snps.vcf --mac 2 --recode --recode-INFO-all --out snps2.vcf
+SN      0       number of samples:      2551
+SN      0       number of records:      149
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 149
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       110     39      2.82    110     39      2.82
+
+azureuser@myVM:~$ mv snps2.vcf.recode.vcf snps2.vcf
+azureuser@myVM:~$ bgzip snps2.vcf
+azureuser@myVM:~$ tabix snps2.vcf.gz
+
+# 2. Align outgroups
+azureuser@myVM:~$ bcftools mpileup -Ou -f cov-browser/ref.fas  outgroup-ST90/*.sorted.bam | bcftools call -mv --ploidy-file cov-browser/ploidy.txt  -Ob -o otg.bcf 
+# can't use -P 0.1, too many SNPs
+[mpileup] 11 samples in 11 input files
+SN      0       number of samples:      11
+SN      0       number of records:      4314
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 4312
+SN      0       number of MNPs: 0
+SN      0       number of indels:       2
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   122
+SN      0       number of multiallelic SNP sites:       122
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       2606    1828    1.43    2528    1784    1.42
+azureuser@myVM:~$ bcftools view otg.bcf > otg.vcf
+azureuser@myVM:~$ bgzip otg.vcf
+azureuser@myVM:~$ tabix otg.vcf.gz
+
+# 3. Merge human & outgroup VCFs
+bcftools isec -n=2 -w1 otg.vcf.gz snps2.vcf.gz > otg-isec-sites.vcf                                                                 bgzip & tabix to index
+vcf-merge -d -R 0 otg-isec-sites.vcf.gz snps2.vcf.gz > snps-ref.vcf ( no duplicated line; add ref state "0" instead of missing)
+SN      0       number of samples:      2562
+SN      0       number of records:      149
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 149
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       110     39      2.82    110     39      2.82
+
+# 4. get samples in FASTA
+azureuser@myVM:~$ bcftools query -l snps-ref.vcf > samples
+azureuser@myVM:~$ cat samples | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' snps-ref.vcf; echo; done > samples.fas
+azureuser@myVM:~$ sed -E "s/>.+(EPI_ISL_[0-9]+).sorted.bam/>\1/" samples.fas > samples2.fas
+
+# 5. obtain STs: no imputation (fast)
+perl cov-browser/impute-hap.pl --dump-missing --format 'fasta' samples2.fas > missing
+azureuser@myVM:~$ sort -n missing | uniq -c | head
+   1829 1
+   1477 2
+   1336 3
+   1301 4
+   1192 5
+    859 6
+    843 7
+    833 8
+     28 9  <= start
+     28 10
+azureuser@myVM:~$ sort -n missing | uniq -c | tail
+      5 140
+     15 141
+     37 142
+     21 143
+     22 144
+     29 145 <= end
+    912 146
+   1069 147
+   1460 148
+   1475 149
+
+recode SNPs:
+azureuser@myVM:~$ grep "^NC" snps-ref.vcf | cut -f2 | cat -n | head
+     1  4
+     2  13
+     3  18
+     4  21
+     5  28
+     6  34
+     7  35
+     8  36
+     9  186 <= from-bp
+    10  187
+azureuser@myVM:~$ grep "^NC" snps-ref.vcf | cut -f2 | cat -n | tail
+   140  29635
+   141  29683
+   142  29700
+   143  29734
+   144  29736
+   145  29751 <= to-bp
+   146  29862
+   147  29865
+   148  29867
+   149  29870
+azureuser@myVM:~$ vcftools --chr NC_045512 --from-bp 186 --to-bp 29751  --recode --recode-INFO-all --vcf snps-ref.vcf --out snps-clean
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+        --vcf snps-ref.vcf
+        --chr NC_045512
+        --to-bp 29751
+        --recode-INFO-all
+        --out snps-clean
+        --recode
+        --from-bp 186
+
+After filtering, kept 2562 out of 2562 Individuals
+Outputting VCF file...
+After filtering, kept 137 out of a possible 149 Sites
+Run Time = 0.00 seconds
+=> "snps-clean.recode.vcf"
+
+## remove manis & ST90
+azureuser@myVM:~/no-impute-April-14-2020$ cat epi-to-remove
+EPI_ISL_410538
+EPI_ISL_410539
+EPI_ISL_410540
+EPI_ISL_410541
+EPI_ISL_410542
+EPI_ISL_410543
+EPI_ISL_410544
+EPI_ISL_410721
+EPI_ISL_412860
+EPI_ISL_414663
+bioseq -d'file:epi-to-remove' samples2.fas | bioaln -i'fasta' --gap-char 'n' > samples-for-no-impute.aln
+perl cov-browser/impute-hap.pl --start 9 --end 145 --format 'clustalw' --no-imputation samples-for-no-impute.aln 2> no-impute.log
+azureuser@myVM:~$ grep -c remove no-impute.log
+202 <= removed >10% missing bases
+azureuser@myVM:~/no-impute-April-14-2020$ bioaln -n no-imputed.aln
+204
+azureuser@myVM:~/no-impute-April-14-2020$ bioaln -l no-imputed.aln
+137
+azureuser@myVM:~$ bioaln -n no-imputed-sample.aln
+2350 <= all samples (no imputation)
+azureuser@myVM:~$ cat no-impute.aln | tr 'N' '-' > tmp # replace N's
+azureuser@myVM:~$ cp tmp no-impute.aln
+
+## DNAPARS
+bioaln -o 'phylip' no-impute.aln > infile
+"S" "O" 2 (to speed up)
+steps in each site:
+         0   1   2   3   4   5   6   7   8   9
+     *-----------------------------------------
+    0|       3   3   2   5   2   3   2   1   1
+   10|   2   1   4   2   3   1   1   3   2   2
+   20|   1   1   1   1   4   5   2   1   1   1
+   30|   1   1   6   2   1   2   5   3   2   1
+   40|   1   2   3   2  13   2   1   4   1   3
+   50|   1   1   4   5   4   1   1   1   3   6
+   60|   2   3   1   1   3   3   2   1   3   3
+   70|   3   3   2   2   2   3   1   4   1   1
+   80|   2   1   1   1   3   1   4   1   2   1
+   90|   1   3   3   1   1   1   3   1   1   1
+  100|   1   4   2   2   1   1   4   1   1   3
+  110|   1   1   3   1   1   0   1   1   1   4
+  120|   2   3   1   1   2   1   1   4   2   1
+  130|   2   2   3   3   8   3   4   6
+
+azureuser@myVM:~$ grep "0|" outfile | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "[0-9]" | sort -n | uniq -c
+      1 0
+     66 1
+     30 2
+     19 3
+     12 4
+      3 5
+      3 6
+      1 7
+      1 10
+      1 16
+=> homoplasy 51.1%
+"requires a total of    297.000" 
+HI = (137-1)/297 = 45.8%
+
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-weigang$ biotree --walk-edge 'ST2' no-impute.outtree > walk.edge
+azureuser@myVM:~$ bcftools query -f "%POS\n" snps-ref.vcf > snps.pos
+perl ../cov-browser/hapnet-pars.pl --genome ../cov-browser/ref.gb --vcf snps.pos --hap no-imputed.aln --impute-log no-impute.log --edge-file walk.edge
+Error: "Hypothetical node I123: child is not haplotype I122"
+
+## MST
+azureuser@myVM:~$ perl cov-browser/hapnet-mst.pl --genome cov-browser/ref.gb --vcf snps-ref.vcf --hap no-impute.aln --impute-log no-impute.log
+azureuser@myVM:~$  cut -f3 edges-1.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     81 1
+     28 2
+     15 3
+      7 4
+      3 5
+      1 6
+      1 17
+
+azureuser@myVM:~$ cut -f3,11 edges-1.tsv | sort -n | uniq -c | cut -f2 | sort | uniq -c
+     73 0
+     53 1
+     10 NA
+=> "net-1.json"
+=> "edges-1.tsv"
+=> "nodes-1.tsv"
+
+# 6. Imputation (slow; ~ 1hr for 2500+ seqs)
+bioseq -d'file:epi-to-remove' samples2.fas > samples3.fas
+azureuser@myVM:~$ perl cov-browser/impute-hap.pl --start 9 --end 145 --format 'fasta' samples3.fas 2> impute.log &
+## MST
+perl ../cov-browser/hapnet-mst.pl --genome ../cov-browser/ref.gb --vcf snps-ref.vcf --hap with-imputed.aln --impute-log with-impute.log
+
+azureuser@myVM:~/with-impute-April-14-2020$ cut -f3 edges-1.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     77 1
+     30 2
+     18 3
+      6 4
+      2 5
+      2 6
+      1 12
+azureuser@myVM:~/with-impute-April-14-2020$ cut -f3,11 edges-1.tsv | sort -n | uniq -c | cut -f2 | sort | uniq -c
+     73 0
+     53 1
+     10 NA
+
+## DNApars
+bioaln -o 'phylip' with-imputed.aln > infile
+phylip dnapars ("S", "O": 2)
+azureuser@myVM:~/with-impute-April-14-2020$ grep "0|" outfile | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "[0-9]" | sort -n | uniq -c
+      1 0
+     80 1
+     28 2
+     17 3
+      5 4
+      3 5
+      2 6
+      1 15
+
+biotree --walk-edge 'ST2' outtree > walk.edge
+azureuser@myVM:~/with-impute-April-14-2020$ perl ../cov-browser/hapnet-pars.pl --genome ../cov-browser/ref.gb --vcf snps.pos --hap with-imputed.aln --impute-log with-impute.log --edge-file walk.edge
+=> net-pars.json
+=> edges-pars.tsv
+=> nodes-pars.tsv
+azureuser@myVM:~/with-impute-April-14-2020$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     80 1
+     28 2
+     16 3
+      6 4
+      3 5
+      1 6
+      1 7
+      1 15
+homplasy => (137-80)/137 = 41.6%
+requires a total of    249.000; CI = 54.6%
