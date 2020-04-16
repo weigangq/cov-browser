@@ -721,3 +721,24 @@ azureuser@myVM:~/with-impute-April-14-2020$ cut -f3 edges-pars.tsv | sort -n | u
       1 15
 homplasy => (137-80)/137 = 41.6%
 requires a total of    249.000; CI = 54.6%
+
+################################
+# Test of recombination (April 15, 2020)
+#####################################
+
+# get conensus
+bgzip snps-filtered-2.vcf
+tabix snps-filtered-2.vcf.gz
+# for one seq:
+bcftools consensus -s EPI_ISL_402119 -f ../ref-genome/ref.fas snps-filtered-2.vcf.gz
+
+# get unique EPI for each ST
+perl -e 'use strict; my %seen; while(<>){chomp; my @a=split; next if $seen{$a[0]}; $seen{$a[0]} = $a[1]} foreach my $st (keys %seen) {print $st, "\t", $seen{$st}, "\n"}' nodes-pars.tsv > nodes.uniq
+
+# for all seq (n=211: remove outgroup EPI_ISL_402131)
+cat nodes.uniq3 | while read line; do bcftools consensus -s $line -f ../ref-genome/ref.fas snps-filtered-2.vcf.gz | sed "s/NC_045512/$line/"; done > consense.fas &
+
+# Use 3seqs (-a: all sites; -d: distinct seqs; -ptable: generated with "3seq -gen-p ptable 100")
+# Manual page: https://mol.ax/content/media/2018/02/3seq_manual.20180209.pdf
+~/3seq/3seq -full consense.fas -a -d -id run01 -ptable ~/3seq/pfile -L5000
+ 
