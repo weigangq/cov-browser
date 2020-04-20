@@ -156,7 +156,7 @@ while(<MP>) {
 	my ($ind, $child, $len) = ($1, $2, $3);
 	my $dist = sprintf "%.1f", $len/$unit;
 	if (!$len) {
-	    $inodes{$ind} = $child;
+	    $inodes{$ind} = $child; # assign Hap to its zero-distant inode
 	}
 	# resolving cases of "maybe":
 	if ($dist > 0 && $dist < 1) { # dist=0.5, cases of "maybe"
@@ -170,7 +170,7 @@ close MP;
 my (@nodelist, @edgelist);
 my %edge_diff;
 foreach my $child (keys %seen_child) {
-    my $ch = $inodes{$child} || $child;
+    my $ch = $inodes{$child} || $child; # replace inode with hap if exist
     $ch =~ s/ST/H/;
     foreach my $parent (keys %{$seen_child{$child}}) {
 	my $pa = $inodes{$parent} || $parent;
@@ -199,6 +199,7 @@ foreach my $child (keys %seen_child) {
     }
 }
 print Dumper(\%inodes) if $options{'debug'};
+#print Dumper(\%inodes); exit;
 
 #################################
 # impute inode (hopefully all like below; no recursive searching):
@@ -207,17 +208,20 @@ print Dumper(\%inodes) if $options{'debug'};
 #           v
 #          H174
 ##############################
-
+# Assign edge length for inode child
 foreach my $ch (keys %parent) {
     next if $ch =~ /^H/; # haplotype node
     my $pa = $parent{$ch}; # single parent
-    die "Hypothetical node $ch: parent is not haplotype $pa\n" unless $pa =~ /^H/; 
+    #    die "Hypothetical node $ch: parent is not haplotype $pa\n" unless $pa =~ /^H/;
+    next unless $pa =~ /^H/; 
     my $pa_seq = $STs{$pa}; # multiple children
     my $refCh = $child{$ch};
     my %seen_diff;
     my (%diff_pos, %diff_rev);
+    
     foreach my $c (@$refCh) {
-	die "Hypothetical node $ch: child is not haplotype $c\n" unless $c =~ /^H/;
+	#	die "Hypothetical node $ch: child is not haplotype $c\n" unless $c =~ /^H/;
+	next unless $c =~ /^H/;
 	my $ch_seq = $STs{$c};
 	my ($ref1, $ref2) = &comp_seq($pa_seq, $ch_seq);
 	foreach my $d (@$ref1) {
@@ -247,6 +251,7 @@ foreach my $ch (keys %parent) {
 
     foreach my $c (@$refCh) {
 	my $ch_seq = $STs{$c};
+	next unless $c =~ /^H/;
 	my ($ref1, $ref2) = &comp_seq($pa_seq, $ch_seq);
 	my (@pos, @rev);
 	foreach my $d (@$ref1) {
