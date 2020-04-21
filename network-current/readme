@@ -1,0 +1,73 @@
+# April 21, 2020
+# Recreate samples file (for TSC)
+cat sample.ids | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' snps-filtered-2.bcf; echo; done > samples.fas
+
+azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --dump-missing --format 'fasta' samples.fas > missing
+azureuser@myVM:~/cov-browser/network-current$ sort -n missing | uniq -c | head
+    101 1
+    100 2
+     96 3
+     96 4
+     92 5
+     94 6
+     92 7
+     36 8
+     18 9
+      3 10
+azureuser@myVM:~/cov-browser/network-current$ sort -n missing | uniq -c | tail
+      2 137
+      3 138
+     23 139
+     31 140
+     30 141
+     97 142
+    137 143
+    125 144
+    125 145
+    134 146
+!!Already cleaned/filterred!!
+
+# no imputation
+azureuser@myVM:~/cov-browser/network-current$ bioaln -i'fasta' --gap-char 'n' samples.fas > samples-for-no-impute.aln
+perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'clustalw' --no-imputation samples-for-no-impute.aln 2> no-impute.log
+azureuser@myVM:~/cov-browser/network-current$ bioaln -n no-imputed.aln
+211
+azureuser@myVM:~/cov-browser/network-current$ bioaln -n no-imputed-sample.aln
+2345
+cat no-imputed.aln | tr 'N' '-' > tmp
+cp tmp no-impu
+cp tmp no-imputed.aln
+
+# get whole-genome alignment (for Saymon, LD-by-window analysis)
+grep remove impute.log | cut -f2 -d' ' > epi-short-removed
+vcftools --remove epi-short-removed --gzvcf snps-filtered-2.vcf.gz --recode --recode-INFO-all --out tmp.vcf
+bcftools stats tmp.vcf.recode.vcf | less
+mv tmp.vcf.recode.vcf snps-filtered-2345.vcf
+bcftools query -l snps-filtered-2345.vcf > samples-2345.ids
+bgzip snps-filtered-2345.vcf
+tabix snps-filtered-2345.vcf.gz
+cat samples-2345.ids | while read line; do bcftools consensus -s $line -f ../ref-genome/ref.fas snps-filtered-2345.vcf | sed -E "s/>NC.+/>$line/"; done > samples-genome.fas
+
+# Build TCS network
+bioaln -o'fasta' no-imputed-sample.aln | bioseq -L > tmp.lfa 
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/QiuDi/TCS-project$ cat tmp.lfa | sed 's/EPI_IS//' | tr '\t' ';' >> tmp.phy
+sed 's/;/  /' tmp.phy > tmp2.phy
+
+C:\Users\lai\Dropbox\QiuDi\TCS-project>java -jar -Xmx1g TCS.jar # increase memory
+Gap as missing
+Add group file to assign colors
+Asia;#0099ff
+Europe;#33cc33
+Africa;#ff66ff
+South America;#ff9933
+North America;#ff0000
+Australia;#cc0099
+NA;#ebebe0
+
+
+# with-imputation
+azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'fasta' samples.fas 2> impute.log &
+azureuser@myVM:~/cov-browser/network-current$ bioaln -n with-imputed-sample.aln
+2345
+azureuser@myVM:~/cov-browser/network-current$ bioaln -n with-imputed.aln
+211
