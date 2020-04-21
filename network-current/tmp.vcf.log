@@ -1,0 +1,17 @@
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--gzvcf snps-filtered-2.vcf.gz
+	--remove epi-short-removed
+	--recode-INFO-all
+	--out tmp.vcf
+	--recode
+
+Using zlib version: 1.2.11
+Excluding individuals in 'exclude' list
+After filtering, kept 2345 out of 2551 Individuals
+Outputting VCF file...
+After filtering, kept 146 out of a possible 146 Sites
+Run Time = 0.00 seconds
