@@ -705,7 +705,9 @@ azureuser@myVM:~/with-impute-April-14-2020$ grep "0|" outfile | tr -s ' ' | cut 
       2 6
       1 15
 
-biotree --walk-edge 'ST2' outtree > walk.edge
+azureuser@myVM:~/cov-browser/network-current$ ~/p5-bpwrapper/bin/biotree --walk-edge 'ST2' outtree > walk.edge
+
+
 azureuser@myVM:~/with-impute-April-14-2020$ perl ../cov-browser/hapnet-pars.pl --genome ../cov-browser/ref.gb --vcf snps.pos --hap with-imputed.aln --impute-log with-impute.log --edge-file walk.edge
 => net-pars.json
 => edges-pars.tsv

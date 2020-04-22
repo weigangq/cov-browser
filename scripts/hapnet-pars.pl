@@ -20,7 +20,7 @@ my $myCodonTable   = Bio::Tools::CodonTable->new();
 #die "Usage: $0 --hap <fasta> --vcf <vcf> --genome <fasta>\n" unless;
 # Usage: perl hapnet.pl --genome ref.gb --vcf snps2-ref-03-19.vcf --hap imputed.aln --impute-log impute.log 
 my %options;
-my $outEPI = 'EPI_ISL_402131'; # bat isolate
+#my $outEPI = 'EPI_ISL_402131'; # bat isolate
 #my $rootEPI = 'EPI_ISL_406801'; # determined after replicated runs (H129, H2, H4, H91, ~25% each)
 my $orfShift = 13468; # orf1ab reading frame shift
 #my $impute_aln = 'imputed.aln';
@@ -34,6 +34,7 @@ GetOptions (
 #    "output=s",
     "impute-log=s", # required
     "help",
+    "root=s", # root ST
     "debug|d",
     "edge-file=s", # read walk-edge.tsv file
 #    "unique-root", # force single root edge
@@ -63,7 +64,7 @@ while(<IMP>) {
 
     if (/^ST(\d+)\s+(EPI_ISL_\d+).*/) {
 	my ($st, $hap) = ("H" . $1, $2); # assign Haplotype numbers
-	$outST = $st if $hap eq $outEPI;
+#	$outST = $st if $hap eq $outEPI;
 #	$rootST = $st if $hap eq $rootEPI;
 	if ($hapST{$st}) {
 	    my $ref = $hapST{$st};
@@ -75,7 +76,8 @@ while(<IMP>) {
 }
 close IMP;
 print Dumper(\%hapST) if $options{'debug'}; 
-die "root ST not found\n" unless $outST;
+$outST = $options{'root'} || die "provide a root ST\n";
+#die "root ST not found\n" unless $outST;
 
 #exit;
 # Read FASTA alignment

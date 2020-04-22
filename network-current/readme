@@ -64,6 +64,20 @@ North America;#ff0000
 Australia;#cc0099
 NA;#ebebe0
 
+# DNApars
+bioaln -o 'phylip' with-imputed.aln > infile
+phylip dnapars ("S", "O": 2, 4)
+outfile: Steps = 316
+azureuser@myVM:~/cov-browser/network-current$ grep "0|" outfile | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "^[0-9]" | sort -n | uniq -c
+      1 0
+     74 1
+     26 2
+     21 3
+     13 4
+      5 5
+      4 6
+      1 10
+      1 16
 
 # with-imputation
 azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'fasta' samples.fas 2> impute.log &
