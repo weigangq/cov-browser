@@ -85,18 +85,20 @@ azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/hapnet-pars.pl --g
 outgroup position:H2=>H7
 outgroup position:H2=>H11
 
-# parsimony tree
-
-
 # homoloplay 
-azureuser@myVM:~/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
-     92 1
-     26 2
-     16 3
-      4 4
-      3 5
-      2 6
-      1 15
+azureuser@myVM:~/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | grep -v NA | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     88 1
+     23 2
+     13 3
+      1 4
+      4 5
+      1 6
+      1 14
+
+# parsimony tree from edge-pars file (with 2 biotree functions)
+biotree -i'edge' -o'newick' edges-pars.tsv > edges-pars.dnd
+biotree --ids-all edges-pars.dnd | wc (to check completeness)
+
 
 # with-imputation
 azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'fasta' samples.fas 2> impute.log &
