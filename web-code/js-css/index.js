@@ -119,6 +119,25 @@ $(document).ready(function(){
     });
 
     $('#closeAck').on("click", function(){ $('#ack').hide(); return false});
+
+var client = algoliasearch('0F0AD3F6TP', '5139b826dbcf021c70db5bb3be8abec1');
+var index = client.initIndex('isolate');
+
+    $('#searchAcc').autocomplete({hint: false}, [
+        {source: $.fn.autocomplete.sources.hits(index, { hitsPerPage:8 }),
+         displayKey: 'name',
+         templates: {
+            suggestion: function(suggestion){
+                var res = suggestion._highlightResult;
+    //            $('#suggestion').html(res.acc.value + ' ' +  res.name.value)
+                return res.acc.value + ' | ' +  res.name.value
+            }
+          }
+        }
+      ]).on('autocomplete:selected', function(event, sug){
+        currAcc = [sug.hap, sug.geo, [sug.acc]]
+        overM()
+      });
 });
 
 function asignColor(){
@@ -207,14 +226,11 @@ function drawChart(){
                 d3.select('#site_'+c.site)
                     .style("stroke", noSyn? "red" : "DodgerBlue")
                 var tds = [];
-                tds.push(c.site);
-                tds.push(c.label);
+                tds.push(c.site, c.label, c.pos);
                 if (c.src_aa){
-                    tds.push(hlCodonP(c.src_codon,c.cd_pos, noSyn) + '(' + c.src_aa + ')');
-                    tds.push(hlCodonP(c.tgt_codon,c.cd_pos, noSyn) + '(' + c.tgt_aa + ')')
+                    tds.push(Math.ceil(c.pos/3), hlCodonP(c.src_codon,c.cd_pos, noSyn) + '(' + c.src_aa + ')', hlCodonP(c.tgt_codon,c.cd_pos, noSyn) + '(' + c.tgt_aa + ')')
                 } else {
-                    tds.push(c.src_base);
-                    tds.push(c.tgt_base)
+                    tds.push('', c.src_base, c.tgt_base)
                 }
                 trs.push('<tr><td>' + tds.join('</td><td>') + '</td></tr>')
             });
@@ -359,7 +375,6 @@ function hlNodes(sel){
     }
 }
 
-
 function overM(){
     var accs = currAcc[2],
         gid = currAcc[1]
@@ -442,6 +457,7 @@ function hideNodeInf(){
     if (!currAcc[0]) return
     $("#nodeInf table, #nodeInf hr, #nPatient").hide()
     d3.select('#dateRg').classed("hidden",true)
+    $('#searchAcc').val('')
     currAcc=[]
 }
 function geo2node(gids){
@@ -802,34 +818,6 @@ function changeColor(val){
         d3.selectAll('.iso').transition().duration(timeT).style("stroke","white").style("fill-opacity",1)
     }
     if (currAcc[0]){hlNodes(d3.select("#"+currAcc[0] + ' .nn_' + currAcc[1]))}
-}
-
-function searchAcc(){
-    var num = $('#searchAcc').val()
-    if (!$.isNumeric(num) || num<400000 || num>420000) {
-        alert('Please input 6 digit number between 400000 & 420000')
-        return
-    }
-    var ac = 'EPI_ISL_' + num
-    var nodes = listNode.filter(function(d){
-        if (!d.haps) return;
-        var arr=[], hap=d.haps;
-        for (var i=0; i<hap.length; i++){
-            arr = arr.concat(hap[i][1])
-        }
-        return seen(ac,arr)
-    })
-    if (!nodes[0]){ alert('No isolate: ' + ac); return}
-
-    var node = nodes[0],
-        gid = annoDataW[ac].geoId,
-        accs = node.haps.filter(d=>d[0]==gid)[0][1];
-    if (accs.length>1){
-        var idx = accs.indexOf(ac)
-        if (idx) accs.splice(0, 0, accs.splice(idx, 1)[0])
-    }
-    currAcc = [node.id, gid, accs]
-    overM()
 }
 
 function drawTree(obj){

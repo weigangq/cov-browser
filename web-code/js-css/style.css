@@ -268,17 +268,15 @@ marker path {fill:#999}
 .node_edge th {font-weight:normal}
 .node_edge td {line-height:14px}
 
-#isoSearch {border-bottom:1px solid #bbb; padding:2px 0; font-size:11px}
-#isoSearch a {text-decoration:none}
-#searchAcc {width:40px}
-
 #nodeInf {height:112px; padding-top:5px}
 #nodeInf th {width:60px; color:#999; vertical-align:top; text-align:left}
 #nodeInf td {font-weight:100}
-#nodeInf hr {border-top:1px solid lightgray; border-bottom:1px solid white}
+#nodeInf hr {
+    border:white 2px solid; border-top:1px solid #c1c1c1
+/*    border-top:1px solid lightgray; border-bottom:1px solid white*/}
 
 #virusName {width:250px}
-#nPatient {position:absolute; top:7px; right:42px}
+#nPatient {position:absolute; top:7px; right:18px}
 
 #chgInf {padding:0; text-align:center; height:50px}
 #chgInf td, #chgInf th {
@@ -287,16 +285,47 @@ marker path {fill:#999}
 }
 #chgInf td { font-family:Courier; padding:0}
 #chgInf th {color: gray}
-#chgTbl {margin-left:auto; margin-right:auto; width:68%}
+#chgTbl {margin-left:auto; margin-right:auto; width:90%}
 
 #refLine {stroke:#b3b3b3; stroke-width:6px}
 #refOrf rect {fill:#ffe4b2; stroke:gray}
 .refSym {font-size:10px; text-anchor:middle; font-style:italic }
 
-.colorC {position:absolute; left:120px; color:#808080; font-weight:100; font-size:13px; z-index:1500}
+.colorC {position:absolute; left:127px; color:#808080; font-weight:100; font-size:13px; z-index:1500}
 .colorC:nth-of-type(2) {top:239px}
 
 #selCtry {left:428px}
 #selCtry span {font-size:9px}
-.nodeId {font-size:8.5px; text-anchor:middle; font-family: Arial Narrow}
-/*.bat {text-anchor:middle; font-size:30px}
+.nodeId {font-size:8.5px; text-anchor:middle; font-family:Arial Narrow}
+/*.bat {text-anchor:middle; font-size:30px}*/
+
+#isoSearch {height:24px; border-bottom:1px solid #bbb; padding:4px 0 0 0; font-size:11px}
+#searchContainer {position:absolute; top:1px; left:65px}
+
+.search {
+    position:relative;
+    line-height:14px;
+    color:#aaa;
+    font-size:12px;
+}
+.fa-search {position:absolute; top:5px; left:5px; font-size:12px}
+.search input {text-indent:18px}
+
+.algolia-autocomplete {width:354px; /*font-size:11px*/}
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {width:100%}
+.algolia-autocomplete .aa-hint {color:#999}
+.algolia-autocomplete .aa-dropdown-menu {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-top: none;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+    cursor: pointer;
+    padding: 5px 4px;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {background-color:#B2D7FF}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+    font-weight: bold;
+    font-style: normal
+}
