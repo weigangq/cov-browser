@@ -34,7 +34,7 @@ GetOptions (
 #    "output=s",
     "impute-log=s", # required
     "help",
-    "root=s", # root ST
+    "root=s", # root ST e.g., H2
     "debug|d",
     "edge-file=s", # read walk-edge.tsv file
 #    "unique-root", # force single root edge
@@ -144,7 +144,7 @@ push @utr_feats, Bio::SeqFeature::Generic->new(-seq_id => '3-UTR',
 
 print Dumper(\@utr_feats) if $options{'debug'};
 
-# read edge-file
+# read edge-file (from dnapars tree)
 my $edge_file = $options{'edge-file'};
 open MP, "<", $edge_file;
 my $graph = Graph->new(undirected => 1);
@@ -169,40 +169,48 @@ while(<MP>) {
 }
 close MP;
 
-my (@nodelist, @edgelist);
+my (@nodelist, @edgelist, %dist);
 my %edge_diff;
+# create graph edge for each pair (replace with haplotype for either if exist)
+# add edge length for only ST pairs
+# create parent & child hashes (replaced with Hap for either if exists
 foreach my $child (keys %seen_child) {
-    my $ch = $inodes{$child} || $child; # replace inode with hap if exist
+    my $ch = $inodes{$child} || $child; # replace ch with hap if exist
     $ch =~ s/ST/H/;
-    foreach my $parent (keys %{$seen_child{$child}}) {
-	my $pa = $inodes{$parent} || $parent;
-	$pa =~ s/ST/H/;
-	next if $ch eq $pa;
-	$pa = "I" . $pa unless $pa =~ /H\d+/;
-	$ch = "I" . $ch unless $ch =~ /H\d+/;
-	$graph->add_edge($pa, $ch);
-	$parent{$ch} = $pa;
-	if ($child{$pa}) {
-	    push @{$child{$pa}}, $ch;
-	} else {
-	    $child{$pa} = [ ($ch) ];
-	}
-	if ($pa =~ /^H\d+/ && $ch =~ /^H\d+/) {
-	    my ($ref1, $ref2) = &comp_seq($STs{$pa}, $STs{$ch});
-	    $edge_diff{$pa}{$ch} = $ref1; 
-	    $edge_diff{$ch}{$pa} = $ref2;
-	}
-#	} else {
-#	    $edge_diff{$pa}{$ch} = &diff_na(); 
-#	    $edge_diff{$ch}{$pa} = &diff_na();
-#	}
-#	print join "\t", ($ch, $pa, $seen_child{$child}{$parent});
-#	print "\n";
+    my ($parent) = keys %{ $seen_child{$child} };
+#    foreach my $parent (keys %{$seen_child{$child}}) {
+    my $pa = $inodes{$parent} || $parent; # replace pa with hap if exist
+    $pa =~ s/ST/H/;
+    next if $ch eq $pa;
+    $pa = "I" . $pa unless $pa =~ /H\d+/;
+    $ch = "I" . $ch unless $ch =~ /H\d+/;
+    $dist{$pa}{$ch} = sprintf "%.0f", $seen_child{$child}{$parent};
+    $graph->add_edge($pa, $ch);
+    $parent{$ch} = $pa;
+    if ($child{$pa}) {
+	push @{$child{$pa}}, $ch;
+    } else {
+	$child{$pa} = [ ($ch) ];
     }
+}
+
+print Dumper(\%dist);
+    
+# calculate edge lengthes 
+foreach my $ch (keys %parent) {
+    my $pa = $parent{$ch};
+    my ($ref1, $ref2);
+    if ($ch =~ /^H\d+/ && $pa =~ /^H\d+/) {
+	($ref1, $ref2) = &comp_seq($STs{$pa}, $STs{$ch}); # real seqs, add diffs
+    } else { # at least one hypothetical, add NA's according to number of diffs
+	($ref1, $ref2) = &diff_na( $dist{$pa}{$ch} );
+    }
+    $edge_diff{$pa}{$ch} = $ref1; 
+    $edge_diff{$ch}{$pa} = $ref2;
 }
 print Dumper(\%inodes) if $options{'debug'};
 #print Dumper(\%inodes); exit;
-
+=a
 #################################
 # impute inode (hopefully all like below; no recursive searching):
 #   H21 -> I127 -> H42
@@ -268,6 +276,7 @@ foreach my $ch (keys %parent) {
 	$edge_diff{$c}{$ch} = [ @rev ]; 
     }
 }
+=cut
 
 &attach_attributes_and_polarize($graph);
 #my $writer = Graph::Writer::Dot->new();
@@ -290,19 +299,25 @@ exit;
 ###################################
 
 sub diff_na {
-    my @edges;
-    push @edges, {'site' => 1, 
-		  'src_base' => 'n', 
-		  'tgt_base' => 'n',
-		  'label' => 'no-gene',
-		  'pos' => 1,
-		  'cd_pos' => 1,
-		  'src_codon' => 'xxx',
-		  'tgt_codon' => 'yyy',
-		  'src_aa' => 'X',
-		  'tgt_aa' => 'X',
-    }; 
-    return \@edges;
+    my $numDiff = shift;
+    my (@diff_pos, @diff_rev);
+    my $na = {'site' => 'NA', 
+		  'src_base' => 'NA', 
+		  'tgt_base' => 'NA',
+		  'label' => 'NA',
+		  'pos' => 'NA',
+		  'cd_pos' => 'NA',
+		  'src_codon' => 'NA',
+		  'tgt_codon' => 'NA',
+		  'src_aa' => 'NA',
+		  'tgt_aa' => 'NA',
+    };
+
+    for (my $i=1; $i<=$numDiff; $i++) {
+	push @diff_pos, $na;
+	push @diff_rev, $na
+    }
+    return (\@diff_pos, \@diff_rev);
 }
 
 sub attach_attributes_and_polarize {
