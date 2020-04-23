@@ -79,6 +79,25 @@ azureuser@myVM:~/cov-browser/network-current$ grep "0|" outfile | tr -s ' ' | cu
       1 10
       1 16
 
+# build parsimony network
+azureuser@myVM:~/cov-browser/network-current$ ~/p5-bpwrapper/bin/biotree --walk-edge 'ST2' outtree > walk.edge
+azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/hapnet-pars.pl --genome ../ref-genome/ref.gb --vcf snps.pos2 --hap no-imputed.aln --impute-log no-impute.log --edge-file walk.edge --root H2
+outgroup position:H2=>H7
+outgroup position:H2=>H11
+
+# parsimony tree
+
+
+# homoloplay 
+azureuser@myVM:~/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     92 1
+     26 2
+     16 3
+      4 4
+      3 5
+      2 6
+      1 15
+
 # with-imputation
 azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'fasta' samples.fas 2> impute.log &
 azureuser@myVM:~/cov-browser/network-current$ bioaln -n with-imputed-sample.aln
