@@ -65,8 +65,8 @@ Australia;#cc0099
 NA;#ebebe0
 
 # DNApars
-bioaln -o 'phylip' with-imputed.aln > infile
-phylip dnapars ("S", "O": 2, 4)
+bioaln -o 'phylip' no-imputed.aln > infile
+phylip dnapars ("S", "O": 4, 4)
 outfile: Steps = 316
 azureuser@myVM:~/cov-browser/network-current$ grep "0|" outfile | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "^[0-9]" | sort -n | uniq -c
       1 0
@@ -81,9 +81,9 @@ azureuser@myVM:~/cov-browser/network-current$ grep "0|" outfile | tr -s ' ' | cu
 
 # build parsimony network
 azureuser@myVM:~/cov-browser/network-current$ ~/p5-bpwrapper/bin/biotree --walk-edge 'ST2' outtree > walk.edge
-azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/hapnet-pars.pl --genome ../ref-genome/ref.gb --vcf snps.pos2 --hap no-imputed.aln --impute-log no-impute.log --edge-file walk.edge --root H2
-outgroup position:H2=>H7
-outgroup position:H2=>H11
+azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/hapnet-pars.pl --genome ../ref-genome/ref.gb --vcf snps.pos2 --hap no-imputed.aln --impute-log no-impute.log --edge-file walk.edge --root H4
+outgroup position:H2=>H13
+outgroup position:H2=>H44
 
 # homoloplay 
 azureuser@myVM:~/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | grep -v NA | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
@@ -99,10 +99,36 @@ azureuser@myVM:~/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n |
 biotree -i'edge' -o'newick' edges-pars.tsv > edges-pars.dnd
 biotree --ids-all edges-pars.dnd | wc (to check completeness)
 
-
-# with-imputation
+# 4/23/2020
+# with-imputation (much improved consistency)
 azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 146 --format 'fasta' samples.fas 2> impute.log &
 azureuser@myVM:~/cov-browser/network-current$ bioaln -n with-imputed-sample.aln
 2345
 azureuser@myVM:~/cov-browser/network-current$ bioaln -n with-imputed.aln
 211
+bioaln -o 'phylip' with-imputed.aln > infile
+phylip dnapars ("S", "O": 2, 4)
+outfile: Steps = 250
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ grep "0|" outfile | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "^[0-9]" | sort -n | uniq -c
+      1 0
+     92 1
+     27 2
+     18 3
+      2 4
+      3 5
+      2 6
+      1 15
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ biotree --walk-edge 'ST2' outtree > walk.edge
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ perl ../scripts/hapnet-pars.pl --genome ../ref-genome/ref.gb --vcf snps.pos2 --hap with-imputed.aln --impute-log with-impute.log --edge-file walk.edge --root H2
+outgroup position:H2=>H8
+outgroup position:H2=>H4
+outgroup position:H2=>H12
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | grep -v NA | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     91 1
+     27 2
+     15 3
+      2 4
+      4 5
+      1 7
+      1 14
+biotree -i'edge' -o'newick' edges-pars.tsv > edges-pars.dnd
