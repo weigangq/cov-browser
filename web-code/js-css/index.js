@@ -124,12 +124,11 @@ var client = algoliasearch('0F0AD3F6TP', '5139b826dbcf021c70db5bb3be8abec1');
 var index = client.initIndex('isolate');
 
     $('#searchAcc').autocomplete({hint: false}, [
-        {source: $.fn.autocomplete.sources.hits(index, { hitsPerPage:8 }),
+        {source: $.fn.autocomplete.sources.hits(index, { hitsPerPage:15 }),
          displayKey: 'name',
          templates: {
             suggestion: function(suggestion){
                 var res = suggestion._highlightResult;
-    //            $('#suggestion').html(res.acc.value + ' ' +  res.name.value)
                 return res.acc.value + ' | ' +  res.name.value
             }
           }
@@ -169,7 +168,7 @@ function drawChart(){
     var svg = d3.select("#netGraph").attr("width", width).attr("height", height);
     svg.append("rect").attr("width", width).attr("height", height)
                     .attr("class", 'whiteFill')
-                    .on('click',function(d){ ulNodes(); hideNodeInf(); ulLink(); ulGeo() })
+                    .on('click',function(d){ ulNodes(); hideNodeInf(); ulLink(); ulCtry(); ulGeo() })
 
 
     for (var i=0; i<listLink.length; i++){
@@ -274,7 +273,7 @@ function drawChart(){
             n.selectAll('path')
                 .data(pie(d.haps)).enter()
                 .append('path')
-                .attr("class", function(n){return 'nn_' + n.data[0] + " iso crosshair"})
+                .attr("class", function(n){return 'nn_' + n.data[0] + " iso finger"})
                 .attr('d', sector)
                 .style('fill', function(n){
                     var gid = n.data[0];
@@ -287,18 +286,22 @@ function drawChart(){
                 })
                 .on("mouseover", function(n){
                     var num =  n.data[1].length
-                    tipNet(num + ' pateint' + (num==1? '' : 's'))
+                    tipNet(num + ' patient' + (num==1? '' : 's'))
                 })
                 .on('mouseout',function(){$("#tipNet").hide()})
             
             var center = n.append("circle").attr("r", (d.haps.length>nLab? 7 : 2)).style('fill',"white")
             if (d.haps.length>nLab){
                 n.append("text").attr("class","nodeId").attr("dy",3).text(d.id)
-                    .on("mouseover", function(){tipNet(d.id, 20)})
+                    .on("mouseover", function(){
+                        tipNet(d.id + ' (' + d3.sum(d.haps.map(d=>d[1].length)) + ' patients)', 20)
+                    })
                     .on('mouseout',function(){$("#tipNet").hide()})
             } else {
                 center.style("fill-opacity",0.1).style("stroke","none")
-                    .on("mouseover", function(){tipNet(d.id, 20)})
+                    .on("mouseover", function(){
+                        tipNet(d.id + ' (' + d3.sum(d.haps.map(d=>d[1].length)) + ' patients)', 20)
+                    })
                     .on('mouseout',function(){$("#tipNet").hide()})
             }
         } else {
@@ -317,8 +320,6 @@ function drawChart(){
                     circle = n.append("circle")
                         .attr("r", d.radius)
                         .style('fill', gid<500? geoColor(geoDataW[gid].ctry) : shipColor);
-//                n.append("circle").attr("r", 8).style('fill',"white")
-//                n.append("text").attr("class","nodeId").attr("dy",3).text(d.id.replace(/ST/,'H'))
                 } else {
                     $("#bat").appendTo(('#'+d.id));
                     circle = n.append("svg")
@@ -327,11 +328,9 @@ function drawChart(){
                             .attr("width",48).attr("height",23.996)
                             .attr("viewBox","562 485.829 50 23.996")
                             .append("path").attr("d",batPath)
-/*                    circle = n.append("text").attr("id", 'nn_'+ac).attr("class",'bat finger')
-                        .attr("dy","0.4em").attr("dx","10px").html('&#129415;')*/
                 }
 
-                circle.attr("class",'nn_' + gid + " iso crosshair")
+                circle.attr("class",'nn_' + gid + " iso finger")
                     .on('click',function(){
                     $('#searchAcc').val('')
                     currAcc = [d.id, gid, [ac]]
@@ -376,6 +375,8 @@ function hlNodes(sel){
 }
 
 function overM(){
+    ulCtry()
+
     var accs = currAcc[2],
         gid = currAcc[1]
 
@@ -394,7 +395,11 @@ function overM(){
     
     hlGeo(gid)
 
-    $("#nPatient").html(rg[0]? (accs.length + ' patient' + (accs.length==1? '' : 's')) : 'Outgroup').show();
+    $("#isoSum").css("background-color", "#999")
+    $("#hapId").html(currAcc[0])
+    $("#nPatient").html(rg[0]? accs.length : 'Outgroup')
+    $("#siteName").html(geoDataW[gid].name)
+
     var tbls=[]
     for (var i=0; i<accs.length; i++){
         var ac = accs[i],
@@ -421,23 +426,21 @@ function overM(){
 
 function hlGeo(geoId){
     d3.selectAll('#mapW circle:not(#mapW_'+geoId+')').transition().duration(timeT)
-        .attr("r", mapR/transK).style("fill-opacity",0.1).style("stroke","none");
+        .attr("r", mapR/transK).style("fill-opacity",0.1)
     d3.select('#mapW_'+geoId).transition().duration(timeT)
-        .attr("r", stdR*2/transK).style("fill-opacity",0.8);
-    $("#siteName").html(geoDataW[geoId].name).show()
+        .attr("r", stdR*2/transK).style("fill-opacity",0.7);
 }
 function hlGeos(gids){
     var arr = gids.map(function(d){return '#mapW_'+d}),
         sel = d3.selectAll(arr.join(','))
     d3.selectAll('#mapW circle').transition().duration(timeT)
-        .attr("r", mapR/transK).style("fill-opacity",0).style("stroke","none");
-    sel.transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.8).style("stroke","white");
+        .attr("r", mapR/transK).style("fill-opacity",0)
+    sel.transition().duration(timeT).attr("r", mapR/transK).style("fill-opacity",0.8)
 }
 
 function ulGeo(){
     d3.selectAll('#mapW circle').transition().duration(timeT)
-        .attr("r", mapR/transK).style("fill-opacity",0.8).style("stroke","white");
-    $("#siteName").hide()
+        .attr("r", mapR/transK).style("fill-opacity",0.7)
 }
 
 function hlDate(arr){
@@ -446,16 +449,32 @@ function hlDate(arr){
         .attr("x", ddScale(arr[0])).attr("width",arr[1]? (ddScale(arr[0])==ddScale(arr[1])? 1 : ddScale(arr[1])-ddScale(arr[0])) : 1);
 }
 
+function hlCtry(id){
+    ulGeo()
+    $('#adm_'+id).css("background", id<700? geoColor(id) : shipColor).css("color", "white")
+    d3.select('#ctry_'+id).classed('country_sel',true)
+
+    var gids = geoList.filter(function(d){return geoDataW[d].ctry==id})
+    geo2node(gids)
+}
+
+function ulCtry(){
+    $('#admin td').css("background", "none").css("color", "inherit")
+    d3.selectAll('#mapW .country').classed("country_sel",false)
+}
+
+
 function ulLink(){
-    d3.selectAll('#netGraph .link').classed("orangeStroke",false)//.style("stroke","#999");
-    d3.selectAll('#netGraph marker path').classed("orangeFill",false)//.style("fill","#999")
+    d3.selectAll('#netGraph .link').classed("orangeStroke",false)
+    d3.selectAll('#netGraph marker path').classed("orangeFill",false)
     $("#chgTbl").hide()
     d3.selectAll('.siteLine').classed("hidden",true)
 }
 
 function hideNodeInf(){
     if (!currAcc[0]) return
-    $("#nodeInf table, #nodeInf hr, #nPatient").hide()
+    $("#nodeInf table, #nodeInf hr").hide()
+    $("#isoSum").css("background-color", "inherit")
     d3.select('#dateRg').classed("hidden",true)
     $('#searchAcc').val('')
     currAcc=[]
@@ -509,7 +528,7 @@ function drawLg(){
     txt2.append("text").html("from the same location").attr("x",ww+wpic);
     txt3.append("text").html('N=2334 from <a href="https://www.gisaid.org" target="_blank">GISAID</a>').attr("x",ww+wpic+52)
     
-    ww += 173//249
+    ww += 173
     svg .append('defs').append('marker').attr('id', 'arrow')
         .attr('viewBox', [0, -5, 10, 10])
         .attr('refX', 7).attr('refY', -0.5).attr('markerWidth', 7).attr('markerHeight', 7)
@@ -527,7 +546,7 @@ function drawLg(){
 }
 
 function tipNet(txt,x){
-    $("#tipNet").css("left", (d3.event.pageX-(x? x : 50))+"px").css("top", (d3.event.pageY-77)+"px").html(txt).show()
+    $("#tipNet").css("left", (d3.event.pageX-(x? x : 50))+"px").css("top", (d3.event.pageY-74)+"px").html(txt).show()
 }
 
 function drawRef(){
@@ -555,15 +574,13 @@ function drawRef(){
     orfChart.append("line").attr("id","refLine").attr("x2", scale(seqL));
 
     var orfs = refData.orf;
-    orfChart.append("g").attr("class","finger")
-            .selectAll("rect").data(orfs).enter()
+    orfChart.append("g").selectAll("rect").data(orfs).enter()
             .append("rect")
             .attr("x", function(d){return scale(d[0])})
             .attr("y", -halfH)
             .attr("width", function(d){return scale(d[1]) - scale(d[0])})
             .attr("height", halfH*2)
             .on('mouseover',function(d){
-                d3.select(this).style("fill", "orange");
                 ulLink()
 
                 var gene = d[2];
@@ -585,7 +602,6 @@ function drawRef(){
                 d3.selectAll(ar).style("fill",'red')
             })
             .on('mouseout', function(){
-                 d3.select(this).style("fill", "#ffe4b2")
                 $("#tipNet").hide()
                 if (!Number($(':radio:checked').val())){
                     d3.selectAll('.iso').transition().duration(timeT*2).style('opacity',1)
@@ -604,10 +620,7 @@ function drawRef(){
             .attr("y", halfH-2)
             .text(function(d){return toShow[d[2]]? d[2] : ''})
     
-    
-//    base -= 9+halfH;
-    chart.append("g")//.attr("transform", "translate("+[0, base]+")")
-            .selectAll(".siteLine").data(listSite).enter()
+    chart.append("g").selectAll(".siteLine").data(listSite).enter()
             .append("line")
             .attr("class","siteLine hidden")
             .attr("id", function(d){return "site_"+d })
@@ -621,14 +634,13 @@ function drawRef(){
 var transK=1, wAdmin=95;
 function drawGeoW(){
     var width = wMap - wAdmin,
-        height = $('#mapW').height() - 45;
+        height = $('#mapW svg').height();
     var projection = d3.geoMercator().translate([width/2, height/2]).scale(70).center([18,22]),
         mapPath = d3.geoPath().projection(projection);
 
-    var active = d3.select(null);
     var zoom = d3.zoom().scaleExtent([1,15]).on("zoom", zoomed);
 
-    var svg = d3.select("#mapW svg").attr("width",width).attr("height",height);
+    var svg = d3.select("#mapW svg").attr("width",width)
 
     var svgMap = svg.append("g");
     svg.call(zoom);
@@ -640,31 +652,23 @@ function drawGeoW(){
         svgMap.selectAll(".country")
             .data(countries).enter()
             .append("path")
-            .attr("class", "country")
+            .attr("class", function(d){return "country" + (map_ctry[d.id*1]? ' finger':'')})
             .attr("id",function(d){return 'ctry_'+map_ctry[d.id*1]})
             .attr("d", mapPath)
-            .on('mouseover', function(d){
+            .on('click', function(d){
+                ulCtry()
                 var id = map_ctry[d.id*1]
-                if (id){
-                    $("#admin").scrollTop(ctry.indexOf(id) * $('#admin td').height() - $('#admin').height()/2);
-                    hlCtry(id)
-                } else {
-                     d3.select(this).classed("country_sel",true)
-                }
+                if (!id) return
+                $("#admin").scrollTop(ctry.indexOf(id) * $('#admin td').height() - $('#admin').height()/2);
+                hlCtry(id)
             })
-            .on('mouseout', function(d){
-                if (map_ctry[d.id*1]){ulCtry()}
-                else {d3.select(this).classed("country_sel",false)}
-            })
-            .on("click", clicked);
  
         svgMap.selectAll("circle")
             .data(geoList).enter()
             .append("circle")
-//            .attr("class","crosshair")
+            .attr("class", "finger")
             .attr("id", function(d){ return 'mapW_'+d })
             .attr("fill", function(d){return d<500? geoColor(geoDataW[d].ctry) : shipColor})
-//            .style("fill-opacity",0.8)
             .attr("r", mapR)
             .attr("cx", function(d){
                 var site = geoDataW[d].locate,
@@ -676,45 +680,27 @@ function drawGeoW(){
                     coords = projection([site[1], site[0]]);
                 return coords[1]
             })
-            .on('mouseover', function(d){
+            .on('click', function(d){
+                ulCtry()
                 hlGeo(d)
                 geo2node([d])
             })
-            .on('mouseout', function(){
-                ulGeo()
-                ulNodes()
-        })
+            .on('mouseover', function(d){tipNet(geoDataW[d].name)})
+            .on('mouseout',function(){$("#tipNet").hide()})
     })
-
-    function clicked(d) {
-//        if (active.node() === this) return reset();
-        active = d3.select(this).classed("active", true);
-
-        var bounds = mapPath.bounds(d),
-            dx = bounds[1][0] - bounds[0][0],
-            dy = bounds[1][1] - bounds[0][1],
-            x = (bounds[0][0] + bounds[1][0]) / 2,
-            y = (bounds[0][1] + bounds[1][1]) / 2,
-            scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx/width, dy/height))),
-            translate = [width/2 - scale*x, height/2 - scale*y];
-
-        svgMap.transition()
-            .duration(750)
-            .call(zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale));
-    }
-
     function reset(){
-        active.classed("active", false);
-        active = d3.select(null);
-        transK=1;
         svgMap.transition().duration(1000).call(zoom.transform, d3.zoomIdentity)
+        transK=1;
+        ulCtry()
+        ulGeo()
+        ulNodes()
     }
 
     function zoomed() {
         var trans = d3.event.transform;
+        svgMap.attr("transform", trans);
         transK=trans.k;
         d3.selectAll('.country, circle').style("stroke-width", 1/transK + "px");
-        svgMap.attr("transform", trans);
         d3.selectAll('#mapW circle').attr("r",mapR/transK)
     }
 }
@@ -729,29 +715,11 @@ function drawAdmin(){
     $('#admin table').append(trs.join(''))
  
     d3.selectAll("#admin td")
-        .on('mouseover', function(){
+        .on('click', function(){
+            ulCtry()
             var id = this.id.split('_')[1];
             hlCtry(id)
         })
-        .on('mouseout', ulCtry)
-}
-
-function hlCtry(id){
-    ulGeo()
-    $('#adm_'+id).css("background", id<700? geoColor(id) : shipColor).css("color", "white")
-    d3.select('#ctry_'+id).classed('country_sel',true)
-
-    var gids = geoList.filter(function(d){return geoDataW[d].ctry==id})
-    hlGeos(gids)
-    geo2node(gids)
-}
-
-function ulCtry(){
-    $('#admin td').css("background", "none").css("color", "inherit")
-    d3.selectAll('#mapW .country').classed("country_sel",false)
-    d3.selectAll('#mapW circle').transition().duration(timeT)
-        .style("fill-opacity",0.8).style("stroke","white");
-    ulNodes()
 }
 
 var tParser = d3.timeParse("%Y-%m-%d"), ddScale;
@@ -771,7 +739,7 @@ function drawDateChart(){
         rg = d3.extent(dateArr, d=>tParser(d));
     ddScale = d3.scaleLinear().domain(rg).range([stdR*2,chartWidth-stdR*2]);
 
-    var svg = d3.select("#dateChart").append("svg").attr("width",width).attr("height",height),
+    var svg = d3.select("#dateChart svg").attr("width",width).attr("height",height),
         chart = svg.append("g")
             .attr("width", chartWidth).attr("height", chartHeight)
             .attr("transform", "translate("+[margin.left, margin.top]+")");
@@ -1312,7 +1280,6 @@ function drawSeq(cid){
         codonBg.append("rect").attr("x",i*6*unitW).attr("y", yEdge).attr("width",unitW*3).attr("height",id.length*hUnit)
     }
 
-//    firstNt = '';
     svg.append("g").attr("id", "seqNt")
         .attr("transform", "translate(0," + yEdge + ")")
         .selectAll("text").data(id).enter().append("text")
@@ -1470,7 +1437,6 @@ function drawComp(){
     }
 }
 
-//tree functions:
 function parseNewick(a){
     if (!/^[\s\n\r]*\(.+\);[\s\n\r]*$/.test(a)){return 0}
     for(var e=[],r={},s=a.split(/\s*(;|\(|\)|,|:)\s*/),t=0;t<s.length;t++){var n=s[t];switch(n){case"(":var c={};r.children=[c],e.push(r),r=c;break;case",":var c={};e[e.length-1].children.push(c),r=c;break;case")":r=e.pop();break;case":":break;default:var h=s[t-1];")"==h||"("==h||","==h?r.name=n:":"==h&&(r.length=parseFloat(n))}}return r
@@ -1566,7 +1532,7 @@ function readHaps(data){
     var ro = {id:"H0", radius:stdR};
     var listEdge = data[1],
         listChg = [];
-//    var rObj={};
+
     for (var i=0; i<listEdge.length; i++){
         var edge = listEdge[i];
         var so = listNode.filter(function(n){ return n.id==edge.source})[0],
@@ -1605,9 +1571,6 @@ function readHaps(data){
 }
 
 var batPath="M598.935,485.829c-2.286,5.292-8.146,7.917-8.146,7.917c0.025-0.684-0.068-1.365-0.279-2.016c1.077-1.284,1.363-3.057,0.745-4.614c-1.251,0.396-2.317,1.229-3.006,2.345c-0.419-0.118-0.853-0.175-1.287-0.169c-0.426,0.016-0.848,0.09-1.253,0.22c-0.711-1.098-1.788-1.908-3.04-2.286c-0.587,1.574-0.262,3.344,0.847,4.606c-0.229,0.639-0.346,1.312-0.347,1.99c0,0-5.928-2.54-8.299-7.799c-3.796,4.166-8.123,7.815-12.87,10.855c0,0,5.69-0.991,7.553,3.073c0,0,6.029-3.167,7.553,2.092c0,0,5.826-5.927,10,7.781c3.963-13.76,9.873-7.942,9.873-7.942c1.432-5.283,7.52-2.21,7.52-2.21c1.795-4.09,7.502-3.192,7.502-3.192C607.195,493.521,602.802,489.939,598.935,485.829zM574.016,490.63c-1.797,2.231-3.075,4.834-3.743,7.621c-0.024,0.147-0.154,0.256-0.305,0.254H569.9c-0.173-0.008-0.307-0.154-0.3-0.327c0.002-0.033,0.009-0.065,0.021-0.097c0.683-2.876,2.009-5.56,3.878-7.85c0.102-0.14,0.298-0.169,0.438-0.067c0.14,0.103,0.17,0.299,0.067,0.438c-0.007,0.01-0.015,0.019-0.022,0.027H574.016zM578.748,494.212c-0.708,1.744-1.022,3.623-0.923,5.504c0.021,0.172-0.1,0.329-0.271,0.355h-0.042c-0.159,0.005-0.296-0.113-0.313-0.271c-0.123-1.983,0.204-3.969,0.957-5.809c0.052-0.16,0.225-0.247,0.385-0.194c0.007,0.003,0.014,0.005,0.021,0.008c0.162,0.06,0.247,0.238,0.188,0.401C578.75,494.208,578.749,494.21,578.748,494.212L578.748,494.212z M586.217,492.561c-0.102,0.22-0.627,0.187-1.177-0.068c-0.551-0.254-0.923-0.635-0.847-0.847c0.076-0.211,0.618-0.186,1.177,0.068S586.31,492.349,586.217,492.561z M588.901,492.459c-0.542,0.263-1.076,0.305-1.178,0.093s0.263-0.601,0.847-0.847c0.585-0.245,1.076-0.305,1.178-0.085C589.85,491.841,589.451,492.196,588.901,492.459z M596.793,499.673c-0.024,0.158-0.154,0.278-0.313,0.288l0,0c-0.172-0.022-0.295-0.175-0.279-0.348c0.068-1.883-0.276-3.759-1.008-5.495c-0.063-0.161,0.016-0.343,0.177-0.406h0.001c0.163-0.063,0.349,0.016,0.415,0.178C596.545,495.719,596.889,497.694,596.793,499.673z M604.058,498.217h-0.06c-0.148,0-0.277-0.102-0.313-0.246c-0.718-2.761-2.039-5.329-3.869-7.519c-0.117-0.127-0.117-0.322,0-0.449c0.136-0.11,0.336-0.092,0.448,0.043c1.926,2.248,3.318,4.902,4.073,7.765c0.029,0.175-0.089,0.341-0.265,0.37c-0.005,0.001-0.01,0.002-0.015,0.002V498.217z"
-
-//function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
-
 
 function seen(s, arr){
     var see={}, yes=0;

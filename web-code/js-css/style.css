@@ -4,7 +4,7 @@ table {
     border-collapse:collapse;
     border:0
 }
-body>table, #genome, #col2, #refOrf, #isolateInf {position:relative}
+body>table, #genome, #col2, #main_tab1 .map {position:relative}
 
 #mainTab { padding:0 }
 #mainTab>ul {padding:0}
@@ -91,10 +91,10 @@ body>table, #genome, #col2, #refOrf, #isolateInf {position:relative}
 .fillOrange{fill:orange}
 
 #netGraph circle, #netGraph path {stroke:white; stroke-width:0.5px}
+#netGraph circle:hover, #netGraph path:hover{stroke:black}
 
 .link {stroke:#999; stroke-width:2px}
-/*.link:hover {stroke:red}
-.noHover:hover{stroke:black}*/
+.link:hover {stroke-width:3px}
 marker path {fill:#999}
 
 .disabled { cursor:not-allowed }
@@ -134,19 +134,18 @@ marker path {fill:#999}
 .mapBg {fill:#f5f5f5}
 
 #mapC { margin:0 25px; text-anchor:middle }
-#mapW {margin:0; height:230px}
-#siteName {height:20px; margin-left:7px}
+#mapW {height:210px}
+#mapW svg {height:185px}
 #mapW td{padding:0}
 #admin {
     width:94px;
-    height:213px;
+    height:193px;
     margin-left:3px;
     overflow-y:scroll;
     overflow-x:hidden;
     font-family:Arial Narrow;
     font-size:11.2px;
     border-top:lightgray thin solid
-/*    overflow:auto;*/
 }
 #admin table {margin:2px 0 0 0}
 #admin td {
@@ -154,8 +153,13 @@ marker path {fill:#999}
     cursor:pointer;
     white-space:nowrap
 }
+#admin td:hover{text-decoration:underline; font-weight:bold}
 
-#dateChart, #refOrf, #isolateInf {margin:8px 0 0 0}
+#mapW, #dateChart, #refOrf {margin:8px 0 0 0}
+#isolateInf {margin:0; font-size:12px}
+#isoSum {width:100%; color:white; height:18px; padding:2px 0 0 0}
+#isoSum td {padding-left:27px; padding-right:2px}
+#isoSum td:nth-of-type(1){padding-left:10px}
 
 .infoTitle {
     font-size:13px;
@@ -167,6 +171,7 @@ marker path {fill:#999}
 }
 
 .country {fill:lightgray; stroke:white; stroke-width:0.5px}
+.country:hover {fill:#bbb}
 .country_sel {fill:lightblue}
 
 .whiteFill { fill:white }
@@ -190,7 +195,6 @@ marker path {fill:#999}
 
 .hidden { display:none }
 .finger { cursor:pointer}
-.crosshair {cursor:crosshair}
 
 .shade { fill:none; stroke:#4CC6FF}
 
@@ -200,9 +204,8 @@ marker path {fill:#999}
 #dateChart .xaxis path { stroke:none}
 #dateChart .xaxis text {fill:black}
 
-#mapW circle, #mapC circle {fill-opacity:0.8; stroke:white}
-/*#dateChart line {stroke:gray; stroke-width:2px}*/
-/*#dateRg {fill:red}*/
+#mapW circle, #mapC circle {fill-opacity:0.7; stroke:white}
+#mapW circle:hover {stroke:black}
 
 #col2 {padding-top:0; margin-top:0}
 .svgContainer {
@@ -271,12 +274,9 @@ marker path {fill:#999}
 #nodeInf {height:112px; padding-top:5px}
 #nodeInf th {width:60px; color:#999; vertical-align:top; text-align:left}
 #nodeInf td {font-weight:100}
-#nodeInf hr {
-    border:white 2px solid; border-top:1px solid #c1c1c1
-/*    border-top:1px solid lightgray; border-bottom:1px solid white*/}
+#nodeInf hr {border:white 2px solid; border-top:1px solid #c1c1c1}
 
 #virusName {width:250px}
-#nPatient {position:absolute; top:7px; right:18px}
 
 #chgInf {padding:0; text-align:center; height:50px}
 #chgInf td, #chgInf th {
@@ -289,12 +289,13 @@ marker path {fill:#999}
 
 #refLine {stroke:#b3b3b3; stroke-width:6px}
 #refOrf rect {fill:#ffe4b2; stroke:gray}
+#refOrf rect:hover{fill:orange}
 .refSym {font-size:10px; text-anchor:middle; font-style:italic }
 
-.colorC {position:absolute; left:127px; color:#808080; font-weight:100; font-size:13px; z-index:1500}
-.colorC:nth-of-type(2) {top:239px}
-
+.colorC {position:absolute; top:-2px; color:#808080; font-weight:100; font-size:13px}
+.colorC:nth-of-type(1), .colorC:nth-of-type(3) {left:127px}
 #selCtry {left:428px}
+
 #selCtry span {font-size:9px}
 .nodeId {font-size:8.5px; text-anchor:middle; font-family:Arial Narrow}
 /*.bat {text-anchor:middle; font-size:30px}*/
@@ -306,12 +307,11 @@ marker path {fill:#999}
     position:relative;
     line-height:14px;
     color:#aaa;
-    font-size:12px;
 }
-.fa-search {position:absolute; top:5px; left:5px; font-size:12px}
+.fa-search {position:absolute; top:5px; left:5px}
 .search input {text-indent:18px}
 
-.algolia-autocomplete {width:354px; /*font-size:11px*/}
+.algolia-autocomplete {width:354px}
 .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {width:100%}
 .algolia-autocomplete .aa-hint {color:#999}
 .algolia-autocomplete .aa-dropdown-menu {

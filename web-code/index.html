@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="keywords" content="coronavirus, COVID-19, haplotype, phylogeny, network, genome, SARS-CoV-2, mutation">
+
 <title>CoV Genome Tracker</title>
 <link rel="icon" type="image/png" href="js-css/icon.png" />
 
@@ -35,32 +37,6 @@
             <div id="tipNet" class="tip tooltip hidden"></div>
         </td>
         <td valign="top" style="position:relative; height:300px">
-            <div class="colorC"><input type="radio" name="colorCode" value="0" checked>color</div>
-            <div class="colorC"><input type="radio" name="colorCode" value="1">color</div>
-            <div class="colorC" id="selCtry">Select &nbsp;<span>&#9660;</span></div>
-
-            <div id="mapW" class="map">
-                <table>
-                    <tr><td class="infoTitle" colspan="2">&nbsp; Collection Site</td></tr>
-                    <tr>
-                        <td><svg></svg></td>
-                        <td rowspan="2"><div id="admin"><table></table></div></td>
-                    </tr>
-                    <tr><td>&nbsp;<span id="siteName"></span></td></tr>
-                </table>
-            </div>
-
-            <div id="dateChart" class="map"></div>
-
-            <div id="refOrf" class="map">
-                <div id="ref_ncbi"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
-                <svg></svg>
-                <div id="chgInf" class="node_edge">
-                    <table id="chgTbl" class="hidden">
-                        <tr><th>Site</th><th>Locus</th><th>NT pos</th><th>AA pos</th><th>Source</th><th>Target</th></tr>
-                    </table>
-                </div>
-            </div>
 
             <div id="isolateInf" class="map">
                 <div id="isoSearch">
@@ -71,9 +47,42 @@
                             <span class="fa-search"> &#128269;</span>
                         </div>
                     </span>
-                    <span id="nPatient"></span>
                 </div>
                 <div id="nodeInf" class="node_edge"></div>
+                <div id="isoSum">
+                    <table><tr>
+                        <td>Haplotype:</td><th id="hapId"></th>
+                        <td>Number of patients:</td><th id="nPatient"></th>
+                        <td>Site: </td><th id="siteName"></th>
+                    </tr></table>
+                </div>
+            </div>
+
+            <div id="mapW" class="map">
+                <table>
+                    <tr><td class="infoTitle" colspan="2">&nbsp; Collection Site</td></tr>
+                    <tr>
+                        <td><svg></svg></td>
+                        <td><div id="admin"><table></table></div></td>
+                    </tr>
+                </table>
+                <div class="colorC"><input type="radio" name="colorCode" value="0" checked>color</div>
+                <div class="colorC" id="selCtry">Select &nbsp;<span>&#9660;</span></div>
+            </div>
+
+            <div id="dateChart" class="map">
+                <svg></svg>
+                <div class="colorC"><input type="radio" name="colorCode" value="1">color</div>
+            </div>
+
+            <div id="refOrf" class="map">
+                <div id="ref_ncbi"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
+                <svg></svg>
+                <div id="chgInf" class="node_edge">
+                    <table id="chgTbl" class="hidden">
+                        <tr><th>Site</th><th>Locus</th><th>NT pos</th><th>AA pos</th><th>Source</th><th>Target</th></tr>
+                    </table>
+                </div>
             </div>
         </td>
     </tr>
@@ -159,7 +168,7 @@
                 <li>Our work was made possible by supports from <a href="https://www.niaid.nih.gov" target="_blank">NIH/NIAID</a> & <a href="https://hunter.cuny.edu" target="_blank">Hunter College of City University of New York</a></li>
             </ul>
         </div>
-        <div id="version">Release 5.6 (Apr 23, 2020)</div>
+        <div id="version">Release 5.7 (Apr 24, 2020)</div>
     </td>
 </tr>
 </table>
