@@ -8,11 +8,13 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 
 #mainTab { padding:0 }
 #mainTab>ul {padding:0}
-#mainTab>ul>li { float:right!important; width:189px; font-size:16px; font-weight:bold}
+#mainTab>ul>li { float:right!important; width:170px; font-size:16px; font-weight:bold}
 #main_tab1, #main_tab2 {padding:4px 5px 0 5px}
 #main_tab1>table {margin-top:4px}
 
-#tabs {padding:0; font-size:13px; width:843px}
+#main_tab2 {width:1089px}
+
+#tabs {padding:0; font-size:13px}
 #tabs>div {padding:6px 4px}
 #tabs td{padding:0}
 #tabs a { text-shadow:2px 1px white}
@@ -20,9 +22,9 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 #top_area {
     position:absolute;
     top:3px; left:3px;
-    padding-left:55px; padding-top:7px;
+    padding-left:50px; padding-top:7px;
     z-index:2000;
-    width:739px; height:33px;
+    width:696px; height:33px;
     font-size:21px;
     color:white;
     font-weight:bold;
@@ -37,30 +39,30 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 
 #bottom_area {
     background-color:gray;
+    position:relative;
     line-height:110%;
     color:white;
     font-size:12px;
-    position:relative
 }
-#bottom_area span {margin-left:110px}
 #bottom_area a {color:white}
-#bottom_area div {position:absolute}
-#version, #thank { top:8px; color:white }
-#version {right:15px}
-#thank {left:777px; text-decoration:underline;cursor:pointer}
+#bottom_area table{width:92%; margin-left:45px}
+#bottom_area td:nth-of-type(1){width:620px}
+#bottom_area td{border-right:lightgray thin solid; text-align:center; padding:4px 0}
 
-#ack {
+.bottomInf {
     position:absolute;
-    top:-120px; left:580px;
 	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
     border-radius:4px;
     background-color:#FFFFE0;
     width:450px;
     color:black
 }
-#ack ul {padding:0 2px 0 27px; margin-bottom:6px}
-#ack li {padding:3px 0}
-#ack a {color:#428bca}
+#ack ul, #dis ul {padding:0 2px 0 27px; margin-bottom:6px}
+#ack li, #dis li {padding:3px 0}
+#ack a, #dis a {color:#428bca}
+
+#ack { top:-130px; left:500px }
+#dis { top:-135px; left:607px }
 
 .close {
     float:right;
@@ -89,12 +91,13 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 .lgExp {font-size:10.5px; font-family:Arial Narrow}
 .grayFill {fill:gray}
 .fillOrange{fill:orange}
+.fillViolet{fill:darkViolet}
 
 #netGraph circle, #netGraph path {stroke:white; stroke-width:0.5px}
 #netGraph circle:hover, #netGraph path:hover{stroke:black}
 
 .link {stroke:#999; stroke-width:2px}
-.link:hover {stroke-width:3px}
+.link:not(#graphLg .link):hover {stroke-width:3px}
 marker path {fill:#999}
 
 .disabled { cursor:not-allowed }
@@ -133,33 +136,17 @@ marker path {fill:#999}
 }
 .mapBg {fill:#f5f5f5}
 
-#mapC { margin:0 25px; text-anchor:middle }
-#mapW {height:210px}
-#mapW svg {height:185px}
-#mapW td{padding:0}
-#admin {
-    width:94px;
-    height:193px;
-    margin-left:3px;
-    overflow-y:scroll;
-    overflow-x:hidden;
-    font-family:Arial Narrow;
-    font-size:11.2px;
-    border-top:lightgray thin solid
-}
-#admin table {margin:2px 0 0 0}
-#admin td {
-    height:15px;
-    cursor:pointer;
-    white-space:nowrap
-}
-#admin td:hover{text-decoration:underline; font-weight:bold}
+#main_tab1 .map {width:420px}
+#nodeInf, #chgInf {width:418px}
 
-#mapW, #dateChart, #refOrf {margin:8px 0 0 0}
+#mapC { margin:0 25px; text-anchor:middle }
+#mapW svg {height:185px}
+
+#mapW, #dateChart, #refOrf {margin:7px 0 0 0}
 #isolateInf {margin:0; font-size:12px}
-#isoSum {width:100%; color:white; height:18px; padding:2px 0 0 0}
-#isoSum td {padding-left:27px; padding-right:2px}
-#isoSum td:nth-of-type(1){padding-left:10px}
+#isoSum {width:99%; margin-left:3px; color:white; height:18px; padding:2px 0 0 0}
+#isoSum td {padding-left:15px; padding-right:1px}
+#isoSum td:nth-of-type(1){padding-left:5px}
 
 .infoTitle {
     font-size:13px;
@@ -241,7 +228,7 @@ marker path {fill:#999}
 .path0 { stroke:#02bd02 }
 .path1 { stroke:deepPink }
 .path2 { stroke:DodgerBlue }
-#compY, #mapW, #ack {font-size:13px}
+#compY, #ack {font-size:13px}
 #compY{text-align:right}
 
 .orangeStroke{stroke:orange!important}
@@ -257,10 +244,6 @@ marker path {fill:#999}
 #tipNet {text-align:center; z-index:2001}
 #tipNet span {font-size:11px; font-weight:100}
 
-#infoContainer {
-    position:relative;
-    height:183px
-}
 .node_edge {
     width:492px;
     overflow-y:auto;
@@ -272,36 +255,36 @@ marker path {fill:#999}
 .node_edge td {line-height:14px}
 
 #nodeInf {height:112px; padding-top:5px}
-#nodeInf th {width:60px; color:#999; vertical-align:top; text-align:left}
+#nodeInf th {width:57px; color:#999; vertical-align:top; text-align:left}
+#nodeInf th:nth-of-type(2){width:40px}
 #nodeInf td {font-weight:100}
+#nodeInf td:nth-of-type(1){width:225px}
 #nodeInf hr {border:white 2px solid; border-top:1px solid #c1c1c1}
 
 #virusName {width:250px}
 
 #chgInf {padding:0; text-align:center; height:50px}
 #chgInf td, #chgInf th {
-    width:70px;
+    width:58px;
     overflow:hidden; display:inline-block
 }
 #chgInf td { font-family:Courier; padding:0}
 #chgInf th {color: gray}
-#chgTbl {margin-left:auto; margin-right:auto; width:90%}
 
 #refLine {stroke:#b3b3b3; stroke-width:6px}
 #refOrf rect {fill:#ffe4b2; stroke:gray}
-#refOrf rect:hover{fill:orange}
+#refOrf rect:hover{stroke:black; stroke-width:2.5px}
 .refSym {font-size:10px; text-anchor:middle; font-style:italic }
 
-.colorC {position:absolute; top:-2px; color:#808080; font-weight:100; font-size:13px}
-.colorC:nth-of-type(1), .colorC:nth-of-type(3) {left:127px}
-#selCtry {left:428px}
+.colorC {position:absolute; top:1px; left:127px; color:#808080; font-weight:100; font-size:13px}
 
-#selCtry span {font-size:9px}
 .nodeId {font-size:8.5px; text-anchor:middle; font-family:Arial Narrow}
 /*.bat {text-anchor:middle; font-size:30px}*/
 
-#isoSearch {height:24px; border-bottom:1px solid #bbb; padding:4px 0 0 0; font-size:11px}
-#searchContainer {position:absolute; top:1px; left:65px}
+.isoFirstRow {height:20px; border-bottom:1px solid #bbb; padding:4px 0 0 0; font-size:11px}
+
+#searchIso {position:absolute; top:0; left:64px}
+#searchSite {position:absolute; top:0; left:190px}
 
 .search {
     position:relative;
@@ -311,7 +294,8 @@ marker path {fill:#999}
 .fa-search {position:absolute; top:5px; left:5px}
 .search input {text-indent:18px}
 
-.algolia-autocomplete {width:354px}
+#searchIso .algolia-autocomplete {width:354px}
+#searchGeo {width:228px}
 .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {width:100%}
 .algolia-autocomplete .aa-hint {color:#999}
 .algolia-autocomplete .aa-dropdown-menu {

@@ -17,8 +17,8 @@
 <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
 
-<script src="js-css/index.js" type="text/javascript"></script>
 <link href="js-css/style.css" rel="stylesheet" type="text/css" />
+<script src="js-css/index.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -32,65 +32,61 @@
 <div id="main_tab1">
 <table>
     <tr>
-        <td rowspan="2" style="position:relative">
+        <td rowspan="5" style="position:relative">
             <div><svg id="netGraph"></svg></div>
             <div id="tipNet" class="tip tooltip hidden"></div>
         </td>
-        <td valign="top" style="position:relative; height:300px">
 
-            <div id="isolateInf" class="map">
-                <div id="isoSearch">
+        <td><div id="isolateInf" class="map">
+                <div class="isoFirstRow">
                     <span class="infoTitle">&nbsp; Isolate</span>
-                    <span id="searchContainer">
+                    <span id="searchIso">
                         <div class="search">
                             <input type="search" id="searchAcc" placeholder="virus name or EPI">
                             <span class="fa-search"> &#128269;</span>
                         </div>
                     </span>
                 </div>
-                <div id="nodeInf" class="node_edge"></div>
                 <div id="isoSum">
                     <table><tr>
                         <td>Haplotype:</td><th id="hapId"></th>
-                        <td>Number of patients:</td><th id="nPatient"></th>
+                        <td>Patient#:</td><th id="nPatient"></th>
                         <td>Site: </td><th id="siteName"></th>
                     </tr></table>
                 </div>
-            </div>
-
-            <div id="mapW" class="map">
-                <table>
-                    <tr><td class="infoTitle" colspan="2">&nbsp; Collection Site</td></tr>
-                    <tr>
-                        <td><svg></svg></td>
-                        <td><div id="admin"><table></table></div></td>
-                    </tr>
-                </table>
-                <div class="colorC"><input type="radio" name="colorCode" value="0" checked>color</div>
-                <div class="colorC" id="selCtry">Select &nbsp;<span>&#9660;</span></div>
-            </div>
-
-            <div id="dateChart" class="map">
-                <svg></svg>
-                <div class="colorC"><input type="radio" name="colorCode" value="1">color</div>
-            </div>
-
-            <div id="refOrf" class="map">
-                <div id="ref_ncbi"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
-                <svg></svg>
-                <div id="chgInf" class="node_edge">
-                    <table id="chgTbl" class="hidden">
-                        <tr><th>Site</th><th>Locus</th><th>NT pos</th><th>AA pos</th><th>Source</th><th>Target</th></tr>
-                    </table>
-                </div>
-            </div>
-        </td>
+                <div id="nodeInf" class="node_edge"></div>
+            </div></td>
     </tr>
-    <tr>
-        <td>
-            <div id="graphLg"></div>
-        </td>
-    </tr>
+
+    <tr><td><div id="mapW" class="map">
+            <div class="isoFirstRow">
+                <span class="infoTitle">&nbsp; Collection Site</span>
+                <span class="colorC"><input type="radio" name="colorCode" value="0" checked>color</span>
+                <span id="searchSite">
+                    <div class="search">
+                        <input type="search" id="searchGeo" placeholder="country, state (province) or city">
+                        <span class="fa-search"> &#128269;</span>
+                    </div>
+                </span>
+            </div>
+            <svg></svg>
+    </div></td></tr>
+
+    <tr><td><div id="dateChart" class="map">
+        <svg></svg>
+        <div class="colorC"><input type="radio" name="colorCode" value="1">color</div>
+    </div></td></tr>
+
+    <tr><td><div id="refOrf" class="map">
+        <div id="ref_ncbi"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">(Wuhan-Hu-1)</a></div>
+        <svg></svg>
+        <div id="chgInf" class="node_edge">
+            <table id="chgTbl" class="hidden">
+                <tr><th>Site</th><th>Locus</th><th>NT pos</th><th>AA pos</th><th>Source</th><th>Target</th></tr>
+            </table>
+        </div>
+    </div></td></tr>
+    <tr><td><div id="graphLg"></div></td></tr>
 </table>
 </div>
 
@@ -158,9 +154,14 @@
 <div id="top_area">COVID-19 Genome Tracker<span>Follow the spread & evolution of coronavirus by tracking genome changes</span></div>
 <tr height="30">
     <td id="bottom_area">
-        <span>This website is maintained by <a href="http://diverge.hunter.cuny.edu/labwiki/Hackathon_2020" target="_blank">Dr. Weigang Qiu's group</a> at <a href="http://hunter.cuny.edu" target="_blank">Hunter College of the City University of New York</a>.</span>
-        <div id="thank" onClick="showAck()">Acknowledgements</div>
-        <div id="ack" class="hidden">
+        <table><tr>
+            <td>Contact: <a href="http://diverge.hunter.cuny.edu/labwiki/Hackathon_2020" target="_blank">Dr. Weigang Qiu</a> at <a href="http://hunter.cuny.edu" target="_blank">Hunter College of the City University of New York</a>.</td>
+            <td><a href="#" onClick="showAck()">Acknowledgements</a></td>
+            <td><a href="#" onClick="showDis()">Disclaimer & Cite</a></td>
+            <td>Release 5.8 (Apr 27, 2020)</td>     
+        </tr></table>
+
+        <div id="ack" class="bottomInf hidden">
             <span id='closeAck' class="close">x</span>
              <ul>
                  <li>We gratefully acknowledge the authors, originating and submitting laboratories of the sequences from GISAID’s EpiFlu™ Database on which this research is based. All submitters of data may be contacted directly via <a href="https://www.gisaid.org" target="_blank">www.gisaid.org</a></li>
@@ -168,7 +169,14 @@
                 <li>Our work was made possible by supports from <a href="https://www.niaid.nih.gov" target="_blank">NIH/NIAID</a> & <a href="https://hunter.cuny.edu" target="_blank">Hunter College of City University of New York</a></li>
             </ul>
         </div>
-        <div id="version">Release 5.7 (Apr 24, 2020)</div>
+
+        <div id="dis" class="bottomInf hidden">
+            <span id='closeDis' class="close">x</span>
+             <ul>
+                 <li>The CoV Genome Tracker is licensed under the GNU General Public License v3.0, which gives permissions for commercial use, modification, distribution, patent use, and private use, while assuming no liability or warranty. Full license is available at <a href="https://github.com/weigangq/cov-browser/blob/master/LICENSE" target="_blank">GNU GPLv3.0 License</a></li>
+                <li>Please cite the following manuscript if you use this tool: Akther S., E. Bezrucenkovas, B. Sulkow, C. Panlasigui, L. Li, W.Qiu & L. Di (2020). CoV Genome Tracker: tracing genomic footprints of Covid-19 pandemic. <a href="https://www.biorxiv.org/content/10.1101/2020.04.10.036343v1">doi: https://doi.org/10.1101/2020.04.10.036343</a></li>
+            </ul>
+        </div>
     </td>
 </tr>
 </table>
