@@ -479,9 +479,17 @@ function hlCtry(id){
     ulCtry()
     ulGeo()
     if (mutClicked) ulMut()
-    d3.select('#ctry_'+id).classed('country_sel',true)
-
+    
     var gids = geoList.filter(function(d){return geoDataW[d].ctry==id})
+
+    if (id<700){
+        d3.select('#ctry_'+id).classed('country_sel',true)
+    } else {
+        d3.selectAll('#mapW circle').transition().duration(timeT).style("fill-opacity",0.1)
+        var arr = gids.map(function(d){return '#mapW_'+d})
+        d3.selectAll(arr.join(',')).transition().duration(timeT).style("fill-opacity",0.8)
+    }
+
     geo2node(gids)
 }
 function ulCtry(){ d3.selectAll('#mapW .country').classed("country_sel",false) }
@@ -621,21 +629,22 @@ function drawRef(){
     var orfs = refData.orf;
     orfChart.append("g").selectAll("rect").data(orfs).enter()
             .append("rect")
-            .attr("class", function(d){return listChange[d[2]]? "finger" : ''})
+            .attr("class", function(d){return listChange[d[2].split('(')[0]]? "finger" : ''})
             .attr("x", function(d){return scale(d[0])})
             .attr("y", -halfH)
             .attr("width", function(d){return scale(d[1]) - scale(d[0])})
             .attr("height", halfH*2)
             .on('mouseover',function(d){
                 var gene = d[2],
-                    lks = listChange[gene],
+                    lks = listChange[gene.split('(')[0]],
                     tipTxt = '<em>' + gene + '</em>'
                 if (lks) tipTxt += '<br><span>Click to show<br>non-synonymous mutations</span>'
                 $("#tipNet").css("left", (d3.event.pageX-(lks?120:26))+"px").css("top", (d3.event.pageY-(lks?103:73))+"px").html(tipTxt).show()
             })
             .on('mouseout', function(){$("#tipNet").hide()})
             .on('click',function(d){
-                var lks = listChange[d[2]]
+                var gene = d[2].split('(')[0]
+                var lks = listChange[gene]
                 if (!lks){return}
 
                 d3.selectAll('#refOrf rect').style('fill','#ffe4b2')
@@ -647,7 +656,7 @@ function drawRef(){
                 hlMut(lks)
             })
 
-    var toShow = {"nsp3":1, "nsp12":1, "S":1}
+    var toShow = {"nsp3":1, "S":1}
     orfChart.append("g").attr("class","refSym")
             .selectAll(".refSym").data(orfs).enter()
             .append("text")

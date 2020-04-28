@@ -53,7 +53,7 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
     position:absolute;
 	box-shadow:1px 1px 3px rgba(0, 0, 0, 0.4);
     border-radius:4px;
-    background-color:#FFFFE0;
+    background-color:#ecf4f9;
     width:450px;
     color:black
 }
@@ -61,7 +61,7 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 #ack li, #dis li {padding:3px 0}
 #ack a, #dis a {color:#428bca}
 
-#ack { top:-130px; left:500px }
+#ack { top:-175px; left:500px }
 #dis { top:-135px; left:607px }
 
 .close {
@@ -145,7 +145,7 @@ marker path {fill:#999}
 #mapW, #dateChart, #refOrf {margin:7px 0 0 0}
 #isolateInf {margin:0; font-size:12px}
 #isoSum {width:99%; margin-left:3px; color:white; height:18px; padding:2px 0 0 0}
-#isoSum td {padding-left:15px; padding-right:1px}
+#isoSum td {padding-left:20px; padding-right:1px}
 #isoSum td:nth-of-type(1){padding-left:5px}
 
 .infoTitle {
