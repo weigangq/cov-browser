@@ -35,7 +35,6 @@ azureuser@myVM:~/cov-browser/network-current$ bioaln -n no-imputed.aln
 azureuser@myVM:~/cov-browser/network-current$ bioaln -n no-imputed-sample.aln
 2345
 cat no-imputed.aln | tr 'N' '-' > tmp
-cp tmp no-impu
 cp tmp no-imputed.aln
 
 # get whole-genome alignment (for Saymon, LD-by-window analysis)
@@ -132,3 +131,13 @@ weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ cu
       1 7
       1 14
 biotree -i'edge' -o'newick' edges-pars.tsv > edges-pars.dnd
+
+#######################################
+# 5/3/2020 MAF cutoff: major CoV lineages
+##############################
+azureuser@myVM:~/cov-browser/network-current$ vcftools --gzvcf snps-filtered-2345.vcf.gz --maf 0.01 --recode --recode-INFO-all --out maf
+azureuser@myVM:~/cov-browser/network-current$ cat samples-2345.ids | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' maf.recode.vcf; echo; done > samples-maf.fas
+azureuser@myVM:~/cov-browser/network-current$ bioaln -i'fasta' --gap-char 'n' samples-maf.fas > samples-maf.aln
+azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 30 --format 'clustalw' --no-imputation samples-maf.aln 2> maf-no-impute.log
+cat no-imputed.aln | tr 'N' '-' > tmp
+cp tmp no-imputed.aln
