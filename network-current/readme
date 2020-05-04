@@ -141,3 +141,38 @@ azureuser@myVM:~/cov-browser/network-current$ bioaln -i'fasta' --gap-char 'n' sa
 azureuser@myVM:~/cov-browser/network-current$ perl ../scripts/impute-hap.pl --start 1 --end 30 --format 'clustalw' --no-imputation samples-maf.aln 2> maf-no-impute.log
 cat no-imputed.aln | tr 'N' '-' > tmp
 cp tmp no-imputed.aln
+
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ bioaln -n maf-no-imputed-sample.aln
+2321
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ bioaln -l maf-no-imputed-sample.aln
+30
+echo "2321 30" > tmp.phy
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ bioaln -o'fasta' maf-no-imputed-sample.aln | bioseq -L > tmp.lfa
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ cat tmp.lfa | sed 's/EPI_IS//' | tr '\t' ';' >> tmp.phy
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ sed 's/;/  /' tmp.phy > tmp2.phy
+
+C:\Users\lai\Dropbox\QiuDi\TCS-project>java -jar -Xmx1g TCS.jar # increase memory
+
+# DNApars
+bioaln -o 'phylip' no-imputed.aln > infile
+phylip dnapars ("S", "O": 2, 4) # ST2
+outfile: Steps = 67
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ head -217 outfile | grep "0|"  | tr -s ' ' | cut -f3- -d ' ' | tr ' ' '\n' | grep "^[0-9]" | sort -n | uniq -c
+     12 1
+      7 2
+     10 3
+      1 11
+
+head -14 outtree | sed 's/\[0.0909\]//' | biotree --walk-edge ST2 > walk.edge
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-current$ grep "^NC" maf.recode.vcf | cut -f2 > snps.pos3
+perl ../scripts/hapnet-pars.pl --genome ../ref-genome/ref.gb --vcf snps.pos3 --hap maf-no-imputed.aln --impute-log maf-no-impute.log --edge-file walk.edge --root H2
+cut -f3 edges-pars.tsv | sort -n | uniq -c | sort -n | grep -v NA | tr -s ' ' | cut -f2 -d' ' | sort -n | uniq -c
+     12 1
+      9 2
+      6 3
+      1 9
+biotree -i'edge' -o'newick' edges-pars.tsv > edges-pars.dnd
+
+SNP view:
+load dnd: edges-pars.dnd
+bioaln -o'fasta' maf-no-imputed.aln | sed 's/ST/H/' > maf.fas

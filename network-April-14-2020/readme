@@ -1,0 +1,52 @@
+#################
+# May 3, 2020: maf cutoff, with outgroup
+###################
+# Directory:
+weigang@DESKTOP-5K5HPLF:/mnt/c/Users/lai/Dropbox/cov-browser/network-April-14-2020/no-impute$ 
+
+vcftools --vcf snps-ref.vcf --maf 0.01 --recode --recode-INFO-all --out maf
+bcftools query -l maf.recode.vcf > samples
+cat samples | while read line; do echo ">$line"; bcftools query -s "$line" -f '[%TGT]' maf.recode.vcf; echo; done > maf-samples.fas
+sed -E "s/>.+(EPI_ISL_[0-9]+).sorted.bam/>\1/" maf-samples.fas > maf-samples2.fas 
+bioseq -d'file:epi-to-remove' maf-samples2.fas | bioaln -i'fasta' --gap-char 'n' > maf-samples-for-no-impute.aln
+perl ../../scripts/impute-hap.pl --dump-missing --format 'clustalw' maf-samples-for-no-impute.aln > missing
+sort -n missing | uniq -c | head
+    167 1
+    156 2 
+     22 3 <= start (241)
+      5 4
+      4 5
+      1 6
+      2 8
+      2 12
+      1 13
+     12 14
+sort -n missing | uniq -c | tail
+      1 23
+      2 25
+      1 26
+      1 27
+      8 28
+      1 29
+      1 33
+     17 34 <= end (29553)
+    793 35
+    807 36
+perl ../../scripts/impute-hap.pl --start 3 --end 34 --format 'clustalw' --no-imputation maf-samples-for-no-impute.aln  2> maf.log
+bioaln -n no-imputed-sample.aln
+2363
+bioaln -l no-imputed-sample.aln
+32
+echo "2363 32" > tmp.phy
+bioaln -o'fasta' no-imputed-sample.aln | bioseq -L > tmp.lfa
+cat tmp.lfa | sed 's/EPI_IS//' | tr '\t' ';' >> tmp.phy
+sed 's/;/  /' tmp.phy > tmp2.phy
+
+bioaln -n no-imputed.aln
+63
+
+grep 402131 no-impute.log
+ST2     EPI_ISL_402131
+
+C:\Users\lai\Dropbox\QiuDi\TCS-project>java -jar -Xmx1g TCS.jar
+(missing; 90% parsimony probability)

@@ -1,0 +1,6218 @@
+graph [
+   directed 0
+   node [
+      data [
+         Weight "outgroup weight=   0.04"
+         Frequency "frequency=226
+ L_412912  
+ L_412972  
+ L_413020  
+ L_413021  
+ L_413022  
+ L_413023  
+ L_413024  
+ L_413221  
+ L_413550  
+ L_413556  
+ L_413565  
+ L_413569  
+ L_413570  
+ L_413571  
+ L_413574  
+ L_413579  
+ L_413587  
+ L_413997  
+ L_414012  
+ L_414021  
+ L_414022  
+ L_414023  
+ L_414424  
+ L_414425  
+ L_414434  
+ L_414436  
+ L_414438  
+ L_414440  
+ L_414442  
+ L_414444  
+ L_414448  
+ L_414449  
+ L_414454  
+ L_414455  
+ L_414460  
+ L_414463  
+ L_414464  
+ L_414466  
+ L_414469  
+ L_414470  
+ L_414471  
+ L_414486  
+ L_414488  
+ L_414507  
+ L_414535  
+ L_414548  
+ L_414549  
+ L_414556  
+ L_414560  
+ L_414566  
+ L_414580  
+ L_414584  
+ L_414644  
+ L_415041  
+ L_415105  
+ L_415129  
+ L_415138  
+ L_415145  
+ L_415157  
+ L_415158  
+ L_415454  
+ L_415455  
+ L_415456  
+ L_415457  
+ L_415458  
+ L_415459  
+ L_415476  
+ L_415532  
+ L_415632  
+ L_415633  
+ L_415634  
+ L_415635  
+ L_415636  
+ L_415656  
+ L_415698  
+ L_415699  
+ L_415700  
+ L_415701  
+ L_415703  
+ L_415787  
+ L_415916  
+ L_415977  
+ L_415991  
+ L_416029  
+ L_416035  
+ L_416036  
+ L_416140  
+ L_416142  
+ L_416428  
+ L_416430  
+ L_416431  
+ L_416471  
+ L_416472  
+ L_416486  
+ L_416519  
+ L_416520  
+ L_416676  
+ L_416697  
+ L_416732  
+ L_416734  
+ L_416736  
+ L_416737  
+ L_416743  
+ L_416744  
+ L_416997  
+ L_417004  
+ L_417012  
+ L_417015  
+ L_417021  
+ L_417022  
+ L_417023  
+ L_417191  
+ L_417196  
+ L_417225  
+ L_417229  
+ L_417230  
+ L_417241  
+ L_417242  
+ L_417243  
+ L_417244  
+ L_417249  
+ L_417250  
+ L_417258  
+ L_417260  
+ L_417265  
+ L_417271  
+ L_417273  
+ L_417274  
+ L_417278  
+ L_417294  
+ L_417297  
+ L_417298  
+ L_417299  
+ L_417307  
+ L_417308  
+ L_417309  
+ L_417311  
+ L_417362  
+ L_417390  
+ L_417404  
+ L_417407  
+ L_417422  
+ L_417425  
+ L_417428  
+ L_417458  
+ L_417464  
+ L_417509  
+ L_417512  
+ L_417525  
+ L_417538  
+ L_417539  
+ L_417546  
+ L_417547  
+ L_417551  
+ L_417561  
+ L_417564  
+ L_417567  
+ L_417581  
+ L_417585  
+ L_417595  
+ L_417608  
+ L_417619  
+ L_417642  
+ L_417643  
+ L_417662  
+ L_417663  
+ L_417664  
+ L_417674  
+ L_417679  
+ L_417697  
+ L_417718  
+ L_417729  
+ L_417733  
+ L_417738  
+ L_417747  
+ L_417751  
+ L_417768  
+ L_417769  
+ L_417776  
+ L_417781  
+ L_417782  
+ L_417783  
+ L_417794  
+ L_417796  
+ L_417807  
+ L_417811  
+ L_417813  
+ L_417816  
+ L_417826  
+ L_417843  
+ L_417845  
+ L_417870  
+ L_417922  
+ L_417933  
+ L_417992  
+ L_417993  
+ L_417994  
+ L_417995  
+ L_418001  
+ L_418002  
+ L_418004  
+ L_418007  
+ L_418008  
+ L_418011  
+ L_418013  
+ L_418014  
+ L_418015  
+ L_418016  
+ L_418018  
+ L_418019  
+ L_418023  
+ L_418043  
+ L_418056  
+ L_418086  
+ L_418087  
+ L_418088  
+ L_418089  
+ L_418090  
+ L_418091  
+ L_418093  
+ L_418094  
+ L_418096  
+ L_418114  
+ L_418118  
+ L_418167  
+ L_418235  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGGGACTTAACCG
+"
+      ]
+      id 15
+      label "L_412912  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -320.625
+            y -6105.0
+            z 0.0
+         ]
+         width 1215.0
+         height 1145.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 83
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.04"
+         Frequency "frequency=94
+ L_413584  
+ L_413604  
+ L_413647  
+ L_414014  
+ L_414017  
+ L_414423  
+ L_414429  
+ L_414433  
+ L_414435  
+ L_414439  
+ L_414446  
+ L_414545  
+ L_414552  
+ L_414554  
+ L_414557  
+ L_414561  
+ L_414562  
+ L_414564  
+ L_414641  
+ L_414643  
+ L_415463  
+ L_415467  
+ L_415468  
+ L_415471  
+ L_415475  
+ L_415482  
+ L_415483  
+ L_415496  
+ L_415497  
+ L_415498  
+ L_415502  
+ L_415511  
+ L_415514  
+ L_415523  
+ L_415529  
+ L_415530  
+ L_415533  
+ L_416028  
+ L_416467  
+ L_416468  
+ L_416475  
+ L_416476  
+ L_416730  
+ L_416746  
+ L_417014  
+ L_417232  
+ L_417234  
+ L_417235  
+ L_417236  
+ L_417252  
+ L_417256  
+ L_417272  
+ L_417279  
+ L_417287  
+ L_417293  
+ L_417295  
+ L_417343  
+ L_417426  
+ L_417427  
+ L_417429  
+ L_417566  
+ L_417571  
+ L_417575  
+ L_417632  
+ L_417644  
+ L_417681  
+ L_417684  
+ L_417688  
+ L_417702  
+ L_417704  
+ L_417713  
+ L_417714  
+ L_417728  
+ L_417734  
+ L_417757  
+ L_417785  
+ L_417795  
+ L_417802  
+ L_417815  
+ L_417817  
+ L_417828  
+ L_417829  
+ L_417834  
+ L_417840  
+ L_417841  
+ L_417852  
+ L_417860  
+ L_417861  
+ L_417862  
+ L_417863  
+ L_417867  
+ L_417868  
+ L_417876  
+ L_417986  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGGGATTTAACCG
+"
+      ]
+      id 25
+      label "L_413584  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -496.875
+            y -6960.0
+            z 0.0
+         ]
+         width 555.0
+         height 485.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 82
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.03"
+         Frequency "frequency=1
+ L_416034  
+"
+         Sequence "Sequence =
+TTCGGCCGTCATTCCTCACAGGGACTTAACCG
+"
+      ]
+      id 45
+      label "L_416034  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -144.375
+            y -6960.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 81
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.01"
+         Frequency "frequency=1
+ L_415702  
+"
+         Sequence "Sequence =
+TTCGGCCGTCATTCCTCACAGGGATTTAACCG
+"
+      ]
+      id 41
+      label "L_415702  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -556.875
+            y -7252.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 82
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417800  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGGGATTTAACTG
+"
+      ]
+      id 59
+      label "L_417800  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -436.875
+            y -7252.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 82
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In7
+"
+         Sequence "Sequence =
+"
+      ]
+      id 70
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -320.625
+            y -5370.0
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 84
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In8
+"
+         Sequence "Sequence =
+"
+      ]
+      id 71
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -320.625
+            y -5092.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 87
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In9
+"
+         Sequence "Sequence =
+"
+      ]
+      id 72
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -144.375
+            y -7252.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 80
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In10
+"
+         Sequence "Sequence =
+"
+      ]
+      id 73
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -144.375
+            y -7305.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 80
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417444  
+"
+         Sequence "Sequence =
+TTCAGCCGCCATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 55
+      label "L_417444  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -589.125
+            y -1950.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 78
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In4
+"
+         Sequence "Sequence =
+CTCAGCCGCCATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 67
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -475.375
+            y -1642.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 105
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.01"
+         Frequency "frequency=44
+ L_408482  
+ L_412975  
+ L_412981  
+ L_413213  
+ L_413214  
+ L_413490  
+ L_413595  
+ L_413597  
+ L_413598  
+ L_413599  
+ L_413600  
+ L_414008  
+ L_414414  
+ L_414476  
+ L_414520  
+ L_414522  
+ L_414558  
+ L_414591  
+ L_415581  
+ L_415644  
+ L_416373  
+ L_416382  
+ L_416406  
+ L_416407  
+ L_416412  
+ L_416458  
+ L_416541  
+ L_416542  
+ L_416543  
+ L_417238  
+ L_417383  
+ L_417384  
+ L_417385  
+ L_417386  
+ L_417387  
+ L_417389  
+ L_417391  
+ L_417392  
+ L_417393  
+ L_417398  
+ L_417406  
+ L_417484  
+ L_417523  
+ L_417524  
+"
+         Sequence "Sequence =
+CTCAGCCGCCATCCCTCACAAGGACTCGGGCG
+"
+      ]
+      id 12
+      label "L_408482  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -361.625
+            y -1950.0
+            z 0.0
+         ]
+         width 305.0
+         height 235.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 77
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=5
+ L_415741  
+ L_415743  
+ L_417519  
+ L_417520  
+ L_417521  
+"
+         Sequence "Sequence =
+CTTAGCCGCCATCCCTCACAAGGACTCGGGCG
+"
+      ]
+      id 42
+      label "L_415741  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -489.125
+            y -2445.0
+            z 0.0
+         ]
+         width 110.0
+         height 40.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 77
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=2
+ L_416331  
+ L_416332  
+"
+         Sequence "Sequence =
+CTCAGCCGCCGTCCCTCACAAGGACTCGGGCG
+"
+      ]
+      id 46
+      label "L_416331  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -356.625
+            y -2445.0
+            z 0.0
+         ]
+         width 95.0
+         height 25.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 77
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417413  
+"
+         Sequence "Sequence =
+CTCAGCCGCCAGCCCTCACAAGGACTCGGGCG
+"
+      ]
+      id 53
+      label "L_417413  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -234.125
+            y -2445.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 77
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In5
+"
+         Sequence "Sequence =
+"
+      ]
+      id 68
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -589.125
+            y -2445.0
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 78
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417147  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCTCTTGTAAGGACCTGGGCG
+"
+      ]
+      id 51
+      label "L_417147  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2165.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=31
+ L_413488  
+ L_414497  
+ L_414499  
+ L_414505  
+ L_414509  
+ L_415464  
+ L_415495  
+ L_415531  
+ L_415657  
+ L_415920  
+ L_416033  
+ L_416488  
+ L_417412  
+ L_417459  
+ L_417461  
+ L_417462  
+ L_417759  
+ L_417793  
+ L_417958  
+ L_418110  
+ L_418117  
+ L_418136  
+ L_418144  
+ L_418145  
+ L_418147  
+ L_418151  
+ L_418155  
+ L_418156  
+ L_418158  
+ L_418159  
+ L_418163  
+"
+         Sequence "Sequence =
+CTCGACCACCAGCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 22
+      label "L_413488  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -1238.375
+            y -1642.5
+            z 0.0
+         ]
+         width 240.0
+         height 170.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 108
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In2
+"
+         Sequence "Sequence =
+"
+      ]
+      id 65
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -1238.375
+            y -1165.0
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 108
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.01"
+         Frequency "frequency=70
+ L_413016  
+ L_413019  
+ L_414011  
+ L_414013  
+ L_414451  
+ L_414468  
+ L_415142  
+ L_415486  
+ L_415491  
+ L_415512  
+ L_415527  
+ L_415631  
+ L_416646  
+ L_416675  
+ L_416723  
+ L_416733  
+ L_417008  
+ L_417009  
+ L_417017  
+ L_417189  
+ L_417246  
+ L_417280  
+ L_417289  
+ L_417290  
+ L_417291  
+ L_417292  
+ L_417346  
+ L_417405  
+ L_417408  
+ L_417478  
+ L_417501  
+ L_417522  
+ L_417528  
+ L_417540  
+ L_417541  
+ L_417544  
+ L_417545  
+ L_417548  
+ L_417557  
+ L_417558  
+ L_417568  
+ L_417574  
+ L_417580  
+ L_417590  
+ L_417603  
+ L_417606  
+ L_417607  
+ L_417611  
+ L_417621  
+ L_417653  
+ L_417655  
+ L_417660  
+ L_417670  
+ L_417696  
+ L_417699  
+ L_417716  
+ L_417732  
+ L_417750  
+ L_417771  
+ L_417772  
+ L_417801  
+ L_417822  
+ L_417825  
+ L_417838  
+ L_417864  
+ L_417931  
+ L_417975  
+ L_418005  
+ L_418060  
+ L_418149  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATCTCCCACAAGTACTTGGGCG
+"
+      ]
+      id 19
+      label "L_413016  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -1079.625
+            y -2445.0
+            z 0.0
+         ]
+         width 435.0
+         height 365.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 74
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.05"
+         Frequency "frequency=373
+ L_412970  
+ L_413455  
+ L_413456  
+ L_413457  
+ L_413458  
+ L_413486  
+ L_413487  
+ L_413557  
+ L_413560  
+ L_413562  
+ L_413563  
+ L_413601  
+ L_413649  
+ L_413650  
+ L_413651  
+ L_413652  
+ L_413653  
+ L_413922  
+ L_413924  
+ L_413925  
+ L_413926  
+ L_413928  
+ L_413931  
+ L_414363  
+ L_414364  
+ L_414365  
+ L_414366  
+ L_414367  
+ L_414368  
+ L_414369  
+ L_414588  
+ L_414590  
+ L_414592  
+ L_414593  
+ L_414595  
+ L_414596  
+ L_414597  
+ L_414618  
+ L_414619  
+ L_414620  
+ L_414621  
+ L_414622  
+ L_415541  
+ L_415542  
+ L_415586  
+ L_415589  
+ L_415591  
+ L_415592  
+ L_415593  
+ L_415594  
+ L_415595  
+ L_415596  
+ L_415598  
+ L_415599  
+ L_415600  
+ L_415602  
+ L_415603  
+ L_415604  
+ L_415605  
+ L_415606  
+ L_415607  
+ L_415608  
+ L_415609  
+ L_415610  
+ L_415611  
+ L_415612  
+ L_415613  
+ L_415614  
+ L_415615  
+ L_415616  
+ L_415617  
+ L_415618  
+ L_415619  
+ L_415620  
+ L_415621  
+ L_415622  
+ L_415623  
+ L_415624  
+ L_415626  
+ L_415627  
+ L_416413  
+ L_416417  
+ L_416418  
+ L_416422  
+ L_416423  
+ L_416424  
+ L_416433  
+ L_416435  
+ L_416436  
+ L_416437  
+ L_416439  
+ L_416440  
+ L_416441  
+ L_416442  
+ L_416443  
+ L_416444  
+ L_416445  
+ L_416446  
+ L_416447  
+ L_416448  
+ L_416450  
+ L_416451  
+ L_416453  
+ L_416454  
+ L_416455  
+ L_416456  
+ L_416460  
+ L_416461  
+ L_416462  
+ L_416465  
+ L_416466  
+ L_416514  
+ L_416635  
+ L_416636  
+ L_416637  
+ L_416638  
+ L_416639  
+ L_416640  
+ L_416641  
+ L_416643  
+ L_416644  
+ L_416645  
+ L_416649  
+ L_416650  
+ L_416651  
+ L_416652  
+ L_416654  
+ L_416656  
+ L_416657  
+ L_416659  
+ L_416662  
+ L_416663  
+ L_416664  
+ L_416665  
+ L_416666  
+ L_416667  
+ L_416668  
+ L_416669  
+ L_416670  
+ L_416677  
+ L_416679  
+ L_416680  
+ L_416681  
+ L_416682  
+ L_416683  
+ L_416684  
+ L_416685  
+ L_416686  
+ L_416687  
+ L_416688  
+ L_416689  
+ L_416690  
+ L_416692  
+ L_416694  
+ L_416695  
+ L_416700  
+ L_416701  
+ L_416702  
+ L_416703  
+ L_416705  
+ L_416709  
+ L_416710  
+ L_416711  
+ L_416712  
+ L_416713  
+ L_416714  
+ L_416715  
+ L_416717  
+ L_416718  
+ L_416720  
+ L_416721  
+ L_416722  
+ L_416726  
+ L_416727  
+ L_416728  
+ L_417028  
+ L_417031  
+ L_417065  
+ L_417066  
+ L_417067  
+ L_417068  
+ L_417069  
+ L_417070  
+ L_417071  
+ L_417072  
+ L_417073  
+ L_417074  
+ L_417075  
+ L_417076  
+ L_417077  
+ L_417079  
+ L_417080  
+ L_417081  
+ L_417082  
+ L_417085  
+ L_417086  
+ L_417087  
+ L_417088  
+ L_417089  
+ L_417090  
+ L_417091  
+ L_417092  
+ L_417093  
+ L_417094  
+ L_417095  
+ L_417096  
+ L_417097  
+ L_417098  
+ L_417099  
+ L_417100  
+ L_417101  
+ L_417102  
+ L_417103  
+ L_417104  
+ L_417105  
+ L_417106  
+ L_417107  
+ L_417108  
+ L_417109  
+ L_417110  
+ L_417111  
+ L_417112  
+ L_417113  
+ L_417114  
+ L_417115  
+ L_417116  
+ L_417117  
+ L_417118  
+ L_417119  
+ L_417120  
+ L_417121  
+ L_417122  
+ L_417123  
+ L_417124  
+ L_417125  
+ L_417127  
+ L_417128  
+ L_417129  
+ L_417130  
+ L_417131  
+ L_417132  
+ L_417133  
+ L_417134  
+ L_417135  
+ L_417136  
+ L_417137  
+ L_417139  
+ L_417140  
+ L_417141  
+ L_417142  
+ L_417143  
+ L_417144  
+ L_417145  
+ L_417146  
+ L_417148  
+ L_417149  
+ L_417150  
+ L_417151  
+ L_417152  
+ L_417153  
+ L_417154  
+ L_417155  
+ L_417156  
+ L_417157  
+ L_417158  
+ L_417159  
+ L_417160  
+ L_417161  
+ L_417162  
+ L_417163  
+ L_417164  
+ L_417165  
+ L_417166  
+ L_417167  
+ L_417168  
+ L_417169  
+ L_417170  
+ L_417171  
+ L_417172  
+ L_417173  
+ L_417175  
+ L_417194  
+ L_417203  
+ L_417323  
+ L_417324  
+ L_417327  
+ L_417332  
+ L_417344  
+ L_417347  
+ L_417349  
+ L_417350  
+ L_417351  
+ L_417353  
+ L_417354  
+ L_417355  
+ L_417356  
+ L_417357  
+ L_417358  
+ L_417360  
+ L_417361  
+ L_417364  
+ L_417365  
+ L_417366  
+ L_417368  
+ L_417369  
+ L_417370  
+ L_417371  
+ L_417374  
+ L_417375  
+ L_417377  
+ L_417378  
+ L_417380  
+ L_417381  
+ L_417395  
+ L_417448  
+ L_417449  
+ L_417450  
+ L_417453  
+ L_417456  
+ L_417477  
+ L_417480  
+ L_417500  
+ L_417503  
+ L_417504  
+ L_417507  
+ L_417577  
+ L_417587  
+ L_417615  
+ L_417618  
+ L_417717  
+ L_417720  
+ L_417724  
+ L_417762  
+ L_417789  
+ L_417791  
+ L_417818  
+ L_417960  
+ L_417962  
+ L_417964  
+ L_417965  
+ L_417966  
+ L_417968  
+ L_418029  
+ L_418030  
+ L_418034  
+ L_418038  
+ L_418040  
+ L_418046  
+ L_418047  
+ L_418048  
+ L_418050  
+ L_418052  
+ L_418055  
+ L_418059  
+ L_418061  
+ L_418062  
+ L_418063  
+ L_418064  
+ L_418065  
+ L_418066  
+ L_418069  
+ L_418070  
+ L_418071  
+ L_418074  
+ L_418075  
+ L_418077  
+ L_418078  
+ L_418079  
+ L_418082  
+ L_418113  
+ L_418186  
+ L_418187  
+ L_418189  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTTGTAAGGACCTGGGCG
+"
+      ]
+      id 17
+      label "L_412970  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2410.375
+            y -3997.5
+            z 0.0
+         ]
+         width 1950.0
+         height 1880.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=25
+ L_412116  
+ L_414005  
+ L_414006  
+ L_414007  
+ L_415128  
+ L_415478  
+ L_415630  
+ L_417213  
+ L_417267  
+ L_417268  
+ L_417269  
+ L_417270  
+ L_417282  
+ L_417315  
+ L_417394  
+ L_417399  
+ L_417409  
+ L_417410  
+ L_417475  
+ L_417498  
+ L_417584  
+ L_417659  
+ L_417950  
+ L_418020  
+ L_418021  
+"
+         Sequence "Sequence =
+CTCGGCTGCCA?CTCTCACAAGTACTTGGGCG
+"
+      ]
+      id 14
+      label "L_412116  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -727.125
+            y -2445.0
+            z 0.0
+         ]
+         width 210.0
+         height 140.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 75
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_406223  
+"
+         Sequence "Sequence =
+CTCGGCCGCTATCCCTCACAAGGACCTGGGTG
+"
+      ]
+      id 6
+      label "L_406223  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1441.375
+            y -2445.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 101
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=11
+ L_404895  
+ L_407214  
+ L_407215  
+ L_408478  
+ L_408487  
+ L_411060  
+ L_413855  
+ L_413862  
+ L_413892  
+ L_416473  
+ L_416886  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTCATAAGGACCTGGGCG
+"
+      ]
+      id 3
+      label "L_404895  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2410.375
+            y -2875.0
+            z 0.0
+         ]
+         width 140.0
+         height 70.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 99
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_402131  
+"
+         Sequence "Sequence =
+CTCGGTCGTTAGCCCTCATAAGGACCTGGGTG
+"
+      ]
+      id 1
+      label "L_402131  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1402.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 94
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In0
+"
+         Sequence "Sequence =
+"
+      ]
+      id 63
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1402.375
+            y -3997.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 94
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In1
+"
+         Sequence "Sequence =
+"
+      ]
+      id 64
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1402.375
+            y -2992.5
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 95
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=18
+ L_403932  
+ L_403933  
+ L_403935  
+ L_405839  
+ L_406030  
+ L_406593  
+ L_408665  
+ L_408666  
+ L_408667  
+ L_411956  
+ L_413809  
+ L_414521  
+ L_414688  
+ L_416318  
+ L_416319  
+ L_416366  
+ L_416377  
+ L_417030  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTCACAAGGACCTGGGTG
+"
+      ]
+      id 2
+      label "L_403932  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1441.375
+            y -2875.0
+            z 0.0
+         ]
+         width 175.0
+         height 105.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 96
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=132
+ L_406034  
+ L_406801  
+ L_407071  
+ L_407073  
+ L_407193  
+ L_407893  
+ L_407894  
+ L_407896  
+ L_407976  
+ L_408483  
+ L_408484  
+ L_408485  
+ L_408489  
+ L_408668  
+ L_410045  
+ L_410535  
+ L_410717  
+ L_410718  
+ L_411926  
+ L_411954  
+ L_412028  
+ L_412869  
+ L_412870  
+ L_412871  
+ L_412978  
+ L_412979  
+ L_412980  
+ L_412983  
+ L_413485  
+ L_413513  
+ L_413514  
+ L_413515  
+ L_413516  
+ L_413518  
+ L_413519  
+ L_413520  
+ L_413521  
+ L_413523  
+ L_413691  
+ L_413695  
+ L_413697  
+ L_413711  
+ L_413729  
+ L_413746  
+ L_413747  
+ L_413748  
+ L_413749  
+ L_413750  
+ L_413751  
+ L_413752  
+ L_413761  
+ L_413791  
+ L_413853  
+ L_413854  
+ L_413856  
+ L_413858  
+ L_413859  
+ L_413860  
+ L_413867  
+ L_413873  
+ L_413876  
+ L_413881  
+ L_413889  
+ L_413897  
+ L_414378  
+ L_414379  
+ L_414380  
+ L_414496  
+ L_414555  
+ L_414577  
+ L_414578  
+ L_414689  
+ L_414690  
+ L_414691  
+ L_414934  
+ L_414935  
+ L_414936  
+ L_414937  
+ L_414938  
+ L_414939  
+ L_414940  
+ L_414941  
+ L_415461  
+ L_415526  
+ L_416042  
+ L_416316  
+ L_416317  
+ L_416322  
+ L_416323  
+ L_416326  
+ L_416328  
+ L_416330  
+ L_416333  
+ L_416335  
+ L_416338  
+ L_416339  
+ L_416341  
+ L_416343  
+ L_416344  
+ L_416350  
+ L_416352  
+ L_416357  
+ L_416368  
+ L_416372  
+ L_416378  
+ L_416381  
+ L_416402  
+ L_416403  
+ L_416409  
+ L_416415  
+ L_416427  
+ L_416429  
+ L_416483  
+ L_416485  
+ L_416538  
+ L_416539  
+ L_416696  
+ L_416885  
+ L_417176  
+ L_417200  
+ L_417201  
+ L_417205  
+ L_417206  
+ L_417514  
+ L_417518  
+ L_417924  
+ L_417979  
+ L_417980  
+ L_418027  
+ L_418045  
+ L_418146  
+ L_418252  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTCACAAGGACCTGGGCG
+"
+      ]
+      id 5
+      label "L_406034  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2562.875
+            y -2445.0
+            z 0.0
+         ]
+         width 745.0
+         height 675.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 100
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_406592  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCCCTCACAAGGACCTGGGTG
+"
+      ]
+      id 8
+      label "L_406592  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1480.375
+            y -2992.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 96
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.05"
+         Frequency "frequency=4
+ L_415584  
+ L_415588  
+ L_416419  
+ L_416421  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTCGTAAGGACCTGGGCG
+"
+      ]
+      id 40
+      label "L_415584  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2410.375
+            y -2992.5
+            z 0.0
+         ]
+         width 105.0
+         height 35.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 98
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=3
+ L_408480  
+ L_412873  
+ L_416392  
+"
+         Sequence "Sequence =
+CTCGGCCGCTATCCCTCACAAGGACCTGGGCG
+"
+      ]
+      id 11
+      label "L_408480  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2002.125
+            y -1950.0
+            z 0.0
+         ]
+         width 100.0
+         height 30.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 102
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_412982  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTCACAGGGACCTGGGCG
+"
+      ]
+      id 18
+      label "L_412982  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2555.375
+            y -2875.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 100
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=17
+ L_414579  
+ L_414598  
+ L_414600  
+ L_414623  
+ L_415151  
+ L_415503  
+ L_415658  
+ L_415660  
+ L_415661  
+ L_416477  
+ L_416484  
+ L_416487  
+ L_416994  
+ L_417034  
+ L_417961  
+ L_417981  
+ L_418216  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCTCTCACAAGGACCTGGGCG
+"
+      ]
+      id 32
+      label "L_414579  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2715.375
+            y -2875.0
+            z 0.0
+         ]
+         width 170.0
+         height 100.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 100
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.07"
+         Frequency "frequency=332
+ L_402119  
+ L_402120  
+ L_402121  
+ L_402123  
+ L_402124  
+ L_402125  
+ L_402127  
+ L_402128  
+ L_402129  
+ L_402130  
+ L_402132  
+ L_403928  
+ L_403929  
+ L_403930  
+ L_403931  
+ L_403934  
+ L_403936  
+ L_403937  
+ L_403962  
+ L_403963  
+ L_404227  
+ L_404228  
+ L_404253  
+ L_406531  
+ L_406534  
+ L_406535  
+ L_406536  
+ L_406538  
+ L_406594  
+ L_406595  
+ L_406716  
+ L_406717  
+ L_406798  
+ L_406800  
+ L_406970  
+ L_406973  
+ L_407079  
+ L_407084  
+ L_407313  
+ L_407987  
+ L_408008  
+ L_408009  
+ L_408010  
+ L_408431  
+ L_408479  
+ L_408486  
+ L_408488  
+ L_408511  
+ L_408514  
+ L_408515  
+ L_408670  
+ L_408976  
+ L_409067  
+ L_410044  
+ L_410218  
+ L_410301  
+ L_410486  
+ L_410531  
+ L_410532  
+ L_410537  
+ L_410719  
+ L_411066  
+ L_411902  
+ L_411915  
+ L_411927  
+ L_411950  
+ L_411952  
+ L_411953  
+ L_411955  
+ L_411957  
+ L_412026  
+ L_412459  
+ L_412862  
+ L_412872  
+ L_412898  
+ L_412899  
+ L_412900  
+ L_412965  
+ L_412967  
+ L_413014  
+ L_413015  
+ L_413522  
+ L_413558  
+ L_413559  
+ L_413561  
+ L_413564  
+ L_413567  
+ L_413568  
+ L_413576  
+ L_413578  
+ L_413580  
+ L_413581  
+ L_413582  
+ L_413585  
+ L_413586  
+ L_413590  
+ L_413594  
+ L_413596  
+ L_413606  
+ L_413607  
+ L_413608  
+ L_413609  
+ L_413610  
+ L_413611  
+ L_413612  
+ L_413613  
+ L_413614  
+ L_413615  
+ L_413616  
+ L_413617  
+ L_413618  
+ L_413619  
+ L_413620  
+ L_413621  
+ L_413622  
+ L_413623  
+ L_413692  
+ L_413693  
+ L_413694  
+ L_413696  
+ L_413753  
+ L_413850  
+ L_413851  
+ L_413852  
+ L_413857  
+ L_413861  
+ L_413866  
+ L_413868  
+ L_413869  
+ L_413871  
+ L_413872  
+ L_413874  
+ L_413875  
+ L_413879  
+ L_413880  
+ L_413882  
+ L_413883  
+ L_413884  
+ L_413888  
+ L_413893  
+ L_413894  
+ L_413898  
+ L_413902  
+ L_414024  
+ L_414026  
+ L_414040  
+ L_414041  
+ L_414042  
+ L_414043  
+ L_414044  
+ L_414426  
+ L_414427  
+ L_414431  
+ L_414432  
+ L_414458  
+ L_414459  
+ L_414462  
+ L_414467  
+ L_414479  
+ L_414480  
+ L_414481  
+ L_414487  
+ L_414498  
+ L_414504  
+ L_414506  
+ L_414508  
+ L_414510  
+ L_414533  
+ L_414538  
+ L_414540  
+ L_414541  
+ L_414542  
+ L_414547  
+ L_414550  
+ L_414553  
+ L_414563  
+ L_414567  
+ L_414574  
+ L_414684  
+ L_414685  
+ L_414686  
+ L_414687  
+ L_414692  
+ L_415148  
+ L_415490  
+ L_415493  
+ L_415494  
+ L_415504  
+ L_415513  
+ L_415516  
+ L_415522  
+ L_415528  
+ L_415538  
+ L_415583  
+ L_415628  
+ L_415638  
+ L_415659  
+ L_415711  
+ L_415918  
+ L_415919  
+ L_416024  
+ L_416044  
+ L_416046  
+ L_416047  
+ L_416320  
+ L_416321  
+ L_416324  
+ L_416329  
+ L_416336  
+ L_416337  
+ L_416340  
+ L_416345  
+ L_416347  
+ L_416348  
+ L_416353  
+ L_416355  
+ L_416356  
+ L_416358  
+ L_416359  
+ L_416360  
+ L_416362  
+ L_416365  
+ L_416367  
+ L_416369  
+ L_416370  
+ L_416374  
+ L_416375  
+ L_416376  
+ L_416379  
+ L_416380  
+ L_416384  
+ L_416385  
+ L_416388  
+ L_416389  
+ L_416390  
+ L_416393  
+ L_416394  
+ L_416396  
+ L_416397  
+ L_416398  
+ L_416399  
+ L_416401  
+ L_416404  
+ L_416405  
+ L_416416  
+ L_416425  
+ L_416474  
+ L_416738  
+ L_416739  
+ L_416829  
+ L_416866  
+ L_416884  
+ L_416907  
+ L_417064  
+ L_417178  
+ L_417218  
+ L_417239  
+ L_417253  
+ L_417259  
+ L_417261  
+ L_417263  
+ L_417276  
+ L_417285  
+ L_417286  
+ L_417288  
+ L_417296  
+ L_417306  
+ L_417312  
+ L_417313  
+ L_417318  
+ L_417320  
+ L_417325  
+ L_417335  
+ L_417432  
+ L_417482  
+ L_417553  
+ L_417576  
+ L_417591  
+ L_417602  
+ L_417604  
+ L_417616  
+ L_417627  
+ L_417628  
+ L_417649  
+ L_417666  
+ L_417667  
+ L_417792  
+ L_418000  
+ L_418083  
+ L_418084  
+ L_418085  
+ L_418092  
+ L_418100  
+ L_418101  
+ L_418102  
+ L_418103  
+ L_418104  
+ L_418105  
+ L_418106  
+ L_418107  
+ L_418108  
+ L_418111  
+ L_418112  
+ L_418115  
+ L_418120  
+ L_418121  
+ L_418124  
+ L_418125  
+ L_418127  
+ L_418128  
+ L_418129  
+ L_418130  
+ L_418131  
+ L_418132  
+ L_418133  
+ L_418134  
+ L_418135  
+ L_418137  
+ L_418140  
+ L_418141  
+ L_418142  
+ L_418143  
+ L_418148  
+ L_418150  
+ L_418153  
+ L_418154  
+ L_418157  
+ L_418160  
+ L_418161  
+ L_418162  
+ L_418164  
+ L_418165  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 0
+      label "L_402119  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 1745.0
+         height 1675.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 109
+         shape "Rectangle"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.06"
+         Frequency "frequency=54
+ L_406031  
+ L_406036  
+ L_406596  
+ L_406597  
+ L_406844  
+ L_408977  
+ L_408978  
+ L_410536  
+ L_410545  
+ L_410713  
+ L_410714  
+ L_410715  
+ L_410716  
+ L_410720  
+ L_411219  
+ L_411220  
+ L_411929  
+ L_411951  
+ L_412029  
+ L_413018  
+ L_413863  
+ L_414517  
+ L_414519  
+ L_414527  
+ L_414528  
+ L_414569  
+ L_415582  
+ L_416314  
+ L_416315  
+ L_416325  
+ L_416346  
+ L_416349  
+ L_416364  
+ L_416391  
+ L_416400  
+ L_416408  
+ L_416410  
+ L_416411  
+ L_417177  
+ L_417179  
+ L_417180  
+ L_417181  
+ L_417182  
+ L_417183  
+ L_417184  
+ L_417185  
+ L_417187  
+ L_417188  
+ L_417190  
+ L_417193  
+ L_417195  
+ L_417197  
+ L_417199  
+ L_418123  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCCCTCACAAGTACTTGGGCG
+"
+      ]
+      id 4
+      label "L_406031  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -773.375
+            y -1165.0
+            z 0.0
+         ]
+         width 355.0
+         height 285.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 107
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=8
+ L_406533  
+ L_408669  
+ L_412966  
+ L_413864  
+ L_414511  
+ L_416361  
+ L_416363  
+ L_416387  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCCTTCACAAGGACTTGGGCG
+"
+      ]
+      id 7
+      label "L_406533  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -77.5
+            y -1165.0
+            z 0.0
+         ]
+         width 125.0
+         height 55.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 109
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.07"
+         Frequency "frequency=112
+ L_407988  
+ L_408430  
+ L_408481  
+ L_410984  
+ L_411218  
+ L_412030  
+ L_412968  
+ L_412969  
+ L_413459  
+ L_413870  
+ L_413896  
+ L_414482  
+ L_414483  
+ L_414484  
+ L_414485  
+ L_414501  
+ L_414571  
+ L_415137  
+ L_415540  
+ L_415577  
+ L_415578  
+ L_415579  
+ L_415580  
+ L_415585  
+ L_415587  
+ L_416342  
+ L_416351  
+ L_416354  
+ L_416383  
+ L_416414  
+ L_416432  
+ L_416449  
+ L_416526  
+ L_416565  
+ L_416566  
+ L_416567  
+ L_416568  
+ L_416569  
+ L_416570  
+ L_416571  
+ L_416572  
+ L_416573  
+ L_416574  
+ L_416575  
+ L_416576  
+ L_416577  
+ L_416578  
+ L_416579  
+ L_416580  
+ L_416581  
+ L_416582  
+ L_416583  
+ L_416584  
+ L_416585  
+ L_416586  
+ L_416587  
+ L_416588  
+ L_416589  
+ L_416590  
+ L_416591  
+ L_416592  
+ L_416593  
+ L_416594  
+ L_416595  
+ L_416596  
+ L_416597  
+ L_416598  
+ L_416599  
+ L_416600  
+ L_416601  
+ L_416602  
+ L_416603  
+ L_416604  
+ L_416605  
+ L_416606  
+ L_416607  
+ L_416608  
+ L_416609  
+ L_416610  
+ L_416611  
+ L_416612  
+ L_416613  
+ L_416614  
+ L_416616  
+ L_416617  
+ L_416618  
+ L_416619  
+ L_416620  
+ L_416621  
+ L_416622  
+ L_416623  
+ L_416624  
+ L_416625  
+ L_416626  
+ L_416627  
+ L_416628  
+ L_416629  
+ L_416630  
+ L_416631  
+ L_416632  
+ L_416633  
+ L_416634  
+ L_416706  
+ L_417033  
+ L_417388  
+ L_417396  
+ L_417400  
+ L_417401  
+ L_417403  
+ L_417917  
+ L_417918  
+ L_417920  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 10
+      label "L_407988  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 763.375
+            y -1165.0
+            z 0.0
+         ]
+         width 645.0
+         height 575.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=32
+ L_413573  
+ L_413577  
+ L_413583  
+ L_414452  
+ L_414500  
+ L_414536  
+ L_414537  
+ L_414539  
+ L_414543  
+ L_414544  
+ L_414551  
+ L_414589  
+ L_415479  
+ L_415489  
+ L_415500  
+ L_415501  
+ L_415505  
+ L_415506  
+ L_415507  
+ L_415508  
+ L_415509  
+ L_415510  
+ L_415517  
+ L_415519  
+ L_415521  
+ L_415524  
+ L_416740  
+ L_417211  
+ L_417264  
+ L_417283  
+ L_417880  
+ L_418026  
+"
+         Sequence "Sequence =
+CCCGGCCGCCAGCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 24
+      label "L_413573  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1238.375
+            y -1165.0
+            z 0.0
+         ]
+         width 245.0
+         height 175.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 109
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.03"
+         Frequency "frequency=57
+ L_410546  
+ L_412974  
+ L_413605  
+ L_414529  
+ L_414531  
+ L_414532  
+ L_414534  
+ L_414546  
+ L_414639  
+ L_414645  
+ L_415130  
+ L_415132  
+ L_415139  
+ L_415143  
+ L_415144  
+ L_415149  
+ L_415470  
+ L_415484  
+ L_415590  
+ L_415641  
+ L_415643  
+ L_415709  
+ L_416480  
+ L_416503  
+ L_416507  
+ L_416515  
+ L_416516  
+ L_416518  
+ L_417011  
+ L_417215  
+ L_417216  
+ L_417219  
+ L_417254  
+ L_417262  
+ L_417275  
+ L_417281  
+ L_417284  
+ L_417300  
+ L_417303  
+ L_417305  
+ L_417314  
+ L_417486  
+ L_417487  
+ L_417488  
+ L_417489  
+ L_417490  
+ L_417601  
+ L_417605  
+ L_417657  
+ L_417658  
+ L_417661  
+ L_417668  
+ L_417669  
+ L_417765  
+ L_417952  
+ L_418025  
+ L_418126  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATCCCTCACAAGTACTTGGGCG
+"
+      ]
+      id 13
+      label "L_410546  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -903.375
+            y -1642.5
+            z 0.0
+         ]
+         width 370.0
+         height 300.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 76
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_413017  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCCCTCACAAGTACCTGGGCG
+"
+      ]
+      id 20
+      label "L_413017  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -643.375
+            y -1642.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 107
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_414430  
+"
+         Sequence "Sequence =
+CTCGGCCGTCATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 31
+      label "L_414430  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -382.95833333333337
+            y -1642.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_415539  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATCCCTCATAAGGACTTGGGCG
+"
+      ]
+      id 39
+      label "L_415539  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -248.54166666666674
+            y -1642.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=1
+ L_415742  
+"
+         Sequence "Sequence =
+?TTGGCCGCCATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 43
+      label "L_415742  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -114.125
+            y -1642.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 104
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=1
+ L_416615  
+"
+         Sequence "Sequence =
+CTCGGCCGCTATCCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 49
+      label "L_416615  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2002.125
+            y -1642.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 103
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.02"
+         Frequency "frequency=7
+ L_413025  
+ L_413603  
+ L_414009  
+ L_417212  
+ L_417483  
+ L_418080  
+ L_418243  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATCTCTCACAAGTACTTGGGCG
+"
+      ]
+      id 21
+      label "L_413025  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -903.375
+            y -1950.0
+            z 0.0
+         ]
+         width 120.0
+         height 50.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 75
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_414617  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTTGTAAGGGCCTGGGCG
+"
+      ]
+      id 34
+      label "L_414617  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2285.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=3
+ L_417126  
+ L_417363  
+ L_417367  
+"
+         Sequence "Sequence =
+CTCGGCCGCTATCCCTTGTAAGGACCTGGGCG
+"
+      ]
+      id 50
+      label "L_417126  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2410.375
+            y -5092.5
+            z 0.0
+         ]
+         width 100.0
+         height 30.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417348  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTTGTAAGGACCTAGGCG
+"
+      ]
+      id 52
+      label "L_417348  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2535.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417871  
+"
+         Sequence "Sequence =
+CTCGGCCGCTAGCCCTTGCAAGGACCTGGGCG
+"
+      ]
+      id 60
+      label "L_417871  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 2655.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 97
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_415492  
+"
+         Sequence "Sequence =
+CTCGGCCGCCATTTCCCACAAGTACTTGGGCG
+"
+      ]
+      id 38
+      label "L_415492  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -1143.375
+            y -2875.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 74
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=4
+ L_416032  
+ L_417025  
+ L_417672  
+ L_417689  
+"
+         Sequence "Sequence =
+CTCGGCCGCCAGCTCCCACAAGTACTTGGGCG
+"
+      ]
+      id 44
+      label "L_416032  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -1015.875
+            y -2875.0
+            z 0.0
+         ]
+         width 105.0
+         height 35.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 74
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In6
+"
+         Sequence "Sequence =
+"
+      ]
+      id 69
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -114.125
+            y -1950.0
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 93
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417744  
+"
+         Sequence "Sequence =
+TTCGGCCGCCAGTCCTCACGGGGACTTGGGCG
+"
+      ]
+      id 58
+      label "L_417744  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -242.625
+            y -5370.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 86
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417420  
+"
+         Sequence "Sequence =
+TTTGGCCGCCAGTCCTCACAAGGACTTGGGCG
+"
+      ]
+      id 54
+      label "L_417420  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -114.125
+            y -2445.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 92
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ In3
+"
+         Sequence "Sequence =
+"
+      ]
+      id 66
+      label " "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -114.125
+            y -2875.0
+            z 0.0
+         ]
+         width 6.0
+         height 6.0
+         depth 1.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 91
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.04"
+         Frequency "frequency=28
+ L_414019  
+ L_414020  
+ L_416426  
+ L_416481  
+ L_416489  
+ L_417007  
+ L_417010  
+ L_417402  
+ L_417609  
+ L_417639  
+ L_417647  
+ L_417766  
+ L_417770  
+ L_417777  
+ L_417798  
+ L_417814  
+ L_417820  
+ L_417923  
+ L_417954  
+ L_417956  
+ L_417957  
+ L_417963  
+ L_417967  
+ L_417978  
+ L_418009  
+ L_418168  
+ L_418182  
+ L_418183  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACGGGGACTTGGGCG
+"
+      ]
+      id 29
+      label "L_414019  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -66.375
+            y -5092.5
+            z 0.0
+         ]
+         width 225.0
+         height 155.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 86
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.04"
+         Frequency "frequency=200
+ L_413572  
+ L_414625  
+ L_414627  
+ L_414630  
+ L_414634  
+ L_414635  
+ L_414636  
+ L_414642  
+ L_415159  
+ L_415477  
+ L_415481  
+ L_415487  
+ L_415543  
+ L_415544  
+ L_415648  
+ L_415649  
+ L_415650  
+ L_415692  
+ L_415693  
+ L_416457  
+ L_416478  
+ L_416491  
+ L_416492  
+ L_416495  
+ L_416496  
+ L_416498  
+ L_416501  
+ L_416502  
+ L_416504  
+ L_416505  
+ L_416506  
+ L_416508  
+ L_416509  
+ L_416510  
+ L_416511  
+ L_416512  
+ L_416513  
+ L_416642  
+ L_416655  
+ L_416660  
+ L_416661  
+ L_416672  
+ L_416678  
+ L_416704  
+ L_416748  
+ L_416753  
+ L_416830  
+ L_417005  
+ L_417006  
+ L_417020  
+ L_417204  
+ L_417328  
+ L_417330  
+ L_417331  
+ L_417338  
+ L_417340  
+ L_417345  
+ L_417352  
+ L_417359  
+ L_417373  
+ L_417376  
+ L_417457  
+ L_417463  
+ L_417465  
+ L_417466  
+ L_417467  
+ L_417468  
+ L_417469  
+ L_417474  
+ L_417476  
+ L_417492  
+ L_417497  
+ L_417499  
+ L_417505  
+ L_417516  
+ L_417531  
+ L_417532  
+ L_417555  
+ L_417559  
+ L_417562  
+ L_417570  
+ L_417579  
+ L_417593  
+ L_417594  
+ L_417596  
+ L_417614  
+ L_417620  
+ L_417629  
+ L_417631  
+ L_417654  
+ L_417656  
+ L_417665  
+ L_417675  
+ L_417677  
+ L_417682  
+ L_417683  
+ L_417685  
+ L_417687  
+ L_417692  
+ L_417693  
+ L_417700  
+ L_417701  
+ L_417705  
+ L_417715  
+ L_417721  
+ L_417722  
+ L_417723  
+ L_417725  
+ L_417726  
+ L_417731  
+ L_417735  
+ L_417742  
+ L_417748  
+ L_417752  
+ L_417761  
+ L_417773  
+ L_417779  
+ L_417784  
+ L_417787  
+ L_417797  
+ L_417805  
+ L_417806  
+ L_417832  
+ L_417833  
+ L_417835  
+ L_417842  
+ L_417844  
+ L_417846  
+ L_417848  
+ L_417849  
+ L_417850  
+ L_417853  
+ L_417854  
+ L_417855  
+ L_417856  
+ L_417857  
+ L_417865  
+ L_417866  
+ L_417872  
+ L_417873  
+ L_417874  
+ L_417875  
+ L_417932  
+ L_417935  
+ L_417937  
+ L_417938  
+ L_417939  
+ L_417970  
+ L_417971  
+ L_417976  
+ L_417977  
+ L_418022  
+ L_418028  
+ L_418036  
+ L_418037  
+ L_418039  
+ L_418041  
+ L_418042  
+ L_418044  
+ L_418049  
+ L_418051  
+ L_418057  
+ L_418058  
+ L_418072  
+ L_418076  
+ L_418095  
+ L_418097  
+ L_418098  
+ L_418109  
+ L_418119  
+ L_418184  
+ L_418188  
+ L_418190  
+ L_418192  
+ L_418193  
+ L_418194  
+ L_418196  
+ L_418197  
+ L_418198  
+ L_418199  
+ L_418200  
+ L_418202  
+ L_418203  
+ L_418204  
+ L_418205  
+ L_418206  
+ L_418207  
+ L_418208  
+ L_418209  
+ L_418218  
+ L_418220  
+ L_418221  
+ L_418224  
+ L_418226  
+ L_418228  
+ L_418236  
+ L_418237  
+ L_418239  
+ L_418241  
+ L_418242  
+"
+         Sequence "Sequence =
+TTTGGCCGTCAGTCCTCACAGTGACTTGGGCG
+"
+      ]
+      id 23
+      label "L_413572  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -709.125
+            y -3997.5
+            z 0.0
+         ]
+         width 1085.0
+         height 1015.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 89
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.06"
+         Frequency "frequency=23
+ L_413592  
+ L_414628  
+ L_414647  
+ L_415710  
+ L_416517  
+ L_416521  
+ L_416522  
+ L_416671  
+ L_416674  
+ L_416758  
+ L_416831  
+ L_417018  
+ L_417192  
+ L_417336  
+ L_417372  
+ L_417452  
+ L_417506  
+ L_417508  
+ L_417510  
+ L_417513  
+ L_417944  
+ L_418006  
+ L_418219  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGTGACTTGGGCG
+"
+      ]
+      id 27
+      label "L_413592  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -946.625
+            y -5092.5
+            z 0.0
+         ]
+         width 200.0
+         height 130.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 79
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=36
+ L_414616  
+ L_415597  
+ L_415625  
+ L_416434  
+ L_416438  
+ L_416452  
+ L_416647  
+ L_416648  
+ L_416653  
+ L_416691  
+ L_416693  
+ L_416698  
+ L_416699  
+ L_416707  
+ L_416708  
+ L_416716  
+ L_416719  
+ L_416724  
+ L_416725  
+ L_416729  
+ L_417341  
+ L_417342  
+ L_417379  
+ L_417382  
+ L_417451  
+ L_417454  
+ L_417455  
+ L_417690  
+ L_418032  
+ L_418033  
+ L_418053  
+ L_418054  
+ L_418067  
+ L_418068  
+ L_418073  
+ L_418081  
+"
+         Sequence "Sequence =
+TTTGGCCGTCAGTCCTCACAGTGACTTGGGCA
+"
+      ]
+      id 33
+      label "L_414616  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -684.125
+            y -5092.5
+            z 0.0
+         ]
+         width 265.0
+         height 195.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 89
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.06"
+         Frequency "frequency=7
+ L_415460  
+ L_415465  
+ L_415466  
+ L_415469  
+ L_415515  
+ L_415525  
+ L_415534  
+"
+         Sequence "Sequence =
+TTTGGCCGTCAGTCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 37
+      label "L_415460  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -114.125
+            y -2992.5
+            z 0.0
+         ]
+         width 120.0
+         height 50.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 90
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=3
+ L_416523  
+ L_417598  
+ L_417830  
+"
+         Sequence "Sequence =
+TTTGGCCGTCATTCCTCACAGTGACTTGGGCG
+"
+      ]
+      id 48
+      label "L_416523  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -471.625
+            y -5092.5
+            z 0.0
+         ]
+         width 100.0
+         height 30.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 89
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.03"
+         Frequency "frequency=7
+ L_406862  
+ L_414640  
+ L_416327  
+ L_416334  
+ L_416386  
+ L_417471  
+ L_417494  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGCCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 9
+      label "L_406862  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 169.25
+            y -5092.5
+            z 0.0
+         ]
+         width 120.0
+         height 50.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.05"
+         Frequency "frequency=230
+ L_412964  
+ L_412971  
+ L_412973  
+ L_413489  
+ L_413555  
+ L_413566  
+ L_413575  
+ L_413591  
+ L_413593  
+ L_413602  
+ L_413648  
+ L_413996  
+ L_414015  
+ L_414016  
+ L_414025  
+ L_414045  
+ L_414437  
+ L_414441  
+ L_414443  
+ L_414445  
+ L_414450  
+ L_414453  
+ L_414456  
+ L_414457  
+ L_414465  
+ L_414477  
+ L_414495  
+ L_414523  
+ L_414525  
+ L_414526  
+ L_414530  
+ L_414559  
+ L_414585  
+ L_414586  
+ L_414587  
+ L_414594  
+ L_414601  
+ L_414624  
+ L_414631  
+ L_414648  
+ L_414949  
+ L_415131  
+ L_415133  
+ L_415134  
+ L_415135  
+ L_415136  
+ L_415140  
+ L_415141  
+ L_415146  
+ L_415147  
+ L_415150  
+ L_415152  
+ L_415153  
+ L_415154  
+ L_415155  
+ L_415156  
+ L_415435  
+ L_415453  
+ L_415462  
+ L_415472  
+ L_415473  
+ L_415474  
+ L_415480  
+ L_415485  
+ L_415488  
+ L_415499  
+ L_415518  
+ L_415520  
+ L_415535  
+ L_415536  
+ L_415537  
+ L_415601  
+ L_415629  
+ L_415637  
+ L_415639  
+ L_415640  
+ L_415642  
+ L_415646  
+ L_415647  
+ L_415653  
+ L_415655  
+ L_415696  
+ L_415708  
+ L_415978  
+ L_416026  
+ L_416031  
+ L_416141  
+ L_416143  
+ L_416144  
+ L_416153  
+ L_416420  
+ L_416469  
+ L_416470  
+ L_416482  
+ L_416494  
+ L_416524  
+ L_416525  
+ L_416658  
+ L_416673  
+ L_416731  
+ L_416735  
+ L_416742  
+ L_416832  
+ L_417013  
+ L_417024  
+ L_417026  
+ L_417027  
+ L_417032  
+ L_417186  
+ L_417198  
+ L_417202  
+ L_417214  
+ L_417217  
+ L_417220  
+ L_417221  
+ L_417222  
+ L_417223  
+ L_417224  
+ L_417226  
+ L_417227  
+ L_417228  
+ L_417231  
+ L_417233  
+ L_417237  
+ L_417240  
+ L_417245  
+ L_417247  
+ L_417248  
+ L_417251  
+ L_417255  
+ L_417257  
+ L_417266  
+ L_417301  
+ L_417302  
+ L_417304  
+ L_417310  
+ L_417397  
+ L_417418  
+ L_417419  
+ L_417421  
+ L_417423  
+ L_417430  
+ L_417434  
+ L_417435  
+ L_417441  
+ L_417445  
+ L_417446  
+ L_417447  
+ L_417470  
+ L_417472  
+ L_417473  
+ L_417479  
+ L_417481  
+ L_417485  
+ L_417493  
+ L_417495  
+ L_417496  
+ L_417502  
+ L_417515  
+ L_417529  
+ L_417530  
+ L_417533  
+ L_417535  
+ L_417556  
+ L_417565  
+ L_417569  
+ L_417572  
+ L_417582  
+ L_417589  
+ L_417592  
+ L_417610  
+ L_417617  
+ L_417622  
+ L_417637  
+ L_417638  
+ L_417641  
+ L_417646  
+ L_417651  
+ L_417691  
+ L_417695  
+ L_417698  
+ L_417706  
+ L_417708  
+ L_417711  
+ L_417727  
+ L_417730  
+ L_417736  
+ L_417743  
+ L_417749  
+ L_417754  
+ L_417764  
+ L_417803  
+ L_417804  
+ L_417821  
+ L_417823  
+ L_417831  
+ L_417837  
+ L_417839  
+ L_417851  
+ L_417921  
+ L_417941  
+ L_417959  
+ L_417972  
+ L_417973  
+ L_417974  
+ L_417987  
+ L_417988  
+ L_417990  
+ L_417991  
+ L_417996  
+ L_417997  
+ L_417998  
+ L_417999  
+ L_418003  
+ L_418010  
+ L_418012  
+ L_418017  
+ L_418099  
+ L_418116  
+ L_418122  
+ L_418138  
+ L_418139  
+ L_418152  
+ L_418166  
+ L_418210  
+ L_418211  
+ L_418212  
+ L_418213  
+ L_418214  
+ L_418215  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 16
+      label "L_412964  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 480.875
+            y -3997.5
+            z 0.0
+         ]
+         width 1235.0
+         height 1165.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_417969  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGCCCTCACGGGGACTTGGGCG
+"
+      ]
+      id 61
+      label "L_417969  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -122.625
+            y -5370.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 86
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.03"
+         Frequency "frequency=3
+ L_413588  
+ L_413589  
+ L_414461  
+"
+         Sequence "Sequence =
+TTCGGCCGTCATTCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 26
+      label "L_413588  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 342.375
+            y -5092.5
+            z 0.0
+         ]
+         width 100.0
+         height 30.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 85
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=26
+ L_413999  
+ L_414010  
+ L_414027  
+ L_414524  
+ L_414646  
+ L_416741  
+ L_417016  
+ L_417019  
+ L_417424  
+ L_417491  
+ L_417550  
+ L_417560  
+ L_417563  
+ L_417652  
+ L_417694  
+ L_417740  
+ L_417746  
+ L_417758  
+ L_417763  
+ L_417775  
+ L_417799  
+ L_417812  
+ L_417877  
+ L_417948  
+ L_417955  
+ L_417989  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGGGGCTTGGGCG
+"
+      ]
+      id 28
+      label "L_413999  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 529.875
+            y -5092.5
+            z 0.0
+         ]
+         width 215.0
+         height 145.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_414428  
+"
+         Sequence "Sequence =
+TCCGGCCGTCAGTCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 30
+      label "L_414428  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 712.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.04"
+         Frequency "frequency=43
+ L_414629  
+ L_415651  
+ L_415652  
+ L_415694  
+ L_415695  
+ L_415704  
+ L_415705  
+ L_415706  
+ L_415707  
+ L_416493  
+ L_416499  
+ L_416500  
+ L_416745  
+ L_416747  
+ L_416749  
+ L_416750  
+ L_416751  
+ L_416752  
+ L_416754  
+ L_416756  
+ L_416757  
+ L_417333  
+ L_417334  
+ L_417337  
+ L_417339  
+ L_417437  
+ L_417438  
+ L_417442  
+ L_417526  
+ L_417527  
+ L_417624  
+ L_417737  
+ L_417788  
+ L_417819  
+ L_417942  
+ L_417946  
+ L_417947  
+ L_418024  
+ L_418222  
+ L_418230  
+ L_418231  
+ L_418234  
+ L_418240  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCTTCACAGGGACTTGGGCG
+"
+      ]
+      id 36
+      label "L_414629  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 937.375
+            y -5092.5
+            z 0.0
+         ]
+         width 300.0
+         height 230.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_416479  
+"
+         Sequence "Sequence =
+TTCGGCCGTCAGTCCTCACAGG?ACTCGGGCG
+"
+      ]
+      id 47
+      label "L_416479  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1162.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=1
+ L_418251  
+"
+         Sequence "Sequence =
+TTCGGCCGTTAGTCCTCACAGGGACTTGGGCG
+"
+      ]
+      id 62
+      label "L_418251  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 1282.375
+            y -5092.5
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.01"
+         Frequency "frequency=1
+ L_417534  
+"
+         Sequence "Sequence =
+TTCGGCCGTCATTCTTCACAGGGACTTGGGCG
+"
+      ]
+      id 56
+      label "L_417534  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 342.375
+            y -5370.0
+            z 0.0
+         ]
+         width 90.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 85
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=21
+ L_414626  
+ L_414632  
+ L_414633  
+ L_414637  
+ L_414638  
+ L_415654  
+ L_415697  
+ L_416497  
+ L_417411  
+ L_417440  
+ L_417517  
+ L_417648  
+ L_417878  
+ L_417879  
+ L_418223  
+ L_418225  
+ L_418227  
+ L_418229  
+ L_418232  
+ L_418233  
+ L_418238  
+"
+         Sequence "Sequence =
+TTCGGTCGTCAGTCCTCACAGTGACTTGGGCG
+"
+      ]
+      id 35
+      label "L_414626  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x -946.625
+            y -5370.0
+            z 0.0
+         ]
+         width 190.0
+         height 120.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 79
+         shape "Oval"
+      ]
+   ]
+   node [
+      data [
+         Weight "outgroup weight=   0.00"
+         Frequency "frequency=46
+ L_417536  
+ L_417537  
+ L_417542  
+ L_417543  
+ L_417549  
+ L_417552  
+ L_417573  
+ L_417583  
+ L_417586  
+ L_417588  
+ L_417597  
+ L_417599  
+ L_417600  
+ L_417612  
+ L_417613  
+ L_417623  
+ L_417625  
+ L_417626  
+ L_417630  
+ L_417633  
+ L_417634  
+ L_417635  
+ L_417636  
+ L_417640  
+ L_417645  
+ L_417650  
+ L_417676  
+ L_417678  
+ L_417680  
+ L_417703  
+ L_417709  
+ L_417712  
+ L_417739  
+ L_417741  
+ L_417745  
+ L_417753  
+ L_417755  
+ L_417774  
+ L_417786  
+ L_417790  
+ L_417808  
+ L_417809  
+ L_417810  
+ L_417824  
+ L_417827  
+ L_417836  
+"
+         Sequence "Sequence =
+TTCGGCCGTCGGTCCTCACGGGGACTTGGGCG
+"
+      ]
+      id 57
+      label "L_417536  "
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 109.875
+            y -5370.0
+            z 0.0
+         ]
+         width 315.0
+         height 245.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "center"
+         group 86
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 74
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 75
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 75
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 76
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 76
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 107
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 77
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 105
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 78
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 105
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 79
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 89
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 80
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 81
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 81
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 83
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 82
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 83
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 83
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 84
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 84
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 87
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 85
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 86
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 87
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 88
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 88
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 90
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 89
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 90
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 90
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 91
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 91
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 92
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 92
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 93
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 93
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 104
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 94
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 95
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 95
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 96
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 96
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 101
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 97
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 98
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 98
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 99
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 99
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 100
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 100
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 102
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 101
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 102
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 102
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 103
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 103
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 104
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 105
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 106
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 106
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 109
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 107
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 109
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 108
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         group 109
+         shape "Oval"
+      ]
+   ]
+   node [
+      id 109
+      label ""
+      graphics [
+         Image [
+            Type ""
+            Location ""
+         ]
+         center [
+            x 0.0
+            y 0.0
+            z 0.0
+         ]
+         width 20.0
+         height 20.0
+         depth 20.0
+      ]
+      vgj [
+         labelPosition "below"
+         shape "Oval"
+      ]
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 36
+      target 56
+   ]
+   edge [
+      linestyle "solid"
+      label "6"
+      data [
+         Changes "C	T"
+      ]
+      source 27
+      target 35
+   ]
+   edge [
+      linestyle "solid"
+      label "13"
+      data [
+         Changes "T	C"
+      ]
+      source 29
+      target 61
+   ]
+   edge [
+      linestyle "solid"
+      label "30"
+      data [
+         Changes "G	C"
+      ]
+      source 73
+      target 26
+   ]
+   edge [
+      linestyle "solid"
+      label "10"
+      data [
+         Changes "C	T"
+      ]
+      source 16
+      target 62
+   ]
+   edge [
+      linestyle "solid"
+      label "3"
+      data [
+         Changes "C	T"
+      ]
+      source 37
+      target 16
+   ]
+   edge [
+      linestyle "solid"
+      label "9"
+      data [
+         Changes "C	T"
+      ]
+      source 10
+      target 31
+   ]
+   edge [
+      linestyle "solid"
+      label "30"
+      data [
+         Changes "G	C"
+      ]
+      source 71
+      target 16
+   ]
+   edge [
+      linestyle "solid"
+      label "25"
+      data [
+         Changes "T	C"
+      ]
+      source 45
+      target 41
+   ]
+   edge [
+      linestyle "solid"
+      label "22"
+      data [
+         Changes "G	T"
+      ]
+      source 27
+      target 16
+   ]
+   edge [
+      linestyle "solid"
+      label "32"
+      data [
+         Changes "G	A"
+      ]
+      source 23
+      target 33
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 5
+      target 11
+   ]
+   edge [
+      linestyle "solid"
+      label "8"
+      data [
+         Changes "G	A"
+      ]
+      source 65
+      target 0
+   ]
+   edge [
+      linestyle "solid"
+      label "11"
+      data [
+         Changes "A	G"
+      ]
+      source 29
+      target 57
+   ]
+   edge [
+      linestyle "solid"
+      label "29"
+      data [
+         Changes "A	G"
+      ]
+      source 70
+      target 71
+   ]
+   edge [
+      linestyle "solid"
+      label "10"
+      data [
+         Changes "C	T"
+      ]
+      source 10
+      target 49
+   ]
+   edge [
+      linestyle "solid"
+      label "25"
+      data [
+         Changes "C	T"
+      ]
+      source 15
+      target 25
+   ]
+   edge [
+      linestyle "solid"
+      label "19"
+      data [
+         Changes "T	C"
+      ]
+      source 17
+      target 60
+   ]
+   edge [
+      linestyle "solid"
+      label "20"
+      data [
+         Changes "A	G"
+      ]
+      source 29
+      target 16
+   ]
+   edge [
+      linestyle "solid"
+      label "3"
+      data [
+         Changes "T	C"
+      ]
+      source 23
+      target 27
+   ]
+   edge [
+      linestyle "solid"
+      label "9"
+      data [
+         Changes "C	T"
+      ]
+      source 54
+      target 66
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 23
+      target 48
+   ]
+   edge [
+      linestyle "solid"
+      label "26"
+      data [
+         Changes "C	T"
+      ]
+      source 11
+      target 49
+   ]
+   edge [
+      linestyle "solid"
+      label "19"
+      data [
+         Changes "C	T"
+      ]
+      source 64
+      target 2
+   ]
+   edge [
+      linestyle "solid"
+      label "28"
+      data [
+         Changes "G	A"
+      ]
+      source 17
+      target 52
+   ]
+   edge [
+      linestyle "solid"
+      label "15"
+      data [
+         Changes "C	T"
+      ]
+      source 0
+      target 7
+   ]
+   edge [
+      linestyle "solid"
+      label "27"
+      data [
+         Changes "T	C"
+      ]
+      source 16
+      target 47
+   ]
+   edge [
+      linestyle "solid"
+      label "21"
+      data [
+         Changes "G	A"
+      ]
+      source 66
+      target 37
+   ]
+   edge [
+      linestyle "solid"
+      label "17"
+      data [
+         Changes "T	C"
+      ]
+      source 17
+      target 40
+   ]
+   edge [
+      linestyle "solid"
+      label "24"
+      data [
+         Changes "A	G"
+      ]
+      source 16
+      target 28
+   ]
+   edge [
+      linestyle "solid"
+      label "14"
+      data [
+         Changes "C	T"
+      ]
+      source 13
+      target 21
+   ]
+   edge [
+      linestyle "solid"
+      label "15"
+      data [
+         Changes "C	T"
+      ]
+      source 16
+      target 36
+   ]
+   edge [
+      linestyle "solid"
+      label "7"
+      data [
+         Changes "T	C"
+      ]
+      source 14
+      target 21
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "T	G"
+      ]
+      source 43
+      target 69
+   ]
+   edge [
+      linestyle "solid"
+      label "13"
+      data [
+         Changes "C	T"
+      ]
+      source 19
+      target 38
+   ]
+   edge [
+      linestyle "solid"
+      label "26"
+      data [
+         Changes "T	C"
+      ]
+      source 4
+      target 20
+   ]
+   edge [
+      linestyle "solid"
+      label "5"
+      data [
+         Changes "A	G"
+      ]
+      source 22
+      target 65
+   ]
+   edge [
+      linestyle "solid"
+      label "29"
+      data [
+         Changes "A	G"
+      ]
+      source 72
+      target 73
+   ]
+   edge [
+      linestyle "solid"
+      label "18"
+      data [
+         Changes "A	G"
+      ]
+      source 3
+      target 40
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "T	G"
+      ]
+      source 12
+      target 53
+   ]
+   edge [
+      linestyle "solid"
+      label "6"
+      data [
+         Changes "T	C"
+      ]
+      source 1
+      target 63
+   ]
+   edge [
+      linestyle "solid"
+      label "21"
+      data [
+         Changes "A	G"
+      ]
+      source 5
+      target 18
+   ]
+   edge [
+      linestyle "solid"
+      label "3"
+      data [
+         Changes "C	T"
+      ]
+      source 12
+      target 42
+   ]
+   edge [
+      linestyle "solid"
+      label "3"
+      data [
+         Changes "C	T"
+      ]
+      source 55
+      target 68
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 15
+      target 45
+   ]
+   edge [
+      linestyle "solid"
+      label "28"
+      data [
+         Changes "A	G"
+      ]
+      source 45
+      target 72
+   ]
+   edge [
+      linestyle "solid"
+      label "31"
+      data [
+         Changes "T	C"
+      ]
+      source 2
+      target 5
+   ]
+   edge [
+      linestyle "solid"
+      label "31"
+      data [
+         Changes "C	T"
+      ]
+      source 25
+      target 59
+   ]
+   edge [
+      linestyle "solid"
+      label "3"
+      data [
+         Changes "C	T"
+      ]
+      source 10
+      target 43
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "T	G"
+      ]
+      source 19
+      target 44
+   ]
+   edge [
+      linestyle "solid"
+      label "23"
+      data [
+         Changes "G	T"
+      ]
+      source 0
+      target 4
+   ]
+   edge [
+      linestyle "solid"
+      label "9"
+      data [
+         Changes "T	C"
+      ]
+      source 58
+      target 29
+   ]
+   edge [
+      linestyle "solid"
+      label "16"
+      data [
+         Changes "C	T"
+      ]
+      source 19
+      target 21
+   ]
+   edge [
+      linestyle "solid"
+      label "14"
+      data [
+         Changes "C	T"
+      ]
+      source 51
+      target 17
+   ]
+   edge [
+      linestyle "solid"
+      label "24"
+      data [
+         Changes "A	G"
+      ]
+      source 17
+      target 34
+   ]
+   edge [
+      linestyle "solid"
+      label "13"
+      data [
+         Changes "T	C"
+      ]
+      source 69
+      target 54
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 6
+      target 2
+   ]
+   edge [
+      linestyle "solid"
+      label "20"
+      data [
+         Changes "A	G"
+      ]
+      source 9
+      target 61
+   ]
+   edge [
+      linestyle "solid"
+      label "27"
+      data [
+         Changes "C	T"
+      ]
+      source 67
+      target 12
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 16
+      target 26
+   ]
+   edge [
+      linestyle "solid"
+      label "19"
+      data [
+         Changes "C	T"
+      ]
+      source 10
+      target 39
+   ]
+   edge [
+      linestyle "solid"
+      label "23"
+      data [
+         Changes "G	T"
+      ]
+      source 10
+      target 13
+   ]
+   edge [
+      linestyle "solid"
+      label "2"
+      data [
+         Changes "T	C"
+      ]
+      source 16
+      target 30
+   ]
+   edge [
+      linestyle "solid"
+      label "9"
+      data [
+         Changes "T	C"
+      ]
+      source 63
+      target 64
+   ]
+   edge [
+      linestyle "solid"
+      label "2"
+      data [
+         Changes "T	C"
+      ]
+      source 0
+      target 24
+   ]
+   edge [
+      linestyle "solid"
+      label "22"
+      data [
+         Changes "T	G"
+      ]
+      source 23
+      target 37
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 4
+      target 13
+   ]
+   edge [
+      linestyle "solid"
+      label "31"
+      data [
+         Changes "T	C"
+      ]
+      source 6
+      target 11
+   ]
+   edge [
+      linestyle "solid"
+      label "4"
+      data [
+         Changes "G	A"
+      ]
+      source 68
+      target 43
+   ]
+   edge [
+      linestyle "solid"
+      label "1"
+      data [
+         Changes "T	C"
+      ]
+      source 55
+      target 67
+   ]
+   edge [
+      linestyle "solid"
+      label "15"
+      data [
+         Changes "C	T"
+      ]
+      source 26
+      target 56
+   ]
+   edge [
+      linestyle "solid"
+      label "19"
+      data [
+         Changes "T	C"
+      ]
+      source 3
+      target 5
+   ]
+   edge [
+      linestyle "solid"
+      label "11"
+      data [
+         Changes "A	G"
+      ]
+      source 12
+      target 46
+   ]
+   edge [
+      linestyle "solid"
+      label "4"
+      data [
+         Changes "G	A"
+      ]
+      source 67
+      target 10
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 25
+      target 41
+   ]
+   edge [
+      linestyle "solid"
+      label "10"
+      data [
+         Changes "T	C"
+      ]
+      source 2
+      target 8
+   ]
+   edge [
+      linestyle "solid"
+      label "28"
+      data [
+         Changes "A	G"
+      ]
+      source 15
+      target 70
+   ]
+   edge [
+      linestyle "solid"
+      label "13"
+      data [
+         Changes "C	T"
+      ]
+      source 9
+      target 16
+   ]
+   edge [
+      linestyle "solid"
+      label "14"
+      data [
+         Changes "C	T"
+      ]
+      source 5
+      target 32
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 0
+      target 10
+   ]
+   edge [
+      linestyle "solid"
+      label "12"
+      data [
+         Changes "G	T"
+      ]
+      source 17
+      target 50
+   ]
+]
+

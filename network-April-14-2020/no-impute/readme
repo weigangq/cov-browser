@@ -1,2 +1,0 @@
-Failed: perl ../cov-browser/hapnet-pars.pl --genome ../cov-browser/ref.gb --vcf snps.pos --hap no-imputed.aln --impute-log no-impute.log --e\
-dge-file walk.edge

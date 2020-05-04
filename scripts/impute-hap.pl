@@ -31,12 +31,13 @@ GetOptions (
     "start=i",
     "end=i",
     "format=s",
+    "perc=f",
     "dump-missing",
     ) or pod2usage(2);
 
 pod2usage(1) if $options{'help'};
 #die "Usage: $0 --start <n> --end <n> [--dump-missing] [--no-imputation] samples.aln\n" unless $options{'dump-missing'};
-my $perc_missing = 0.1;
+my $perc_missing = $options{perc} || 0.1;
 my $format = $options{format} || 'fasta';
 my $in = Bio::AlignIO->new(-file => shift @ARGV, -format => $format);
 my $aln = $in->next_aln();
