@@ -1,10 +1,10 @@
 var listNode=[], listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSite, listChange={}, outGrp='EPI_ISL_402131';
-var wMap, stdR=4.5, cR1=4, mapR=3.5, cR2=8, distance=12//, lnkdist=1;
+var wMap, stdR=4.5, cR1=4, mapR=3.5, cR2=6, distance=12//, lnkdist=1;
 var annoDataW, geoDataW, countryData, map_ctry, refData,
     ids=[], annoDataC, geoDataC, pubData, source, symData, orfData, compData, seqData, dndData;
 var wMainTab2, wTree=100, unit=30, marginL=1, wYear=140,
     hUnit=19.5, yEdge=22, hTree, hSvg,
-    orgColor = {1:"DodgerBlue", 2:"magenta", 3:"yellowGreen", 4:"orange"},
+    orgColor = {1:"Crimson", 2:"magenta", 3:"orange", 4:"DarkMagenta", 5:"LightSeaGreen", 6:"MediumBlue"},
     geoColor, dateScale, shipColor='navy',
     ratio=41, hORF=6, transBar, orfLine, sub_site=[],
     unitW=6.6, showAA;
@@ -16,9 +16,9 @@ $(document).ready(function(){
     wMap = $("#main_tab1 .map").width()
     wMainTab2 = $("#main_tab2").width()
 
-    var wCol2 = wMainTab2-320
+    var wCol2 = wMainTab2-290
     $("#col2").css("width", wCol2+'px');
-    
+
     wORF = wCol2-30
     
     $("#mainTab, #tabs").tabs();
@@ -901,8 +901,8 @@ function mOut(d){
     d3.selectAll('#col_year circle, #lg_org circle').attr("r", cR1);
     d3.selectAll('#mapC circle').attr("r", cR2);
     $('#ids td, #collect td').css("background", "inherit");
-    $("#collect td").css("color", "black");
-    if (d.length==3){
+    $("#collect td").css("color", "inherit");
+    if (d.length==4){
         var acc = ids.filter(function(ac){ var an=annoDataC[ac]; return an.geoId==d[0] && an.orgId==d[1]});
         acc.forEach(function(ac){ $('#id_'+ac).css("color", orgColor[annoDataC[ac].orgId]) })
     }
@@ -978,11 +978,12 @@ function drawYear(){
 }
 
 function drawGeoC(){
-    var hMap=333,
-        projection = d3.geoMercator().translate([wMap/2, hMap/2]).scale(420).center([104.2,38]),
+    var width=445,
+        hMap=333,
+        projection = d3.geoMercator().translate([width/2, hMap/2]).scale(420).center([104.2,38]),
         mapPath = d3.geoPath().projection(projection);
 
-    var svg = d3.select("#mapC").append("svg").attr("width",wMap).attr("height",hMap);
+    var svg = d3.select("#mapC").append("svg").attr("width",width).attr("height",hMap);
 
     d3.json("js-css/china.geo.json", function(error, china){
         svg.selectAll(".country")
@@ -1006,8 +1007,10 @@ function drawGeoC(){
         Object.keys(geo_org).forEach(function(d){
             var obj = geo_org[d],
                 nG = Object.keys(obj).length,
-                offset = 0.45;
-            Object.keys(obj).forEach(function(g,i){ g_o_n.push([d*1,g*1, nG==1? 0 : (i? offset : -offset)]) })
+                offset = 0.45,
+                offset2 = 0.55;
+            Object.keys(obj).forEach(function(g,i){
+                g_o_n.push([d*1, g*1, nG==1? 0 : (nG==2? (i? offset : -offset) : (!i? offset2 : (i==1? 0 : -offset2))), nG==3 && i==1? -offset2:0]) })
         });
         
         svg.selectAll("circle")
@@ -1023,7 +1026,7 @@ function drawGeoC(){
             })
             .attr("cy", function(d){
                 var site = geoDataC[d[0]].locate,
-                    coords = projection([site[1], site[0]]);
+                    coords = projection([site[1], site[0] + (d[3]? d[3] : 0)]);
                 return coords[1]
             })
             .on('mouseover', geoTip)
@@ -1049,20 +1052,20 @@ function drawGeoC(){
 
 // draw legend
     var svgLg=d3.select("#lg_org").append("svg")
-            .attr("width", wMap).attr("height", hUnit*6-5)
-            .append("g").attr("transform", "translate(130,10)");
+            .attr("width", width).attr("height", hUnit*6-5)
+            .append("g").attr("transform", "translate(80,17)");
     svgLg.append("text").attr("x",15).attr("class","lg").text("Organism")
     var lgOrg = svgLg.append("g").attr("class","lgOrg")
         .attr("transform", "translate(18,13)")
-        .selectAll("g").data([2,3,4,1]).enter()
-        .append("g").attr("transform", function(d,i) { return "translate(0," + (i*(hUnit+1)) + ")" });
+        .selectAll("g").data(Object.keys(source)).enter()
+        .append("g").attr("transform", function(d,i) { return "translate(" + (i>2? 190 : 0) + "," + ((i>2? i-3 : i)*(hUnit+1)) + ")" });
     lgOrg.append("circle").attr("id", function(d){ return 'lgDot' + d})
         .attr("cy",3.6).attr("r", cR1).attr("fill", function(d){return orgColor[d]});
     lgOrg.append("text").attr("x", 12).attr("dy", ".7em")
         .text(function(d) { return source[d] });
-    var orgChinese = {2:'新冠病毒 (人)',3:'新冠病毒 (蝙蝠)',4:'SARS (人)',1:'SARS (蝙蝠)'};
+/*    var orgChinese = {2:'新冠病毒 (人)',3:'新冠病毒 (蝙蝠)',4:'SARS (人)',1:'SARS (蝙蝠)'};
     lgOrg.append("text").attr("x", 117).attr("dy", ".7em")
-        .text(function(d) { return orgChinese[d] })
+        .text(function(d) { return orgChinese[d] })*/
 }
 
 function geoTip(d){
@@ -1125,37 +1128,30 @@ function drawORF(){
                     .attr("points", points)
                     .attr("fill", mycolor).attr("stroke", mycolor)
                
-            if (!obj.orth) {
-                var myId = obj.cid>0? obj.cid : obj.orf_id,
-                    myClass = ac + '_' + myId; 
-                thisOrf.attr("class", myClass);
-                thisOrf.classed('whiteFill',true);
-                if (!obj.cid) { thisOrf.classed('dotStroke',true)}
-            }
-
             var tipText;
             if (obj.cid>0){
                 tipText = '<em>' + symData[obj.cid] + '</em>'
             } else if (obj.sym){ tipText = '<em>' + obj.sym + '</em>' }
             else { tipText = '[' + obj.orf_id + ']' }
+            
             thisOrf.on("mouseover", function(){
                 $("#tipORF").css("left", (d3.event.pageX-22)+"px").css("top", (d3.event.pageY-127)+"px").show().html(tipText);
                 mOver(ac)
-                })
+            })
                 .on("mouseout", function(){ $("#tipORF").hide(); mOut(ac)})
 
-            if (!obj.cid || obj.cid<0){ return }
+            if (!obj.cid){ return }
 
             thisOrf.classed('finger',true)
-                   .on("dblclick", function(){ drawSeq(obj.cid) });
             
-            if (obj.orth){
-                thisOrf.attr("id", ac+'-'+obj.cid + '-' + obj.orth)
+            if (obj.cid>0){
+                thisOrf.attr("id", ac+'-'+obj.cid)
                         .attr('end', obj.stop)
                         .attr('len', obj.stop - obj.start + 1)
-                        .on("click", function(){ alignORF(obj.cid, obj.orth) })
+                        .on("click", function(){ alignORF(obj.cid) })
+                        .on("dblclick", function(){ drawSeq(obj.cid) })
             } else {
-                thisOrf.on("click", function(){ locateORF(obj.cid>0? obj.cid : obj.orf_id)})
+                thisOrf.on("click", function(){ locateORF(obj.orf_id)})
             }
         });
         base += hUnit
@@ -1169,11 +1165,11 @@ function drawORF(){
     $.ajax({
         async:false, dataType:"json", url:"js-css/dnacomp.json",
         success: function(data) {compData = data; drawComp()}
-    }) 
+    })
 }
 
-function alignORF(cid, oid){
-    var accs = orfData.filter(function(d){ return d.cid==cid && d.orth==oid})
+function alignORF(cid){
+    var accs = orfData.filter(function(d){ return d.cid==cid})
             .map(function(d){return d.acc})
             .sort(function(a,b){return ids.indexOf(a) - ids.indexOf(b)});
 
@@ -1181,7 +1177,7 @@ function alignORF(cid, oid){
     var end_len=[], endMax=0, remainMax=0;
     
     $.each(accs, function(i,acc){
-        var myid = '#'+acc+'-'+cid + '-' + oid,
+        var myid = '#'+acc+'-'+cid,
             myorf = $(myid)[0],
             end =  myorf.attributes['end'].value * 1,
             len =  myorf.attributes['len'].value * 1;
@@ -1265,10 +1261,12 @@ function addEv(){
     $(".pheno td").css("height", hUnit+"px");
     d3.selectAll(".pheno td")
         .on('mouseover', function(){
-            var arr = this.id.split('_');
-            mOver(arr[1]);
-            if (arr[0]=='ph'){$('#affiliation').html(pubData[annoDataC[arr[1]].pubId][2])}})
-        .on('mouseout', function(){var arr = this.id.split('_'); mOut(arr[1])})
+            var arr = this.id.split('_'),
+                ph = arr.shift(),
+                id = arr.join('_')
+            mOver(id);
+            if (ph=='ph'){$('#affiliation').html(pubData[annoDataC[id].pubId][2])}})
+        .on('mouseout', function(){var arr = this.id.split('_'); arr.shift(); mOut(arr.join('_'))})
 }
 
 var cdhit, seqNt, firstNt, firstId, firstAA, svgSeqW, id;
@@ -1384,9 +1382,9 @@ function drawComp(){
             return max = d3.max(arr.map(function(j){ return d3.max(j)}))
         }));
     
-    var stdAcc='MN996527',
+    var stdAcc='NC_045512',
         stdOrf = orfData.filter(function(d){ return d.acc==stdAcc }),
-        stdCid1 = stdOrf.filter(function(d){return d.cid==1})[0];
+        stdCid1 = stdOrf.filter(function(d){return d.cid==2})[0];
     ratioC = d3.format(".3n")((stdCid1.stop-stdCid1.start+1)/wORF) * 1;
 
     var stdSeqL = annoDataC[stdAcc].len;

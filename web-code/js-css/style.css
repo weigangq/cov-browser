@@ -76,8 +76,8 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 }
 
 #ids a, #citation a { color: inherit}
-#citation {margin-top:0; margin-left:2px; width:103px}
-#citation td:hover {font-weight:bold}
+#citation {margin-top:0; margin-left:2px; width:103px; color:gray}
+#citation td:hover {color:black}
 
 #netGraph {margin:0 6px 0 0; padding:2px 0 2px 2px; border:gray thin solid; position:relative}
 
@@ -115,7 +115,7 @@ marker path {fill:#999}
 .pheno th {font-size:13px; color:#999; vertical-align:top}
 .pheno td {font-size:11px; overflow:hidden}
 
-#collect {margin:42px 1px 0 1px}
+#collect {margin:42px 1px 0 1px; color:gray}
 #treeContainer {padding:1px 0}
 #ids {margin-left:1px}
 #ids td, #collect td {padding:0 2px 0 2px}
@@ -239,7 +239,7 @@ marker path {fill:#999}
 
 .blueColor {color:DodgerBlue}
 
-#affiliation {height:15px; color:gray; font-style:italic}
+#affiliation {height:15px; color:gray; font-style:italic; font-size:12px}
 
 #tipNet {text-align:center; z-index:2001}
 #tipNet span {font-size:11px; font-weight:100}
