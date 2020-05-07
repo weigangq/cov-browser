@@ -2,11 +2,11 @@ var listNode=[], listLink=[], /*rList, */geoList, ctryList, listVirus=[], listSi
 var wMap, stdR=4.5, cR1=4, mapR=3.5, cR2=6, distance=12//, lnkdist=1;
 var annoDataW, geoDataW, countryData, map_ctry, refData,
     ids=[], annoDataC, geoDataC, pubData, source, symData, orfData, compData, seqData, dndData;
-var wMainTab2, wTree=100, unit=30, marginL=1, wYear=140,
+var wMainTab2, wTree=100, unit=30, marginL=1,
     hUnit=19.5, yEdge=22, hTree, hSvg,
     orgColor = {1:"Crimson", 2:"magenta", 3:"orange", 4:"DarkMagenta", 5:"LightSeaGreen", 6:"MediumBlue"},
     geoColor, dateScale, shipColor='navy',
-    ratio=41, hORF=6, transBar, orfLine, sub_site=[],
+    ratio=35, hORF=6, transBar, orfLine, sub_site=[],
     unitW=6.6, showAA;
 var ratioC, cid_comp=[1,2,3,4,5,6,8,9,10], compLine, seqCid, tabNum, seqScroll;
 var dbLink ={"pubmed":"http://www.ncbi.nlm.nih.gov/pubmed/","ncbi":"http://www.ncbi.nlm.nih.gov/nuccore/"};
@@ -16,7 +16,7 @@ $(document).ready(function(){
     wMap = $("#main_tab1 .map").width()
     wMainTab2 = $("#main_tab2").width()
 
-    var wCol2 = wMainTab2-290
+    var wCol2 = wMainTab2-185
     $("#col2").css("width", wCol2+'px');
 
     wORF = wCol2-30
@@ -895,13 +895,12 @@ function mOver(d){
     var an = annoDataC[d];
     d3.selectAll('#o_'+d + ', #lgDot'+an.orgId).attr("r", cR2+2);
     d3.select('#map'+an.geoId+'_'+an.orgId).attr("r", cR2*2);
-    $('#id_'+d + ', #co_'+d).css("background", orgColor[an.orgId]).css("color", "white")
+    $('#id_'+d).css("background", orgColor[an.orgId]).css("color", "white")
 }
 function mOut(d){
     d3.selectAll('#col_year circle, #lg_org circle').attr("r", cR1);
     d3.selectAll('#mapC circle').attr("r", cR2);
-    $('#ids td, #collect td').css("background", "inherit");
-    $("#collect td").css("color", "inherit");
+    $('#ids td').css("background", "inherit");
     if (d.length==4){
         var acc = ids.filter(function(ac){ var an=annoDataC[ac]; return an.geoId==d[0] && an.orgId==d[1]});
         acc.forEach(function(ac){ $('#id_'+ac).css("color", orgColor[annoDataC[ac].orgId]) })
@@ -912,28 +911,39 @@ function mOut(d){
     $('#affiliation').html('')
 }
 
-var tdId={}, tdCol={};
+var tdId={};
 function addIds(){
     var tdPh=[];
     ids.forEach(function(d){
         var an = annoDataC[d],
             pId = an.pubId,
-            pu = pubData[pId];
-        var ii = '<td id="id_' + d + '" style="color:' + orgColor[an.orgId] + '"><a href="' + dbLink.ncbi + d + '" target="_blank">' + an.iso + '</a></td>',
-            cc = '<td id="co_' + d + '">' + an.col + ' | ' + geoDataC[an.geoId].name + '</td>',
+            pu = pubData[pId],
+            isEPI = d.split('_')[0]=='EPI';
+        var ii = '<td id="id_' + d + '" style="color:' + orgColor[an.orgId] + '">' +
+            (isEPI? '' : '<a href="' + dbLink.ncbi + d + '" target="_blank">') + an.iso + (isEPI? '' : '</a>') + '</td>',
+            cc = '<td id="co_' + d + '">' + geoDataC[an.geoId].name + '</td>',
             pp = '<td id="ph_' + d + '">' + (pId>1000? '<a href="' + dbLink.pubmed + pId + '" target="_blank">' : '') + pu[0] + ' <em>et al</em>. '  + pu[1] + (pId>1000? '</a>' : '') + '</td>';
         var tr1 = '<tr class="p' + an.geoId + 'o' + an.orgId + '">',
             tr2 = '</tr>';
 
         tdId[d] = tr1 + ii + tr2;
-        tdCol[d] = tr1 + cc + tr2;
-        tdPh.push('<tr>' + pp + tr2);
+        tdPh.push('<tr>' + cc + pp + tr2);
     });
     
-    appendPhe(ids);
-    $('#citation').append(tdPh.join(''));
+    $('#ids').append(ids.map(function(x){return tdId[x]}).join(''));
+    $('#site_cita').append(tdPh.join(''));
+
     $('.pheno th').css("height", (yEdge-2)+'px');
-    addEv()
+    $(".pheno td").css("height", hUnit+"px");
+
+    d3.selectAll(".pheno td")
+        .on('mouseover', function(){
+            var arr = this.id.split('_'),
+                ph = arr.shift(),
+                id = arr.join('_')
+            mOver(id);
+            if (ph=='ph'){$('#affiliation').html(pubData[annoDataC[id].pubId][2])}})
+        .on('mouseout', function(){var arr = this.id.split('_'); arr.shift(); mOut(arr.join('_'))})
 
     d3.csv("js-css/orf.csv", function(data){ orfData = data; drawORF()});
 }
@@ -941,6 +951,7 @@ function addIds(){
 function drawYear(){
     var year = ids.map(function(d){return annoDataC[d].col}),
         minYear = d3.min(year) - 1,
+        wYear=120,
         scaleYear = d3.scaleLinear().domain([minYear, d3.max(year)]).range([marginL+4, wYear+marginL]),
         start = scaleYear(minYear);
     
@@ -952,7 +963,7 @@ function drawYear(){
                 .tickFormat(function(f){ var y=f-2000; return y<10? '0'+y : y });
     svg.append("g").attr("class", "xaxis").attr("transform", "translate(" + 0 + "," + (hSvg+6) + ")").call(xAxis);
 
-    svg.append("text").attr("x",27).attr("y",13).attr("class","lg").text("Collect Year")
+    svg.append("text").attr("x",10).attr("y",13).attr("class","lg").text("Collection Year")
 
     var lineFun = d3.line()
         .x(function(d) { return scaleYear(annoDataC[d].col); })
@@ -1058,20 +1069,17 @@ function drawGeoC(){
     var lgOrg = svgLg.append("g").attr("class","lgOrg")
         .attr("transform", "translate(18,13)")
         .selectAll("g").data(Object.keys(source)).enter()
-        .append("g").attr("transform", function(d,i) { return "translate(" + (i>2? 190 : 0) + "," + ((i>2? i-3 : i)*(hUnit+1)) + ")" });
+        .append("g").attr("transform", function(d,i) { return "translate(" + (i>2? 170 : 0) + "," + ((i>2? i-3 : i)*(hUnit+1)) + ")" });
     lgOrg.append("circle").attr("id", function(d){ return 'lgDot' + d})
         .attr("cy",3.6).attr("r", cR1).attr("fill", function(d){return orgColor[d]});
     lgOrg.append("text").attr("x", 12).attr("dy", ".7em")
-        .text(function(d) { return source[d] });
-/*    var orgChinese = {2:'新冠病毒 (人)',3:'新冠病毒 (蝙蝠)',4:'SARS (人)',1:'SARS (蝙蝠)'};
-    lgOrg.append("text").attr("x", 117).attr("dy", ".7em")
-        .text(function(d) { return orgChinese[d] })*/
+        .text(function(d) { return source[d] })
 }
 
 function geoTip(d){
     d3.select('#map'+d[0]+'_'+d[1]).attr("r", cR2*2);
     d3.selectAll('.g' + d[0] + 'o' + d[1] + ', #lgDot' + d[1]).attr("r", cR2);
-    $('#ids .p'+d[0]+'o'+d[1]+' td' + ', #collect .p'+d[0]+'o'+d[1]+' td').css("background", orgColor[d[1]]).css("color", "white");
+    $('#ids .p'+d[0]+'o'+d[1]+' td').css("background", orgColor[d[1]]).css("color", "white");
 }
 
 var base0 = yEdge + hUnit/2, wORF;
@@ -1251,24 +1259,6 @@ function locateORF(cid){
     }
 }
 
-function appendPhe(myIds){
-    $('#ids tr:not(.firstRow), #collect tr:not(.firstRow)').remove();
-    $('#ids').append(myIds.map(function(x){return tdId[x]}).join(''));
-    $('#collect').append(myIds.map(function(x){return tdCol[x]}).join(''));
-    addEv()
-}
-function addEv(){
-    $(".pheno td").css("height", hUnit+"px");
-    d3.selectAll(".pheno td")
-        .on('mouseover', function(){
-            var arr = this.id.split('_'),
-                ph = arr.shift(),
-                id = arr.join('_')
-            mOver(id);
-            if (ph=='ph'){$('#affiliation').html(pubData[annoDataC[id].pubId][2])}})
-        .on('mouseout', function(){var arr = this.id.split('_'); arr.shift(); mOut(arr.join('_'))})
-}
-
 var cdhit, seqNt, firstNt, firstId, firstAA, svgSeqW, id;
 function drawSeq(cid){
     tabNum = 2;
@@ -1375,7 +1365,7 @@ function transAA(s){
 }
 
 function drawComp(){
-    var wLg=300;
+    var wLg = marginL*2 + wTree + 50;
 //maxComp
     var maxComp = d3.max(Object.keys(compData).map(function(d){
             var arr = compData[d];
@@ -1402,7 +1392,7 @@ function drawComp(){
     svgLegend.append("g").attr("class","xaxis").attr("transform", "translate("+(wLg-3)+",0)").call(axisY);
     svgLegend.append("text").attr("transform", "translate(270,82)rotate(-90)").text("NT Changes");
 
-    var svgLg = svgLegend.append("g").attr("transform", "translate(134,22)");
+    var svgLg = svgLegend.append("g").attr("transform", "translate(" + (wLg-115) + ",22)");
     svgLg.append("text").text("Codon Position");
     var lgComp = svgLg.append("g").attr("class","lgOrg")
         .attr("transform", "translate(10,17)")
@@ -1492,18 +1482,29 @@ function showIns(d, cid){
     if (d==2){
         $("#tree").fadeOut(1500);
         $('#tree_cid').fadeIn(1500);
-        appendPhe(id);
+        updateIds(id);
         $('#treeScale tspan').html(sub_site[1]);
         $('#geneName, #showWhat, #guideH').show()
     } else {
         $('#tree_cid').fadeOut(1500);
         $('#tree').fadeIn(1500);
         $('#treeScale tspan').html(sub_site[0]);
-        appendPhe(ids);
+        updateIds(ids);
         $('#geneName, #showWhat, #guideH').hide()
     }
     if (d==1 || (d==2 && seqCid)){showComp(d)} else {$('#compContainer').hide()}
 }
+function updateIds(myIds){
+    $('#ids tr').remove();
+    $('#ids').append(myIds.map(function(x){return tdId[x]}).join(''));
+    $("#ids td").css("height", hUnit+"px");
+    if (!tabNum){
+        d3.selectAll("#ids td")
+            .on('mouseover', function(){ mOver(this.id.substring(3,)) })
+            .on('mouseout', function(){ mOut(this.id.substring(3,))})
+    }
+}
+
 
 function showComp(d){
     $('#compContainer, .charts').show();

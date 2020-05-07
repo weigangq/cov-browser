@@ -5,14 +5,13 @@ table {
     border:0
 }
 body>table, #genome, #col2, #main_tab1 .map {position:relative}
+#main_tab2 {width:1089px}
 
 #mainTab { padding:0 }
 #mainTab>ul {padding:0}
 #mainTab>ul>li { float:right!important; width:170px; font-size:16px; font-weight:bold}
 #main_tab1, #main_tab2 {padding:4px 5px 0 5px}
 #main_tab1>table {margin-top:4px}
-
-#main_tab2 {width:1089px}
 
 #tabs {padding:0; font-size:13px}
 #tabs>div {padding:6px 4px}
@@ -75,9 +74,14 @@ body>table, #genome, #col2, #main_tab1 .map {position:relative}
 	cursor:pointer
 }
 
-#ids a, #citation a { color: inherit}
-#citation {margin-top:0; margin-left:2px; width:103px; color:gray}
-#citation td:hover {color:black}
+#ids a, #site_cita a { color: inherit}
+
+.pheCon {margin:0 16px}
+#col_year svg {margin:0 0 0 16px}
+#mapC { text-anchor:middle }
+
+#site_cita {color:gray}
+#site_cita td:hover {color:black}
 
 #netGraph {margin:0 6px 0 0; padding:2px 0 2px 2px; border:gray thin solid; position:relative}
 
@@ -110,15 +114,15 @@ marker path {fill:#999}
 .link-extensions{ stroke:lightgray; stroke-dasharray:4,2 }
 
 .pheno {white-space:nowrap}
-#collect tr:nth-of-type(even), #citation tr:nth-of-type(even), #ids tr:nth-of-type(odd){
-    background:rgb(240,240,240) }
 .pheno th {font-size:13px; color:#999; vertical-align:top}
 .pheno td {font-size:11px; overflow:hidden}
 
-#collect {margin:42px 1px 0 1px; color:gray}
+#site_cita tr:nth-of-type(even), #ids tr:nth-of-type(odd){ background:rgb(240,240,240) }
+
 #treeContainer {padding:1px 0}
 #ids {margin-left:1px}
-#ids td, #collect td {padding:0 2px 0 2px}
+#ids td {padding:0 2px}
+#site_cita td {padding:0 10px}
 
 .lg {fill:#999; font-weight:bold; font-size:13px}
 #lg_org {margin-top:25px}
@@ -139,7 +143,6 @@ marker path {fill:#999}
 #main_tab1 .map {width:420px}
 #nodeInf, #chgInf {width:418px}
 
-#mapC { margin:0 25px; text-anchor:middle }
 #mapW svg {height:185px}
 
 #mapW, #dateChart, #refOrf {margin:7px 0 0 0}
@@ -239,7 +242,7 @@ marker path {fill:#999}
 
 .blueColor {color:DodgerBlue}
 
-#affiliation {height:15px; color:gray; font-style:italic; font-size:12px}
+#affiliation {height:15px; text-align:right; color:gray; font-style:italic; font-size:12px}
 
 #tipNet {text-align:center; z-index:2001}
 #tipNet span {font-size:11px; font-weight:100}
