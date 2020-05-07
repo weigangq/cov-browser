@@ -94,9 +94,7 @@
 <table>
 <tr valign="top">
     <td id="col1"><table>
-        <tr valign="top"><td colspan="2" id="treeScale"></td>
-            <td rowspan="2"><table class="pheno" id="collect"><tr class="firstRow"><th>Collection</th></tr></table></td>
-        </tr>
+        <tr valign="top"><td colspan="2" id="treeScale"></td></tr>
         <tr valign="top">
             <td id="treeContainer"><svg></svg></td>
             <td><table class="pheno" id="ids"></table></td>
@@ -114,16 +112,18 @@
             <div id="home">
                 <table>
                     <tr valign="top">
-                        <td><table class="pheno" id="citation"><tr><th>Citation</th></tr></table></td>
+                        <td id="col_year"></td>
                         <td>
-                            <table>
+                            <table class="pheCon">
                                 <tr class="pheno"><th>China Map</th></tr>
                                 <tr><td><div id="mapC" class="map"></div><div id="lg_org"></div></td></tr>
                             </table>
                         </td>
-                        <td id="col_year"></td>
+                        <td>
+                            <table class="pheno pheCon" id="site_cita"><tr><th>Site</th><th>Citation</th></tr></table>
+                        </td>
                     </tr>
-                <tr><td colspan="3" id="affiliation"></td></tr>
+                    <tr><td colspan="3" id="affiliation"></td></tr>
                 </table>
             </div>
 
